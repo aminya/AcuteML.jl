@@ -1,5 +1,8 @@
 module AML
 
-# Write your package code here.
+using EzXML
+import EzXML.Node
+
+export @aml, print
 
 end
