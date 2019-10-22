@@ -129,4 +129,12 @@ function addelementOne!(aml::Node, name::String, value)
         link!(aml,value.aml)
     end
 end
+
+# vector of strings
+function addelementVect!(aml::Node, name::String, value::Vector{String})
+    for ii = 1:length(value)
+        addelement!(aml, name, value[ii])
+    end
+end
+
 end
