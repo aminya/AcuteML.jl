@@ -1,0 +1,13 @@
+name = "AML"
+uuid = "6b84a0a3-a11a-41fa-a417-e600528de108"
+authors = ["Amin Yahyaabadi"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
