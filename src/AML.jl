@@ -28,4 +28,13 @@ function findfirstcontent(::Type{T}, s::String,node::Node) where{T<:Union{String
 end
 findfirstcontent(s::String,node::Node) = findfirstcontent(Union{String, Nothing}, s::String, node::Node)
 
+# for numbers
+function findfirstcontent(::Type{T},s::String,node::Node) where {T<:Union{Number,Nothing}}
+    elm = findfirst(s,node)
+    if isnothing(elm)
+        return nothing
+    else
+        return parse(T, elm.content)
+    end
+end
 end
