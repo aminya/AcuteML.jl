@@ -49,4 +49,27 @@ function findfirstcontent(::Type{T},s::String,node::Node) where {T}
 end
 
 ################################################################
+"""
+    findallcontent(type, string, node)
+
+Finds all the elements with the address of string in the node, and converts the elements to Type object.
+"""
+# for strings
+function findallcontent(::Type{T}, s::String, node::Node) where{T<:Union{String, Nothing}}
+
+    elmsNode = findall(s, node) # a vector of Node elements
+    if isnothing(elmsNode)
+        return nothing
+    else
+        elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+        i=1
+        for elm in elmsNode
+            elmsType[i]=elm.content
+            i=+1
+        end
+        return elmsType
+    end
+
+end
+findallcontent(s::String, node::Node) = findallcontent(Union{String, Nothing},s, node)
 end
