@@ -150,4 +150,6 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}) where {T}
         link!(aml,value[ii].aml)
     end
 end
+
+Base.print(x::Node) = prettyprint(x)
 end
