@@ -90,4 +90,22 @@ function findallcontent(::Type{T}, s::String, node::Node) where{T<:Union{Number,
     end
 
 end
+
+# for defined types
+function findallcontent(::Type{T}, s::String, node::Node) where{T}
+
+    elmsNode = findall(s, node) # a vector of Node elements
+    if isnothing(elmsNode)
+        return nothing
+    else
+        elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+        i=1
+        for elm in elmsNode
+            elmsType[i]=T(elm)
+            i=+1
+        end
+        return elmsType
+    end
+
+end
 end
