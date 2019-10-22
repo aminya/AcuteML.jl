@@ -108,4 +108,14 @@ function findallcontent(::Type{T}, s::String, node::Node) where{T}
     end
 
 end
+################################################################
+# Constructors
+
+# strings
+function addelementOne!(aml::Node, name::String, value::String)
+    if !isnothing(value)
+        addelement!(aml, name, value)
+    end
+end
+
 end
