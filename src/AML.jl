@@ -37,4 +37,16 @@ function findfirstcontent(::Type{T},s::String,node::Node) where {T<:Union{Number
         return parse(T, elm.content)
     end
 end
+
+# for defined types
+function findfirstcontent(::Type{T},s::String,node::Node) where {T}
+    elm = findfirst(s,node)
+    if isnothing(elm)
+        return nothing
+    else
+        return T(elm)
+    end
+end
+
+################################################################
 end
