@@ -118,4 +118,10 @@ function addelementOne!(aml::Node, name::String, value::String)
     end
 end
 
+#  defined or nothing
+function addelementOne!(aml::Node, name::String, value)
+    if !isnothing(value)
+        link!(aml,value.aml)
+    end
+end
 end
