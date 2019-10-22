@@ -152,4 +152,83 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}) where {T}
 end
 
 Base.print(x::Node) = prettyprint(x)
+# @aml helper function
+# var is a symbol
+# var::T or anything more complex is an expression
+function _aml(tArgs, params_args, idxDefexp, defexpVal, argType, call_args, name_args, Tn)
+    for i in eachindex(tArgs.args) # iterating over arguments of each type argument
+        ei = tArgs.args[i] # type argument element i
+
+        if typeof(ei) == LineNumberNode
+            continue
+        end
+
+        if isa(ei, String) # struct name "aml name"
+            Tn = ei # Type aml name
+        else
+            if ei.head == :tuple # argument is an aml argument , "some name" or "~"
+                vi = ei.args[1]
+                ni = ei.args[2]
+                push!(name_args,ni)
+            else  # argument is ignored for aml
+                vi = ei
+                ni = missing
+                push!(name_args,ni)
+            end
+
+            # Determining the argument among (var,var::Type, var = defexpr, var::T = defexpr, etc)
+            if vi isa Symbol
+                #  var
+                var = vi
+
+                push!(argType, String)
+                push!(defexpVal, missing)
+                push!(idxDefexp, false)
+                push!(params_args, var)
+                push!(call_args, var)
+            elseif vi isa Expr # something more than a symbol = an expression
+                if vi.head == :(=) # either default value or a function
+                    lhs = vi.args[1]
+                    if lhs isa Symbol
+                        #  var = defexpr
+                        push!(argType, String)
+                        var = lhs
+                    elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol
+                        #  var::T = defexpr
+                        var = lhs.args[1]
+                        tvar = lhs.args[2] # Type
+                        push!(argType, eval(tvar))
+                    else
+                        push!(argType, String)
+                        # something else, e.g. inline inner constructor
+                        #   F(...) = ...
+                        continue
+                    end
+                    defexpr = vi.args[2]  # defexpr
+                    push!(defexpVal, defexpr)
+                    push!(idxDefexp, true)
+                    push!(params_args, Expr(:kw, var, esc(defexpr)))
+                    push!(call_args, var)
+                    tArgs.args[i] = lhs # storing argument i (var or var::T)
+                elseif vi.head == :(::) && vi.args[1] isa Symbol # var with Type annotation
+                    # var::Type
+                    var = vi.args[1]
+                    tvar = vi.args[2]
+                    push!(argType, eval(tvar))
+                    push!(defexpVal, missing)
+                    push!(idxDefexp, false)
+                    push!(params_args, var)
+                    push!(call_args, var)
+
+                elseif vi.head == :block  # anything else should be evaluated again
+                    # can arise with use of @static inside type decl
+                    tArgs, params_args, idxDefexp, defexpVal, argType, call_args, name_args, Tn = _aml(tArgs, params_args, idxDefexp, defexpVal, argType, call_args, name_args, Tn)
+                end
+            end
+
+        end
+    end # endfor
+    tArgs
+    return tArgs, params_args, idxDefexp, defexpVal, argType, call_args, name_args, Tn
+end
 end
