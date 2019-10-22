@@ -1,8 +1,8 @@
 # AML
 
-[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://aminya.github.io/AML.jl/stable)
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AML.jl/dev)
-[![Build Status](https://travis-ci.com/aminya/AML.jl.svg?branch=master)](https://travis-ci.com/aminya/AML.jl)
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://aminya.github.io/AML/stable)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AML/dev)
+[![Build Status](https://travis-ci.com/aminya/AML.svg?branch=master)](https://travis-ci.com/aminya/AML)
 
 AML web development framework in Julia
 
