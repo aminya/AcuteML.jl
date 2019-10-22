@@ -137,4 +137,10 @@ function addelementVect!(aml::Node, name::String, value::Vector{String})
     end
 end
 
+# vector of numbers
+function addelementVect!(aml::Node, name::String, value::Vector{T}) where {T<:Number}
+    for ii = 1:length(value)
+        addelement!(aml, name, string(value[ii]))
+    end
+end
 end
