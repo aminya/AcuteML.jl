@@ -156,7 +156,7 @@ Base.print(x::Node) = prettyprint(x)
 """
   @aml typedef
 
-Use @aml macro to define Julia types that have a xml or html associated with them.
+Use @aml macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
 # Examples
 ```julia
@@ -169,14 +169,24 @@ using AML
     courses::Vector{String}, "taken courses"
 end
 
+
 P1 = Person(age=24, field="Mechanical Engineering", GPA=2, courses=["Artificial Intelligence", "Robotics"])
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"])
 
-print(P1.aml)
+julia>print(P1.aml)
+<person>
+  <age>24</age>
+  <study-field>Mechanical Engineering</study-field>
+  <taken courses>Artificial Intelligence</taken courses>
+  <taken courses>Robotics</taken courses>
+</person>
 
-print(P2.aml)
-
-
+julia>print(P2.aml)
+<person>
+  <age>18</age>
+  <study-field>Computer Engineering</study-field>
+  <taken courses>Julia</taken courses>
+</person>
 ```
 """
 macro aml(expr)
