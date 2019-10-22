@@ -143,4 +143,11 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}) where {T<:Nu
         addelement!(aml, name, string(value[ii]))
     end
 end
+
+#  vector of defined or nothing
+function addelementVect!(aml::Node, name::String, value::Vector{T}) where {T}
+    for ii = 1:length(value)
+        link!(aml,value[ii].aml)
+    end
+end
 end
