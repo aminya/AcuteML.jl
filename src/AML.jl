@@ -152,6 +152,126 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}) where {T}
 end
 
 Base.print(x::Node) = prettyprint(x)
+################################################################
+"""
+  @aml typedef
+
+Use @aml macro to define Julia types that have a xml or html associated with them.
+
+# Examples
+```julia
+using AML
+
+@aml mutable struct Person "person"
+    age::UInt, "age"
+    field::String, "study-field"
+    GPA::Float64 = 4.3 , "GPA (/4.5)"
+    courses::Vector{String}, "taken courses"
+end
+
+P1 = Person(age=24, field="Mechanical Engineering", GPA=2, courses=["Artificial Intelligence", "Robotics"])
+P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"])
+
+print(P1.aml)
+
+print(P2.aml)
+
+
+```
+"""
+macro aml(expr)
+    expr = macroexpand(__module__, expr) # to expand @static
+    #  check if aml is used before struct
+    expr isa Expr && expr.head == :struct || error("Invalid usage of @aml")
+    T = expr.args[2] # Type name
+    # Tn = exprt.args[3].args[2] # Type aml name
+
+    aml = Symbol(:aml)
+    params_ex = Expr(:parameters)
+    call_args = Any[]
+    idxDefexp = Bool[]
+    defexpVal = Any[]
+    argType = Union{Missing,Type, Symbol, Expr}[]
+    name_args = Union{Missing,String}[]
+    Tn = "name"
+    # expr.args[3] # Type arguments
+     # params_ex.args # empty
+    expr.args[3], params_args, idxDefexp, defexpVal, argType, call_args, name_args, Tn = _aml(expr.args[3], params_ex.args, idxDefexp, defexpVal, argType, call_args, name_args, Tn)
+
+    # defining outter constructors
+    # Only define a constructor if the type has fields, otherwise we'll get a stack
+    # overflow on construction
+    if !isempty(params_ex.args)
+
+        # Type name is a single name (symbol)
+        if T isa Symbol
+
+            idxXmlArgs = (!).(ismissing.(name_args)) # non aml arguments
+            xmlArgs = call_args[idxXmlArgs]
+            xmlNames = name_args[idxXmlArgs]
+            argType  = argType[idxXmlArgs]
+            numXml = length(xmlArgs)
+
+            xmlconst=Vector{Expr}(undef,numXml)
+            xmlext=Vector{Expr}(undef,numXml)
+
+            for i=1:numXml
+                argTypeI = argType[i]
+                xmlArgsI = xmlArgs[i]
+                xmlNamesI = xmlNames[i]
+                if isa(argTypeI, Symbol) || !(argTypeI <: Array)   # non vector # isa(argTypeI, Symbol) ||
+
+                    xmlconst[i]=:(addelementOne!(aml, $xmlNamesI, $xmlArgsI))
+                    xmlext[i]=:($xmlArgsI = findfirstcontent($argTypeI, $xmlNamesI, aml))
+
+                else # vector
+
+                    xmlconst[i]=:(addelementVect!(aml, $xmlNamesI, $xmlArgsI))
+                    xmlext[i]=:($xmlArgsI = findallcontent($argTypeI, $xmlNamesI, aml))
+                end
+            end
+
+            # two functions to make the type
+            sexpr = replace(string(expr),r"\"(.*)\"" => "") # removing type string name
+            sexpr = replace(sexpr,r"\((.*)\,(.*)\)" => s"\1") # removing all the arguments string names
+            sexpr = replace(sexpr,r"end" => s"aml::Node \n end")
+            typeExpr= Meta.parse(sexpr)
+
+            typeDefinition =:($typeExpr)
+
+            xmlConstructor = quote
+                function ($(esc(T)))($params_ex)
+                    aml = ElementNode($Tn)
+                    $(xmlconst...)
+                    return ($(esc(T)))($(call_args...),aml)
+                end
+            end
+
+            xmlExtractor = quote
+                 function ($(esc(T)))(aml::Node)
+                     $(xmlext...)
+                     return ($(esc(T)))($(call_args...),aml)
+                  end
+
+            end
+            out = quote
+               $typeDefinition
+               $xmlConstructor
+               $xmlExtractor
+            end
+        else
+            error("Invalid usage of @aml")
+        end
+    else
+        out = nothing
+    end
+    quote
+        # Base.@__doc__($(esc(typeDefinition)))
+        $out
+    end
+end
+
+
 # @aml helper function
 # var is a symbol
 # var::T or anything more complex is an expression
@@ -231,4 +351,8 @@ function _aml(tArgs, params_args, idxDefexp, defexpVal, argType, call_args, name
     tArgs
     return tArgs, params_args, idxDefexp, defexpVal, argType, call_args, name_args, Tn
 end
+
+
+
+
 end
