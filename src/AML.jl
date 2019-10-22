@@ -118,6 +118,11 @@ function addelementOne!(aml::Node, name::String, value::String)
     end
 end
 
+# number
+function addelementOne!(aml::Node, name::String, value::T) where {T<:Number}
+    addelement!(aml, name, string(value))
+end
+
 #  defined or nothing
 function addelementOne!(aml::Node, name::String, value)
     if !isnothing(value)
