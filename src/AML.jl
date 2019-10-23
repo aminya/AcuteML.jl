@@ -279,20 +279,20 @@ macro aml(expr)
 
             end
             out = quote
+               Base.@__doc__($(typeDefinition))
                $typeDefinition
                $amlConstructor
                $amlExtractor
             end
+
         else
             error("Invalid usage of @aml")
         end
     else
         out = nothing
     end
-    quote
-        # Base.@__doc__($(esc(typeDefinition)))
-        $out
-    end
+
+    return out
 end
 
 
