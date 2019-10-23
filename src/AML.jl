@@ -265,8 +265,6 @@ macro aml(expr)
             end
 
             # functions to make the type
-            sexpr = replace(sexpr,r"\((.*)\,(.*)\)" => s"\1") # removing all the arguments string names
-            sexpr = replace(sexpr,r"end" => s"aml::Node \n end")
             typeExpr= Meta.parse(sexpr)
 
 
@@ -325,7 +323,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
         if isa(ei, String) # struct name "aml name"
             amlName = ei # Type aml name
-            argExpr.args[i]=nothing  # removing "aml name" from expr args
+            argExpr.args[i]= LineNumberNode(1)  # removing "aml name" from expr args
         else
             if ei.head == :tuple # var/var::T, "name"
 
@@ -343,6 +341,8 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                     push!(argParams, var)
                     push!(argVars, var)
 
+                    argExpr.args[i]=var  # removing "name"
+
                 elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T, "name"
 
                     var = lhs.args[1]
@@ -351,6 +351,9 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                     push!(argTypes, varType)
                     push!(argParams, var)
                     push!(argVars, var)
+
+                    argExpr.args[i]=lhs  # removing "name"
+
                 end
 
             elseif ei.head == :(=) # def value provided
@@ -375,6 +378,8 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                         push!(argParams, Expr(:kw, var, defVal))
                         push!(argVars, var)
 
+                        argExpr.args[i]=var  # removing "name"
+
                     elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal, "name"
 
                         var = lhs.args[1]
@@ -383,6 +388,9 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                         push!(argTypes, varType)
                         push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
                         push!(argVars, var)
+
+                        argExpr.args[i]=lhs  # removing "name"
+
                     end
 
                 else # var/var::T = defVal # ignored for creating aml
@@ -401,7 +409,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                         push!(argParams, Expr(:kw, var, defVal))
                         push!(argVars, var)
 
-                        argExpr.args[i]=lhs # remove =defVal for type definition
+                        argExpr.args[i]=var # remove =defVal for type definition
 
                     elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal
 
