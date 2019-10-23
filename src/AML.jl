@@ -238,6 +238,7 @@ macro aml(expr)
 
             amlconst=Vector{Expr}(undef,numAml)
             amlext=Vector{Expr}(undef,numAml)
+            # argDefinition=Vector{Expr}(undef,numAml)
 
             for i=1:numAml
                 argTypesI = argTypes[i]
@@ -254,6 +255,9 @@ macro aml(expr)
                     amlext[i]=:($amlVarsI = findfirstcontent($argTypesI, $amlNamesI, aml))
 
                 end
+
+                # argDefinition[i]=:($amlVarsI::$(argTypesI))
+
             end
 
             # functions to make the type
@@ -261,6 +265,15 @@ macro aml(expr)
             sexpr = replace(sexpr,r"\((.*)\,(.*)\)" => s"\1") # removing all the arguments string names
             sexpr = replace(sexpr,r"end" => s"aml::Node \n end")
             typeExpr= Meta.parse(sexpr)
+
+
+            # typeDefinition = quote
+            #     $(Meta.parse("struct $(T)"))
+            #     $(argDefinition...)
+            #     aml::Node
+            #     end
+            # end
+
 
             typeDefinition =:($typeExpr)
 
