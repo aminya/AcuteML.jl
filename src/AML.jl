@@ -3,7 +3,7 @@ module AML
 using EzXML
 import EzXML.Node
 
-export @aml, print
+export @aml, print, show
 ################################################################
 # Extractors
 """
@@ -150,8 +150,15 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}) where {T}
         link!(aml,value[ii].aml)
     end
 end
-
-Base.print(x::Node) = prettyprint(x)
+################################################################
+function Base.print(x::Node)
+    println("")
+    prettyprint(x)
+end
+function Base.show(io::IO,x::Node)
+    println("")
+    prettyprint(io, x)
+end
 ################################################################
 """
   @aml typedef
@@ -160,37 +167,37 @@ Use @aml macro to define a Julia type, and then the package automatically create
 
 # Examples
 ```julia
-using AML
-
 @aml mutable struct Person "person"
     age::UInt, "age"
     field::String, "study-field"
-    # GPA::Float64 = 4.3 , "GPA (/4.5)"
+    GPA::Float64, "GPA"
     courses::Vector{String}, "taken courses"
 end
 
 
-P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"])
-P2 = Person(age=18, field="Computer Engineering", courses=["Julia"])
+P1 = Person(age=24, field="Mechanical Engineering", GPA=4.5, courses=["Artificial Intelligence", "Robotics"])
+P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"])
+```
 
-print(P1.aml)
-#=
+```julia
+julia> P1.aml
 <person>
   <age>24</age>
   <study-field>Mechanical Engineering</study-field>
+  <GPA>4.5</GPA>
   <taken courses>Artificial Intelligence</taken courses>
   <taken courses>Robotics</taken courses>
 </person>
-=#
 
-print(P2.aml)
-#=
+
+julia> print(P2.aml)
 <person>
   <age>18</age>
   <study-field>Computer Engineering</study-field>
+  <GPA>4</GPA>
   <taken courses>Julia</taken courses>
 </person>
-=#
+
 ```
 """
 macro aml(expr)
@@ -201,46 +208,50 @@ macro aml(expr)
     # amlName = exprt.args[3].args[2] # Type aml name
 
     aml = Symbol(:aml)
-    argParams = Expr(:parameters)
-    argVars = Any[]
+    argParams = Union{Expr,Symbol}[] # Expr(:parameters)[]
+    argVars = Union{Expr,Symbol}[]
     argDefVal = Any[]
     argTypes = Union{Missing,Type, Symbol, Expr}[]
     argNames = Union{Missing,String}[]
     amlName = "name"
-    # expr.args[3] # Type arguments
+    # expr.args[3] # arguments
      # argParams.args # empty
-    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(expr.args[3], argParams.args, argDefVal, argTypes, argVars, argNames, amlName)
+    argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlName)
 
     # defining outter constructors
     # Only define a constructor if the type has fields, otherwise we'll get a stack
     # overflow on construction
-    if !isempty(argParams.args)
+    if !isempty(argVars)
 
         # Type name is a single name (symbol)
         if T isa Symbol
 
             idAmlArgs = (!).(ismissing.(argNames)) # non aml arguments
-            amlArgs = argVars[idAmlArgs]
+
             amlNames = argNames[idAmlArgs]
+            amlVars = argVars[idAmlArgs]
+            amlParams = argParams[idAmlArgs]
+            amlDefVal = argDefVal[idAmlArgs]
             argTypes  = argTypes[idAmlArgs]
-            numAml = length(amlArgs)
+
+            numAml = length(amlVars)
 
             amlconst=Vector{Expr}(undef,numAml)
             amlext=Vector{Expr}(undef,numAml)
 
             for i=1:numAml
                 argTypesI = argTypes[i]
-                amlArgsI = amlArgs[i]
+                amlVarsI = amlVars[i]
                 amlNamesI = amlNames[i]
                 if isa(argTypesI, Symbol) || !(argTypesI <: Array)   # non vector
 
-                    amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlArgsI))
-                    amlext[i]=:($amlArgsI = findfirstcontent($argTypesI, $amlNamesI, aml))
+                    amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI))
+                    amlext[i]=:($amlVarsI = findfirstcontent($argTypesI, $amlNamesI, aml))
 
                 else # vector
 
-                    amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlArgsI))
-                    amlext[i]=:($amlArgsI = findallcontent($argTypesI, $amlNamesI, aml))
+                    amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI))
+                    amlext[i]=:($amlVarsI = findallcontent($argTypesI, $amlNamesI, aml))
                 end
             end
 
@@ -253,7 +264,7 @@ macro aml(expr)
             typeDefinition =:($typeExpr)
 
             amlConstructor = quote
-                function ($(esc(T)))($argParams)
+                function ($(esc(T)))(; $(argParams...))
                     aml = ElementNode($amlName)
                     $(amlconst...)
                     return ($(esc(T)))($(argVars...),aml)
@@ -299,69 +310,130 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
         if isa(ei, String) # struct name "aml name"
             amlName = ei # Type aml name
         else
-            if ei.head == :tuple # argument is an aml argument , "some name" or "~"
-                vi = ei.args[1]
+            if ei.head == :tuple # var/var::T, "name"
+
                 ni = ei.args[2]
-                push!(argNames,ni)
-            elseif ei.head == :(=)
 
-
-            else  # argument is ignored for aml
-                vi = ei
-                ni = missing
-                push!(argNames,ni)
-            end
-
-            # Determining the argument among (var,var::Type, var = defexpr, var::T = defexpr, etc)
-            if vi isa Symbol
-                #  var
-                var = vi
-
-                push!(argTypes, String)
                 push!(argDefVal, missing)
-                push!(argParams, var)
-                push!(argVars, var)
-            elseif vi isa Expr # something more than a symbol = an expression
-                if vi.head == :(=) # either default value or a function
-                    lhs = vi.args[1]
-                    if lhs isa Symbol
-                        #  var = defexpr
-                        push!(argTypes, String)
-                        var = lhs
-                    elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol
-                        #  var::T = defexpr
+                push!(argNames,ni)
+
+                lhs = ei.args[1]
+                if lhs isa Symbol #  var, "name"
+
+                    var = ei.args[1]
+
+                    push!(argTypes, String) # consider String as the type
+                    push!(argParams, var)
+                    push!(argVars, var)
+
+                elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T, "name"
+
+                    var = lhs.args[1]
+                    varType = lhs.args[2] # Type
+
+                    push!(argTypes, eval(varType))
+                    push!(argParams, var)
+                    push!(argVars, var)
+                end
+
+            elseif ei.head == :(=) # def value provided
+
+                if ei.args[2].head == :tuple # var/var::T = defVal, name
+
+                    defVal = ei.args[2].args[1]
+                    ni = ei.args[2].args[2]
+
+                    push!(argDefVal, defVal)
+                    push!(argNames,ni)
+
+                    lhs = ei.args[1]
+                    if lhs isa Symbol #  var = defVal, "name"
+
+                        var = ei.args[1]
+
+                        push!(argTypes, String) # consider String as the type
+                        push!(argParams, Expr(:kw, var, defVal))
+                        push!(argVars, var)
+
+                    elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal, "name"
+
                         var = lhs.args[1]
-                        tvar = lhs.args[2] # Type
-                        push!(argTypes, eval(tvar))
+                        varType = lhs.args[2] # Type
+
+                        push!(argTypes, eval(varType))
+                        push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
+                        push!(argVars, var)
+                    end
+
+                else # var/var::T = defVal # ignored for creating aml
+
+                    lhs = ei.args[1]
+                    if lhs isa Symbol #  var = defVal
+
+                        defVal = ei.args[2]
+
+                        push!(argDefVal, defVal)
+                        push!(argNames,missing) # ignored for creating aml
+
+                        var = ei.args[1]
+
+                        push!(argTypes, Any)
+                        push!(argParams, Expr(:kw, var, defVal))
+                        push!(argVars, var)
+
+                    elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal
+
+                        defVal = ei.args[2]
+
+                        push!(argDefVal, defVal)
+                        push!(argNames,missing) # ignored for creating aml
+
+                        var = lhs.args[1]
+                        varType = lhs.args[2] # Type
+
+                        push!(argTypes, eval(varType))
+                        push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
+                        push!(argVars, var)
                     else
-                        push!(argTypes, String)
                         # something else, e.g. inline inner constructor
                         #   F(...) = ...
                         continue
                     end
-                    defexpr = vi.args[2]  # defexpr
-                    push!(argDefVal, defexpr)
-                    push!(argParams, Expr(:kw, var, esc(defexpr)))
+
+                end
+
+            else  # var/var::T
+                if ei isa Symbol #  var = defVel
+                    push!(argNames, missing) # argument ignored for aml
+
+                    push!(argTypes, String)
+
+                    var = ei
+
+                    push!(argParams, var)
                     push!(argVars, var)
-                    argExpr.args[i] = lhs # storing argument i (var or var::T)
-                elseif vi.head == :(::) && vi.args[1] isa Symbol # var with Type annotation
-                    # var::Type
-                    var = vi.args[1]
-                    tvar = vi.args[2]
-                    push!(argTypes, eval(tvar))
-                    push!(argDefVal, missing)
+
+                elseif ei.head == :(::) && ei.args[1] isa Symbol # var::T = defVel
+                    push!(argNames, missing) # argument ignored for aml
+
+                    var = ei.args[1]
+                    varType = ei.args[2] # Type
+
+                    push!(argTypes, eval(varType))
                     push!(argParams, var)
                     push!(argVars, var)
 
                 elseif vi.head == :block  # anything else should be evaluated again
                     # can arise with use of @static inside type decl
-                    argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName)
+                    argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName)
+                else
+                    continue
                 end
             end
 
         end
     end # endfor
-    return argExpr, params_args, argDefVal, argTypes, argVars, argNames, amlName
+    return argParams, argDefVal, argTypes, argVars, argNames, amlName
 end
 
 
