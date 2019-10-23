@@ -194,7 +194,7 @@ print(P2.aml)
 ```
 """
 macro aml(expr)
-    expr = macroexpand(__module__, expr) # to expand @static
+    # expr = macroexpand(__module__, expr) # to expand @static
     #  check if aml is used before struct
     expr isa Expr && expr.head == :struct || error("Invalid usage of @aml")
     T = expr.args[2] # Type name
@@ -207,7 +207,7 @@ macro aml(expr)
     argTypes = Union{Missing,Type, Symbol, Expr}[]
     argNames = Union{Missing,String}[]
     amlName = "name"
-    # expr.args[3] # Type arguments
+    # expr.args[3] # arguments
      # argParams.args # empty
     expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(expr.args[3], argParams.args, argDefVal, argTypes, argVars, argNames, amlName)
 
@@ -299,63 +299,115 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
         if isa(ei, String) # struct name "aml name"
             amlName = ei # Type aml name
         else
-            if ei.head == :tuple # argument is an aml argument , "some name" or "~"
-                vi = ei.args[1]
+            if ei.head == :tuple # var/var::T, "name"
+
                 ni = ei.args[2]
-                push!(argNames,ni)
-            elseif ei.head == :(=)
 
-
-            else  # argument is ignored for aml
-                vi = ei
-                ni = missing
-                push!(argNames,ni)
-            end
-
-            # Determining the argument among (var,var::Type, var = defexpr, var::T = defexpr, etc)
-            if vi isa Symbol
-                #  var
-                var = vi
-
-                push!(argTypes, String)
                 push!(argDefVal, missing)
-                push!(argParams, var)
-                push!(argVars, var)
-            elseif vi isa Expr # something more than a symbol = an expression
-                if vi.head == :(=) # either default value or a function
-                    lhs = vi.args[1]
-                    if lhs isa Symbol
-                        #  var = defexpr
-                        push!(argTypes, String)
-                        var = lhs
-                    elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol
-                        #  var::T = defexpr
+                push!(argNames,ni)
+
+                lhs = ei.args[1]
+                if lhs isa Symbol #  var, "name"
+
+                    var = ei.args[1]
+
+                    push!(argTypes, String) # consider String as the type
+                    push!(argParams, var)
+                    push!(argVars, var)
+
+                elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T, "name"
+
+                    var = lhs.args[1]
+                    varType = lhs.args[2] # Type
+
+                    push!(argTypes, eval(varType))
+                    push!(argParams, var)
+                    push!(argVars, var)
+                end
+
+            elseif ei.head == :(=) # def value provided
+
+                if ei.args[2].head == :tuple # var/var::T = defVal, name
+
+                    defVal = ei.args[2][1]
+                    ni = ei.args[2][2
+
+                    push!(argDefVal, defVal)
+                    push!(argNames,ni)
+
+                    lhs = ei.args[1]
+                    if lhs isa Symbol #  var = defVal, "name"
+
+                        var = ei.args[1]
+
+                        push!(argTypes, String) # consider String as the type
+                        push!(argParams, Expr(:kw, var, defVal))
+                        push!(argVars, var)
+
+                    elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal, "name"
+
                         var = lhs.args[1]
-                        tvar = lhs.args[2] # Type
-                        push!(argTypes, eval(tvar))
+                        varType = lhs.args[2] # Type
+
+                        push!(argTypes, eval(varType))
+                        push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
+                        push!(argVars, var)
+                    end
+
+                else # var/var::T = defVal # ignored for creating aml
+
+                    lhs = ei.args[1]
+                    if lhs isa Symbol #  var = defVal
+
+                        defVal = ei.args[2]
+
+                        push!(argDefVal, defVal)
+                        push!(argNames,missing) # ignored for creating aml
+
+                        var = ei.args[1]
+
+                        push!(argTypes, Any)
+                        push!(argParams, Expr(:kw, var, defVal))
+                        push!(argVars, var)
+
+                    elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal
+
+                        defVal = ei.args[2]
+
+                        push!(argDefVal, defVal)
+                        push!(argNames,missing) # ignored for creating aml
+
+                        var = lhs.args[1]
+                        varType = lhs.args[2] # Type
+
+                        push!(argTypes, eval(varType))
+                        push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
+                        push!(argVars, var)
                     else
-                        push!(argTypes, String)
                         # something else, e.g. inline inner constructor
                         #   F(...) = ...
                         continue
                     end
-                    defexpr = vi.args[2]  # defexpr
-                    push!(argDefVal, defexpr)
-                    push!(argParams, Expr(:kw, var, esc(defexpr)))
-                    push!(argVars, var)
-                    argExpr.args[i] = lhs # storing argument i (var or var::T)
-                elseif vi.head == :(::) && vi.args[1] isa Symbol # var with Type annotation
-                    # var::Type
-                    var = vi.args[1]
-                    tvar = vi.args[2]
-                    push!(argTypes, eval(tvar))
-                    push!(argDefVal, missing)
-                    push!(argParams, var)
-                    push!(argVars, var)
 
+                end
+
+            else  # var/var::T
+                push!(argNames, missing) # argument ignored for aml
+
+                if ei isa Symbol
+                    #  var = defexpr
+                    push!(argTypes, String)
+                    var = ei
+                elseif ei.head == :(::) && ei.args[1] isa Symbol # var with Type annotation
+                    #  var::T = defexpr
+                    var = ei.args[1]
+                    varType = ei.args[2] # Type
+                    push!(argTypes, eval(varType))
                 elseif vi.head == :block  # anything else should be evaluated again
                     # can arise with use of @static inside type decl
                     argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName)
+                else
+                    continue
                 end
             end
 
