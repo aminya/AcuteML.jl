@@ -257,7 +257,7 @@ macro aml(expr)
             typeDefinition =:($typeExpr)
 
             amlConstructor = quote
-                function ($(esc(T)))($argParams)
+                function ($(esc(T)))(; $(argParams...))
                     aml = ElementNode($amlName)
                     $(amlconst...)
                     return ($(esc(T)))($(argVars...),aml)
