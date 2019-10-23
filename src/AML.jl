@@ -198,54 +198,53 @@ macro aml(expr)
     #  check if aml is used before struct
     expr isa Expr && expr.head == :struct || error("Invalid usage of @aml")
     T = expr.args[2] # Type name
-    # Tn = exprt.args[3].args[2] # Type aml name
+    # amlName = exprt.args[3].args[2] # Type aml name
 
     aml = Symbol(:aml)
-    params_ex = Expr(:parameters)
-    call_args = Any[]
-    idxDefexp = Bool[]
-    defexpVal = Any[]
-    argType = Union{Missing,Type, Symbol, Expr}[]
-    name_args = Union{Missing,String}[]
-    Tn = "name"
+    argParams = Expr(:parameters)
+    argVars = Any[]
+    argDefVal = Any[]
+    argTypes = Union{Missing,Type, Symbol, Expr}[]
+    argNames = Union{Missing,String}[]
+    amlName = "name"
     # expr.args[3] # Type arguments
-     # params_ex.args # empty
-    expr.args[3], params_args, idxDefexp, defexpVal, argType, call_args, name_args, Tn = _aml(expr.args[3], params_ex.args, idxDefexp, defexpVal, argType, call_args, name_args, Tn)
+     # argParams.args # empty
+    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(expr.args[3], argParams.args, argDefVal, argTypes, argVars, argNames, amlName)
 
     # defining outter constructors
     # Only define a constructor if the type has fields, otherwise we'll get a stack
     # overflow on construction
-    if !isempty(params_ex.args)
+    if !isempty(argParams.args)
 
         # Type name is a single name (symbol)
         if T isa Symbol
 
-            idxXmlArgs = (!).(ismissing.(name_args)) # non aml arguments
-            xmlArgs = call_args[idxXmlArgs]
-            xmlNames = name_args[idxXmlArgs]
-            argType  = argType[idxXmlArgs]
-            numXml = length(xmlArgs)
+            idAmlArgs = (!).(ismissing.(argNames)) # non aml arguments
+            amlArgs = argVars[idAmlArgs]
+            amlNames = argNames[idAmlArgs]
+            argTypes  = argTypes[idAmlArgs]
+            numAml = length(amlArgs)
 
-            xmlconst=Vector{Expr}(undef,numXml)
-            xmlext=Vector{Expr}(undef,numXml)
+            amlconst=Vector{Expr}(undef,numAml)
+            amlext=Vector{Expr}(undef,numAml)
 
-            for i=1:numXml
-                argTypeI = argType[i]
-                xmlArgsI = xmlArgs[i]
-                xmlNamesI = xmlNames[i]
-                if isa(argTypeI, Symbol) || !(argTypeI <: Array)   # non vector
+            for i=1:numAml
+                argTypesI = argTypes[i]
+                amlArgsI = amlArgs[i]
+                amlNamesI = amlNames[i]
+                if isa(argTypesI, Symbol) || !(argTypesI <: Array)   # non vector
 
-                    xmlconst[i]=:(addelementOne!(aml, $xmlNamesI, $xmlArgsI))
-                    xmlext[i]=:($xmlArgsI = findfirstcontent($argTypeI, $xmlNamesI, aml))
+                    amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlArgsI))
+                    amlext[i]=:($amlArgsI = findfirstcontent($argTypesI, $amlNamesI, aml))
 
                 else # vector
 
-                    xmlconst[i]=:(addelementVect!(aml, $xmlNamesI, $xmlArgsI))
-                    xmlext[i]=:($xmlArgsI = findallcontent($argTypeI, $xmlNamesI, aml))
+                    amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlArgsI))
+                    amlext[i]=:($amlArgsI = findallcontent($argTypesI, $amlNamesI, aml))
                 end
             end
 
-            # two functions to make the type
+            # functions to make the type
             sexpr = replace(string(expr),r"\"(.*)\"" => "") # removing type string name
             sexpr = replace(sexpr,r"\((.*)\,(.*)\)" => s"\1") # removing all the arguments string names
             sexpr = replace(sexpr,r"end" => s"aml::Node \n end")
@@ -253,25 +252,25 @@ macro aml(expr)
 
             typeDefinition =:($typeExpr)
 
-            xmlConstructor = quote
-                function ($(esc(T)))($params_ex)
-                    aml = ElementNode($Tn)
-                    $(xmlconst...)
-                    return ($(esc(T)))($(call_args...),aml)
+            amlConstructor = quote
+                function ($(esc(T)))($argParams)
+                    aml = ElementNode($amlName)
+                    $(amlconst...)
+                    return ($(esc(T)))($(argVars...),aml)
                 end
             end
 
-            xmlExtractor = quote
+            amlExtractor = quote
                  function ($(esc(T)))(aml::Node)
-                     $(xmlext...)
-                     return ($(esc(T)))($(call_args...),aml)
+                     $(amlext...)
+                     return ($(esc(T)))($(argVars...),aml)
                   end
 
             end
             out = quote
                $typeDefinition
-               $xmlConstructor
-               $xmlExtractor
+               $amlConstructor
+               $amlExtractor
             end
         else
             error("Invalid usage of @aml")
@@ -289,25 +288,28 @@ end
 # @aml helper function
 # var is a symbol
 # var::T or anything more complex is an expression
-function _aml(tArgs, params_args, idxDefexp, defexpVal, argType, call_args, name_args, Tn)
-    for i in eachindex(tArgs.args) # iterating over arguments of each type argument
-        ei = tArgs.args[i] # type argument element i
+function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName)
+    for i in eachindex(argExpr.args) # iterating over arguments of each type argument
+        ei = argExpr.args[i] # type argument element i
 
         if typeof(ei) == LineNumberNode
             continue
         end
 
         if isa(ei, String) # struct name "aml name"
-            Tn = ei # Type aml name
+            amlName = ei # Type aml name
         else
             if ei.head == :tuple # argument is an aml argument , "some name" or "~"
                 vi = ei.args[1]
                 ni = ei.args[2]
-                push!(name_args,ni)
+                push!(argNames,ni)
+            elseif ei.head == :(=)
+
+
             else  # argument is ignored for aml
                 vi = ei
                 ni = missing
-                push!(name_args,ni)
+                push!(argNames,ni)
             end
 
             # Determining the argument among (var,var::Type, var = defexpr, var::T = defexpr, etc)
@@ -315,54 +317,51 @@ function _aml(tArgs, params_args, idxDefexp, defexpVal, argType, call_args, name
                 #  var
                 var = vi
 
-                push!(argType, String)
-                push!(defexpVal, missing)
-                push!(idxDefexp, false)
-                push!(params_args, var)
-                push!(call_args, var)
+                push!(argTypes, String)
+                push!(argDefVal, missing)
+                push!(argParams, var)
+                push!(argVars, var)
             elseif vi isa Expr # something more than a symbol = an expression
                 if vi.head == :(=) # either default value or a function
                     lhs = vi.args[1]
                     if lhs isa Symbol
                         #  var = defexpr
-                        push!(argType, String)
+                        push!(argTypes, String)
                         var = lhs
                     elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol
                         #  var::T = defexpr
                         var = lhs.args[1]
                         tvar = lhs.args[2] # Type
-                        push!(argType, eval(tvar))
+                        push!(argTypes, eval(tvar))
                     else
-                        push!(argType, String)
+                        push!(argTypes, String)
                         # something else, e.g. inline inner constructor
                         #   F(...) = ...
                         continue
                     end
                     defexpr = vi.args[2]  # defexpr
-                    push!(defexpVal, defexpr)
-                    push!(idxDefexp, true)
-                    push!(params_args, Expr(:kw, var, esc(defexpr)))
-                    push!(call_args, var)
-                    tArgs.args[i] = lhs # storing argument i (var or var::T)
+                    push!(argDefVal, defexpr)
+                    push!(argParams, Expr(:kw, var, esc(defexpr)))
+                    push!(argVars, var)
+                    argExpr.args[i] = lhs # storing argument i (var or var::T)
                 elseif vi.head == :(::) && vi.args[1] isa Symbol # var with Type annotation
                     # var::Type
                     var = vi.args[1]
                     tvar = vi.args[2]
-                    push!(argType, eval(tvar))
-                    push!(defexpVal, missing)
-                    push!(idxDefexp, false)
-                    push!(params_args, var)
-                    push!(call_args, var)
+                    push!(argTypes, eval(tvar))
+                    push!(argDefVal, missing)
+                    push!(argParams, var)
+                    push!(argVars, var)
 
                 elseif vi.head == :block  # anything else should be evaluated again
                     # can arise with use of @static inside type decl
-                    tArgs, params_args, idxDefexp, defexpVal, argType, call_args, name_args, Tn = _aml(tArgs, params_args, idxDefexp, defexpVal, argType, call_args, name_args, Tn)
+                    argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName)
                 end
             end
 
         end
     end # endfor
-    return tArgs, params_args, idxDefexp, defexpVal, argType, call_args, name_args, Tn
+    return argExpr, params_args, argDefVal, argTypes, argVars, argNames, amlName
 end
 
 
