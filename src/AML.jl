@@ -329,8 +329,8 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
                 if ei.args[2].head == :tuple # var/var::T = defVal, name
 
-                    defVal = ei.args[2][1]
-                    ni = ei.args[2][2
+                    defVal = ei.args[2].args[1]
+                    ni = ei.args[2].args[2]
 
                     push!(argDefVal, defVal)
                     push!(argNames,ni)
@@ -413,7 +413,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
         end
     end # endfor
-    return argExpr, params_args, argDefVal, argTypes, argVars, argNames, amlName
+    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName
 end
 
 
