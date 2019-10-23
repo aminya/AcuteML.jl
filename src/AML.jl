@@ -3,7 +3,7 @@ module AML
 using EzXML
 import EzXML.Node
 
-export @aml, print
+export @aml, print, show
 ################################################################
 # Extractors
 """
@@ -150,8 +150,15 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}) where {T}
         link!(aml,value[ii].aml)
     end
 end
-
-Base.print(x::Node) = prettyprint(x)
+################################################################
+function Base.print(x::Node)
+    println("")
+    prettyprint(x)
+end
+function Base.show(io::IO,x::Node)
+    println("")
+    prettyprint(io, x)
+end
 ################################################################
 """
   @aml typedef
