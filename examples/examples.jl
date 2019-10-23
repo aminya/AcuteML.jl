@@ -23,7 +23,7 @@ P1.aml
 
 =#
 
-print(P2.aml)
+P2.aml
 #=
 <person>
   <age>18</age>
