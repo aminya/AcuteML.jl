@@ -265,7 +265,6 @@ macro aml(expr)
             end
 
             # functions to make the type
-            sexpr = replace(string(expr),r"\"(.*)\"" => "") # removing type string name
             sexpr = replace(sexpr,r"\((.*)\,(.*)\)" => s"\1") # removing all the arguments string names
             sexpr = replace(sexpr,r"end" => s"aml::Node \n end")
             typeExpr= Meta.parse(sexpr)
@@ -326,6 +325,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
         if isa(ei, String) # struct name "aml name"
             amlName = ei # Type aml name
+            argExpr.args[i]=nothing  # removing "aml name" from expr args
         else
             if ei.head == :tuple # var/var::T, "name"
 
@@ -460,6 +460,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
         end
     end # endfor
+
     return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName
 end
 
