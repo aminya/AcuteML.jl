@@ -306,10 +306,12 @@ macro aml(expr)
                   end
 
             end
+            nothingMethod = :( ($(esc(T)))(::Nothing) = nothing )
             out = quote
                Base.@__doc__($(esc(typeDefinition)))
                $amlConstructor
                $amlExtractor
+               $nothingMethod
             end
 
         else
