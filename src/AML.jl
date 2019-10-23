@@ -243,15 +243,16 @@ macro aml(expr)
                 argTypesI = argTypes[i]
                 amlVarsI = amlVars[i]
                 amlNamesI = amlNames[i]
-                if isa(argTypesI, Symbol) || !(argTypesI <: Array)   # non vector
+                if isa(argTypesI, Expr) || (!isa(argTypesI, Symbol) && argTypesI <: Array)
+
+                    amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI))
+                    amlext[i]=:($amlVarsI = findallcontent($argTypesI, $amlNamesI, aml))
+
+                elseif isa(argTypesI, Symbol) || !(argTypesI <: Array)   # non vector
 
                     amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI))
                     amlext[i]=:($amlVarsI = findfirstcontent($argTypesI, $amlNamesI, aml))
 
-                else # vector
-
-                    amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI))
-                    amlext[i]=:($amlVarsI = findallcontent($argTypesI, $amlNamesI, aml))
                 end
             end
 
