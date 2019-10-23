@@ -428,7 +428,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                 end
 
             else  # var/var::T
-                if ei isa Symbol #  var = defVel
+                if ei isa Symbol #  var
                     push!(argNames, missing) # argument ignored for aml
 
                     push!(argTypes, String)
@@ -438,7 +438,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                     push!(argParams, var)
                     push!(argVars, var)
 
-                elseif ei.head == :(::) && ei.args[1] isa Symbol # var::T = defVel
+                elseif ei.head == :(::) && ei.args[1] isa Symbol # var::T
                     push!(argNames, missing) # argument ignored for aml
 
                     var = ei.args[1]
@@ -447,8 +447,6 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                     push!(argTypes, varType)
                     push!(argParams, var)
                     push!(argVars, var)
-
-                    argExpr.args[i]=lhs # remove =defVal for type definition
 
                 elseif vi.head == :block  # anything else should be evaluated again
                     # can arise with use of @static inside type decl
