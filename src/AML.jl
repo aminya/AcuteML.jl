@@ -264,10 +264,6 @@ macro aml(expr)
 
             end
 
-            # functions to make the type
-            typeExpr= Meta.parse(sexpr)
-
-
             # typeDefinition = quote
             #     $(Meta.parse("struct $(T)"))
             #     $(argDefinition...)
@@ -276,7 +272,7 @@ macro aml(expr)
             # end
 
 
-            typeDefinition =:($typeExpr)
+            typeDefinition =:($expr)
 
             amlConstructor = quote
                 function ($(esc(T)))(; $(argParams...))
@@ -314,16 +310,18 @@ end
 # var is a symbol
 # var::T or anything more complex is an expression
 function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName)
+    lineNumber=1
     for i in eachindex(argExpr.args) # iterating over arguments of each type argument
         ei = argExpr.args[i] # type argument element i
 
         if typeof(ei) == LineNumberNode
+            lineNumber +=2
             continue
         end
 
         if isa(ei, String) # struct name "aml name"
             amlName = ei # Type aml name
-            argExpr.args[i]= LineNumberNode(1)  # removing "aml name" from expr args
+            argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
         else
             if ei.head == :tuple # var/var::T, "name"
 
@@ -466,6 +464,9 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
         end
     end # endfor
+
+    push!(argExpr.args,LineNumberNode(lineNumber+2))
+    push!(argExpr.args,:(aml::Node))
 
     return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName
 end
