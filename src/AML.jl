@@ -194,7 +194,7 @@ print(P2.aml)
 ```
 """
 macro aml(expr)
-    # expr = macroexpand(__module__, expr) # to expand @static
+    expr = macroexpand(__module__, expr) # to expand @static
     #  check if aml is used before struct
     expr isa Expr && expr.head == :struct || error("Invalid usage of @aml")
     T = expr.args[2] # Type name
