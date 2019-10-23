@@ -179,7 +179,7 @@ P1 = Person(age=24, field="Mechanical Engineering", GPA=4.5, courses=["Artificia
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"])
 ```
 
-```julia
+```html
 julia> P1.aml
 <person>
   <age>24</age>
@@ -190,7 +190,7 @@ julia> P1.aml
 </person>
 
 
-julia> print(P2.aml)
+julia> P2.aml
 <person>
   <age>18</age>
   <study-field>Computer Engineering</study-field>

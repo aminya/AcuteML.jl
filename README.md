@@ -19,13 +19,12 @@ Use @aml macro to define a Julia type, and then the package automatically create
     courses::Vector{String}, "taken courses"
 end
 
-
-P1 = Person(age=24, field="Mechanical Engineering", GPA=4.5, courses=["Artificial Intelligence", "Robotics"])
-P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"])
+P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"])
+P2 = Person(age=18, field="Computer Engineering", courses=["Julia"])
 ```
 
-```julia
-julia> P1.aml
+```html
+julia>P1.aml
 <person>
   <age>24</age>
   <study-field>Mechanical Engineering</study-field>
@@ -35,7 +34,7 @@ julia> P1.aml
 </person>
 
 
-julia> print(P2.aml)
+julia> P2.aml
 <person>
   <age>18</age>
   <study-field>Computer Engineering</study-field>
