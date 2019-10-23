@@ -331,7 +331,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                     var = lhs.args[1]
                     varType = lhs.args[2] # Type
 
-                    push!(argTypes, eval(varType))
+                    push!(argTypes, varType)
                     push!(argParams, var)
                     push!(argVars, var)
                 end
@@ -360,7 +360,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                         var = lhs.args[1]
                         varType = lhs.args[2] # Type
 
-                        push!(argTypes, eval(varType))
+                        push!(argTypes, varType)
                         push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
                         push!(argVars, var)
                     end
@@ -391,7 +391,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                         var = lhs.args[1]
                         varType = lhs.args[2] # Type
 
-                        push!(argTypes, eval(varType))
+                        push!(argTypes, varType)
                         push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
                         push!(argVars, var)
                     else
@@ -419,7 +419,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                     var = ei.args[1]
                     varType = ei.args[2] # Type
 
-                    push!(argTypes, eval(varType))
+                    push!(argTypes, varType)
                     push!(argParams, var)
                     push!(argVars, var)
 
