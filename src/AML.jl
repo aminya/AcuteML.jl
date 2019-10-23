@@ -165,17 +165,21 @@ end
 
 Use @aml macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
+* Specify the root html/xml name in a string after the struct name
+* Sepecify the html/xml names for childs in strings in front of the struct fields after `,`
+* You can specify the default value for a argument by using `= defVal` syntax
+
 # Examples
 ```julia
-@aml mutable struct Person "person"
+@aml struct Person "person"
     age::UInt, "age"
     field::String, "study-field"
-    GPA::Float64, "GPA"
+    GPA::Float64 = 4.5, "GPA"
     courses::Vector{String}, "taken courses"
 end
 
 
-P1 = Person(age=24, field="Mechanical Engineering", GPA=4.5, courses=["Artificial Intelligence", "Robotics"])
+P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"])
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"])
 ```
 
@@ -216,7 +220,7 @@ macro aml(expr)
     amlName = "name"
     # expr.args[3] # arguments
      # argParams.args # empty
-    argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlName)
+    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlName)
 
     # defining outter constructors
     # Only define a constructor if the type has fields, otherwise we'll get a stack
@@ -294,7 +298,6 @@ macro aml(expr)
             end
             out = quote
                Base.@__doc__($(typeDefinition))
-               $typeDefinition
                $amlConstructor
                $amlExtractor
             end
@@ -361,6 +364,9 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                     push!(argNames,ni)
 
                     lhs = ei.args[1]
+
+                    argExpr.args[i]=lhs # remove =defVal for type definition
+
                     if lhs isa Symbol #  var = defVal, "name"
 
                         var = ei.args[1]
@@ -395,6 +401,8 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                         push!(argParams, Expr(:kw, var, defVal))
                         push!(argVars, var)
 
+                        argExpr.args[i]=lhs # remove =defVal for type definition
+
                     elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal
 
                         defVal = ei.args[2]
@@ -408,6 +416,9 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                         push!(argTypes, varType)
                         push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
                         push!(argVars, var)
+
+                        argExpr.args[i]=lhs # remove =defVal for type definition
+
                     else
                         # something else, e.g. inline inner constructor
                         #   F(...) = ...
@@ -437,6 +448,8 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                     push!(argParams, var)
                     push!(argVars, var)
 
+                    argExpr.args[i]=lhs # remove =defVal for type definition
+
                 elseif vi.head == :block  # anything else should be evaluated again
                     # can arise with use of @static inside type decl
                     argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName)
@@ -447,7 +460,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
         end
     end # endfor
-    return argParams, argDefVal, argTypes, argVars, argNames, amlName
+    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName
 end
 
 

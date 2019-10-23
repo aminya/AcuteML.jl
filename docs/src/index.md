@@ -8,20 +8,24 @@ AML web development framework in Julia
 
 It automatically creates/extracts HTML/XML files from Julia types!
 
-Use @aml macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
+Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
+
+* Specify the root html/xml name in a string after the struct name
+* Sepecify the html/xml names for childs in strings in front of the struct fields after `,`
+* You can specify the default value for a argument by using `= defVal` syntax
 
 # Examples
 ```julia
 
-@aml mutable struct Person "person"
+@aml struct Person "person"
     age::UInt, "age"
     field::String, "study-field"
-    GPA::Float64, "GPA"
+    GPA::Float64 = 4.5, "GPA"
     courses::Vector{String}, "taken courses"
 end
 
 
-P1 = Person(age=24, field="Mechanical Engineering", GPA=4.5, courses=["Artificial Intelligence", "Robotics"])
+P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"])
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"])
 ```
 
