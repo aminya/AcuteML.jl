@@ -3,7 +3,7 @@ module AML
 using EzXML
 import EzXML.Node
 
-export @aml, print, show
+export @aml, print, show, Node
 ################################################################
 # Extractors
 """
@@ -171,6 +171,8 @@ Use @aml macro to define a Julia type, and then the package automatically create
 
 # Examples
 ```julia
+using AML
+
 @aml struct Person "person"
     age::UInt, "age"
     field::String, "study-field"
@@ -179,8 +181,15 @@ Use @aml macro to define a Julia type, and then the package automatically create
 end
 
 
+@aml struct University "university"
+    name, "university-name"
+    people::Vector{Person}, "students"
+end
+
 P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"])
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"])
+
+U = University(name="Julia University", people=[P1, P2])
 ```
 
 ```html
@@ -201,6 +210,24 @@ julia> P2.aml
   <GPA>4</GPA>
   <taken courses>Julia</taken courses>
 </person>
+
+julia> U.aml
+<university>
+  <university-name>Julia University</university-name>
+  <person>
+    <age>24</age>
+    <study-field>Mechanical Engineering</study-field>
+    <GPA>4.5</GPA>
+    <taken courses>Artificial Intelligence</taken courses>
+    <taken courses>Robotics</taken courses>
+  </person>
+  <person>
+    <age>18</age>
+    <study-field>Computer Engineering</study-field>
+    <GPA>4</GPA>
+    <taken courses>Julia</taken courses>
+  </person>
+</university>
 
 ```
 """
@@ -242,7 +269,6 @@ macro aml(expr)
 
             amlconst=Vector{Expr}(undef,numAml)
             amlext=Vector{Expr}(undef,numAml)
-            # argDefinition=Vector{Expr}(undef,numAml)
 
             for i=1:numAml
                 argTypesI = argTypes[i]
@@ -260,16 +286,7 @@ macro aml(expr)
 
                 end
 
-                # argDefinition[i]=:($amlVarsI::$(argTypesI))
-
             end
-
-            # typeDefinition = quote
-            #     $(Meta.parse("struct $(T)"))
-            #     $(argDefinition...)
-            #     aml::Node
-            #     end
-            # end
 
 
             typeDefinition =:($expr)
@@ -290,7 +307,7 @@ macro aml(expr)
 
             end
             out = quote
-               Base.@__doc__($(typeDefinition))
+               Base.@__doc__($(esc(typeDefinition)))
                $amlConstructor
                $amlExtractor
             end
@@ -346,6 +363,10 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                     var = lhs.args[1]
                     varType = lhs.args[2] # Type
 
+                    if !(@isdefined varType)
+                        varType = :(esc($varType))
+                    end
+
                     push!(argTypes, varType)
                     push!(argParams, var)
                     push!(argVars, var)
@@ -383,6 +404,10 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                         var = lhs.args[1]
                         varType = lhs.args[2] # Type
 
+                        if !(@isdefined varType)
+                            varType = :(esc($varType))
+                        end
+
                         push!(argTypes, varType)
                         push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
                         push!(argVars, var)
@@ -419,6 +444,10 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                         var = lhs.args[1]
                         varType = lhs.args[2] # Type
 
+                        if !(@isdefined varType)
+                            varType = :(esc($varType))
+                        end
+
                         push!(argTypes, varType)
                         push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
                         push!(argVars, var)
@@ -449,6 +478,10 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
                     var = ei.args[1]
                     varType = ei.args[2] # Type
+
+                    if !(@isdefined varType)
+                        varType = :(esc($varType))
+                    end
 
                     push!(argTypes, varType)
                     push!(argParams, var)
