@@ -201,46 +201,50 @@ macro aml(expr)
     # amlName = exprt.args[3].args[2] # Type aml name
 
     aml = Symbol(:aml)
-    argParams = Expr(:parameters)
-    argVars = Any[]
+    argParams = Union{Expr,Symbol}[] # Expr(:parameters)[]
+    argVars = Union{Expr,Symbol}[]
     argDefVal = Any[]
     argTypes = Union{Missing,Type, Symbol, Expr}[]
     argNames = Union{Missing,String}[]
     amlName = "name"
     # expr.args[3] # arguments
      # argParams.args # empty
-    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(expr.args[3], argParams.args, argDefVal, argTypes, argVars, argNames, amlName)
+    argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlName)
 
     # defining outter constructors
     # Only define a constructor if the type has fields, otherwise we'll get a stack
     # overflow on construction
-    if !isempty(argParams.args)
+    if !isempty(argVars)
 
         # Type name is a single name (symbol)
         if T isa Symbol
 
             idAmlArgs = (!).(ismissing.(argNames)) # non aml arguments
-            amlArgs = argVars[idAmlArgs]
+
             amlNames = argNames[idAmlArgs]
+            amlVars = argVars[idAmlArgs]
+            amlParams = argParams[idAmlArgs]
+            amlDefVal = argDefVal[idAmlArgs]
             argTypes  = argTypes[idAmlArgs]
-            numAml = length(amlArgs)
+
+            numAml = length(amlVars)
 
             amlconst=Vector{Expr}(undef,numAml)
             amlext=Vector{Expr}(undef,numAml)
 
             for i=1:numAml
                 argTypesI = argTypes[i]
-                amlArgsI = amlArgs[i]
+                amlVarsI = amlVars[i]
                 amlNamesI = amlNames[i]
                 if isa(argTypesI, Symbol) || !(argTypesI <: Array)   # non vector
 
-                    amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlArgsI))
-                    amlext[i]=:($amlArgsI = findfirstcontent($argTypesI, $amlNamesI, aml))
+                    amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI))
+                    amlext[i]=:($amlVarsI = findfirstcontent($argTypesI, $amlNamesI, aml))
 
                 else # vector
 
-                    amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlArgsI))
-                    amlext[i]=:($amlArgsI = findallcontent($argTypesI, $amlNamesI, aml))
+                    amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI))
+                    amlext[i]=:($amlVarsI = findallcontent($argTypesI, $amlNamesI, aml))
                 end
             end
 
@@ -392,20 +396,29 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                 end
 
             else  # var/var::T
-                push!(argNames, missing) # argument ignored for aml
+                if ei isa Symbol #  var = defVel
+                    push!(argNames, missing) # argument ignored for aml
 
-                if ei isa Symbol
-                    #  var = defexpr
                     push!(argTypes, String)
+
                     var = ei
-                elseif ei.head == :(::) && ei.args[1] isa Symbol # var with Type annotation
-                    #  var::T = defexpr
+
+                    push!(argParams, var)
+                    push!(argVars, var)
+
+                elseif ei.head == :(::) && ei.args[1] isa Symbol # var::T = defVel
+                    push!(argNames, missing) # argument ignored for aml
+
                     var = ei.args[1]
                     varType = ei.args[2] # Type
+
                     push!(argTypes, eval(varType))
+                    push!(argParams, var)
+                    push!(argVars, var)
+
                 elseif vi.head == :block  # anything else should be evaluated again
                     # can arise with use of @static inside type decl
-                    argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName)
+                    argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName)
                 else
                     continue
                 end
@@ -413,7 +426,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
         end
     end # endfor
-    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName
+    return argParams, argDefVal, argTypes, argVars, argNames, amlName
 end
 
 
