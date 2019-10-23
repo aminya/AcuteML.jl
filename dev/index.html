@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · AML</title><link rel="canonical" href="https://aminya.github.io/AML/index.html"/><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link href="assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>AML</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li class="current"><a class="toctext" href>Home</a><ul class="internal"><li class="toplevel"><a class="toctext" href="#Examples-1">Examples</a></li></ul></li></ul></nav><article id="docs"><header><nav><ul><li><a href>Home</a></li></ul><a class="edit-page" href="https://github.com/aminya/AML/blob/master/docs/src/index.md#L"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Home</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="AML-1" href="#AML-1">AML</a></h1><p>AML web development framework in Julia</p><p>It automatically creates/extracts HTML/XML files from Julia types!</p><p>Use <code>@aml</code> macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.</p><ul><li>Specify the root html/xml name in a string after the struct name</li><li>Sepecify the html/xml names for childs in strings in front of the struct fields after <code>,</code></li><li>You can specify the default value for a argument by using <code>= defVal</code> syntax</li></ul><h1><a class="nav-anchor" id="Examples-1" href="#Examples-1">Examples</a></h1><pre><code class="language-julia">
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · AML</title><link rel="canonical" href="https://aminya.github.io/AML/index.html"/><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link href="assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>AML</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li class="current"><a class="toctext" href>Home</a><ul class="internal"></ul></li></ul></nav><article id="docs"><header><nav><ul><li><a href>Home</a></li></ul><a class="edit-page" href="https://github.com/aminya/AML/blob/master/docs/src/index.md#L"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Home</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="AML-1" href="#AML-1">AML</a></h1><p>AML web development framework in Julia</p><p>It automatically creates/extracts HTML/XML files from Julia types!</p><ul><li><a href="#AML.@aml-Tuple{Any}"><code>AML.@aml</code></a></li></ul><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="AML.@aml-Tuple{Any}" href="#AML.@aml-Tuple{Any}"><code>AML.@aml</code></a> — <span class="docstring-category">Macro</span>.</div><div><div><p>@aml typedef</p><p>Use @aml macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.</p><ul><li>Specify the root html/xml name in a string after the struct name</li><li>Sepecify the html/xml names for childs in strings in front of the struct fields after <code>,</code></li><li>You can specify the default value for a argument by using <code>= defVal</code> syntax</li></ul><p><strong>Examples</strong></p><pre><code class="language-julia">using AML
+
 @aml struct Person &quot;person&quot;
     age::UInt, &quot;age&quot;
     field::String, &quot;study-field&quot;
@@ -8,34 +9,15 @@
 end
 
 
-P1 = Person(age=24, field=&quot;Mechanical Engineering&quot;, courses=[&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;])
-P2 = Person(age=18, field=&quot;Computer Engineering&quot;, GPA=4, courses=[&quot;Julia&quot;])</code></pre><pre><code class="language-html">julia&gt; P1.aml
-&lt;person&gt;
-  &lt;age&gt;24&lt;/age&gt;
-  &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
-  &lt;GPA&gt;4.5&lt;/GPA&gt;
-  &lt;taken courses&gt;Artificial Intelligence&lt;/taken courses&gt;
-  &lt;taken courses&gt;Robotics&lt;/taken courses&gt;
-&lt;/person&gt;
-
-
-julia&gt; P2.aml
-&lt;person&gt;
-  &lt;age&gt;18&lt;/age&gt;
-  &lt;study-field&gt;Computer Engineering&lt;/study-field&gt;
-  &lt;GPA&gt;4&lt;/GPA&gt;
-  &lt;taken courses&gt;Julia&lt;/taken courses&gt;
-&lt;/person&gt;
-</code></pre><ul><li><a href="#AML.@aml-Tuple{Any}"><code>AML.@aml</code></a></li></ul><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="AML.@aml-Tuple{Any}" href="#AML.@aml-Tuple{Any}"><code>AML.@aml</code></a> — <span class="docstring-category">Macro</span>.</div><div><div><p>@aml typedef</p><p>Use @aml macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.</p><ul><li>Specify the root html/xml name in a string after the struct name</li><li>Sepecify the html/xml names for childs in strings in front of the struct fields after <code>,</code></li><li>You can specify the default value for a argument by using <code>= defVal</code> syntax</li></ul><p><strong>Examples</strong></p><pre><code class="language-julia">@aml struct Person &quot;person&quot;
-    age::UInt, &quot;age&quot;
-    field::String, &quot;study-field&quot;
-    GPA::Float64 = 4.5, &quot;GPA&quot;
-    courses::Vector{String}, &quot;taken courses&quot;
+@aml struct University &quot;university&quot;
+    name, &quot;university-name&quot;
+    people::Vector{Person}, &quot;students&quot;
 end
 
-
 P1 = Person(age=24, field=&quot;Mechanical Engineering&quot;, courses=[&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;])
-P2 = Person(age=18, field=&quot;Computer Engineering&quot;, GPA=4, courses=[&quot;Julia&quot;])</code></pre><pre><code class="language-html">julia&gt; P1.aml
+P2 = Person(age=18, field=&quot;Computer Engineering&quot;, GPA=4, courses=[&quot;Julia&quot;])
+
+U = University(name=&quot;Julia University&quot;, people=[P1, P2])</code></pre><pre><code class="language-html">julia&gt; P1.aml
 &lt;person&gt;
   &lt;age&gt;24&lt;/age&gt;
   &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
@@ -52,4 +34,22 @@ julia&gt; P2.aml
   &lt;GPA&gt;4&lt;/GPA&gt;
   &lt;taken courses&gt;Julia&lt;/taken courses&gt;
 &lt;/person&gt;
-</code></pre></div></div><a class="source-link" target="_blank" href="https://github.com/aminya/AML/blob/b46bcdafdd7c324252b9a2482af750b35afa5603/src/AML.jl#LL163-L206">source</a></section><footer><hr/></footer></article></body></html>
+
+julia&gt; U.aml
+&lt;university&gt;
+  &lt;university-name&gt;Julia University&lt;/university-name&gt;
+  &lt;person&gt;
+    &lt;age&gt;24&lt;/age&gt;
+    &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4.5&lt;/GPA&gt;
+    &lt;taken courses&gt;Artificial Intelligence&lt;/taken courses&gt;
+    &lt;taken courses&gt;Robotics&lt;/taken courses&gt;
+  &lt;/person&gt;
+  &lt;person&gt;
+    &lt;age&gt;18&lt;/age&gt;
+    &lt;study-field&gt;Computer Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4&lt;/GPA&gt;
+    &lt;taken courses&gt;Julia&lt;/taken courses&gt;
+  &lt;/person&gt;
+&lt;/university&gt;
+</code></pre></div></div><a class="source-link" target="_blank" href="https://github.com/aminya/AML/blob/a305828ccbda8f6b7af0a2de8a27a78aeb872b3d/src/AML.jl#LL163-L233">source</a></section><footer><hr/></footer></article></body></html>
