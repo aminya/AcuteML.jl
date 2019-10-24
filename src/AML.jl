@@ -23,7 +23,7 @@ using AML
     age::UInt, "age"
     field::String, "study-field"
     GPA::Float64 = 4.5, "GPA"
-    courses::Vector{String}, "taken courses"
+    courses::Vector{String}, "taken-courses"
 end
 
 
@@ -44,8 +44,8 @@ julia> print(P1.aml)
   <age>24</age>
   <study-field>Mechanical Engineering</study-field>
   <GPA>4.5</GPA>
-  <taken courses>Artificial Intelligence</taken courses>
-  <taken courses>Robotics</taken courses>
+  <taken-courses>Artificial Intelligence</taken-courses>
+  <taken-courses>Robotics</taken-courses>
 </person>
 
 
@@ -54,7 +54,7 @@ julia> print(P2.aml)
   <age>18</age>
   <study-field>Computer Engineering</study-field>
   <GPA>4</GPA>
-  <taken courses>Julia</taken courses>
+  <taken-courses>Julia</taken-courses>
 </person>
 
 julia> print(U.aml)
@@ -64,14 +64,14 @@ julia> print(U.aml)
     <age>24</age>
     <study-field>Mechanical Engineering</study-field>
     <GPA>4.5</GPA>
-    <taken courses>Artificial Intelligence</taken courses>
-    <taken courses>Robotics</taken courses>
+    <taken-courses>Artificial Intelligence</taken-courses>
+    <taken-courses>Robotics</taken-courses>
   </person>
   <person>
     <age>18</age>
     <study-field>Computer Engineering</study-field>
     <GPA>4</GPA>
-    <taken courses>Julia</taken courses>
+    <taken-courses>Julia</taken-courses>
   </person>
 </university>
 
