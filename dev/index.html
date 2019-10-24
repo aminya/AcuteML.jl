@@ -17,7 +17,7 @@ end
 P1 = Person(age=24, field=&quot;Mechanical Engineering&quot;, courses=[&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;])
 P2 = Person(age=18, field=&quot;Computer Engineering&quot;, GPA=4, courses=[&quot;Julia&quot;])
 
-U = University(name=&quot;Julia University&quot;, people=[P1, P2])</code></pre><pre><code class="language-html">julia&gt; P1.aml
+U = University(name=&quot;Julia University&quot;, people=[P1, P2])</code></pre><pre><code class="language-html">julia&gt; print(P1.aml)
 &lt;person&gt;
   &lt;age&gt;24&lt;/age&gt;
   &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
@@ -27,7 +27,7 @@ U = University(name=&quot;Julia University&quot;, people=[P1, P2])</code></pre><
 &lt;/person&gt;
 
 
-julia&gt; P2.aml
+julia&gt; print(P2.aml)
 &lt;person&gt;
   &lt;age&gt;18&lt;/age&gt;
   &lt;study-field&gt;Computer Engineering&lt;/study-field&gt;
@@ -35,7 +35,7 @@ julia&gt; P2.aml
   &lt;taken courses&gt;Julia&lt;/taken courses&gt;
 &lt;/person&gt;
 
-julia&gt; U.aml
+julia&gt; print(U.aml)
 &lt;university&gt;
   &lt;university-name&gt;Julia University&lt;/university-name&gt;
   &lt;person&gt;
@@ -52,4 +52,4 @@ julia&gt; U.aml
     &lt;taken courses&gt;Julia&lt;/taken courses&gt;
   &lt;/person&gt;
 &lt;/university&gt;
-</code></pre></div></div><a class="source-link" target="_blank" href="https://github.com/aminya/AML/blob/1256bb18dd9e4cdd0a0fcccc90abb53850d7bf9f/src/AML.jl#LL9-L79">source</a></section><footer><hr/></footer></article></body></html>
+</code></pre></div></div><a class="source-link" target="_blank" href="https://github.com/aminya/AML/blob/fe8a697d06295f9dc257fa7d62cfdea3aa736f3d/src/AML.jl#LL9-L79">source</a></section><footer><hr/></footer></article></body></html>
