@@ -1,7 +1,7 @@
 using EzXML
 import EzXML.Node
 
-export findfirstcontent, findallcontent, addelementOne!, addelementVect!, print, show
+export findfirstcontent, findallcontent, addelementOne!, addelementVect!, print
 
 
 ################################################################
@@ -154,8 +154,4 @@ end
 function Base.print(x::Node)
     println("")
     prettyprint(x)
-end
-function Base.show(io::IO,x::Node)
-    println("")
-    prettyprint(io, x)
 end

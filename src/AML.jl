@@ -39,7 +39,7 @@ U = University(name="Julia University", people=[P1, P2])
 ```
 
 ```html
-julia> P1.aml
+julia> print(P1.aml)
 <person>
   <age>24</age>
   <study-field>Mechanical Engineering</study-field>
@@ -49,7 +49,7 @@ julia> P1.aml
 </person>
 
 
-julia> P2.aml
+julia> print(P2.aml)
 <person>
   <age>18</age>
   <study-field>Computer Engineering</study-field>
@@ -57,7 +57,7 @@ julia> P2.aml
   <taken courses>Julia</taken courses>
 </person>
 
-julia> U.aml
+julia> print(U.aml)
 <university>
   <university-name>Julia University</university-name>
   <person>

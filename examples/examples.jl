@@ -18,7 +18,7 @@ P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"])
 
 U = University(name="Julia University", people=[P1, P2])
 
-P1.aml
+print(P1.aml)
 #=
 <person>
   <age>24</age>
@@ -30,7 +30,7 @@ P1.aml
 
 =#
 
-P2.aml
+print(P2.aml)
 #=
 <person>
   <age>18</age>
@@ -40,7 +40,7 @@ P2.aml
 </person>
 =#
 
-U.aml
+print(U.aml)
 #=
 <university>
   <university-name>Julia University</university-name>
