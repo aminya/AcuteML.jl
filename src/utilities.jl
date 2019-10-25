@@ -1,7 +1,7 @@
 using EzXML
-import EzXML.Node
+import EzXML: Document, Node
 
-export findfirstcontent, findallcontent, addelementOne!, addelementVect!, print
+export findfirstcontent, findallcontent, addelementOne!, addelementVect!, docOrElmInit, print
 
 
 ################################################################
@@ -110,6 +110,20 @@ function findallcontent(::Type{T}, s::String, node::Node) where{T}
 end
 ################################################################
 # Constructors
+
+#  defined or nothing
+function addelementOne!(aml::Document, name::String, value, amlType::Int8)
+
+    if hasroot(aml)
+        amlNode = root(aml)
+        if !isnothing(value)
+            link!(amlNode,value.aml)
+        end
+    else
+        setroot!(aml, value.aml)
+    end
+
+end
 
 # strings
 function addelementOne!(aml::Node, name::String, value::String, amlType::Int8)
