@@ -95,10 +95,11 @@ macro aml(expr)
     argDefVal = Any[]
     argTypes = Union{Missing,Type, Symbol, Expr}[]
     argNames = Union{Missing,String}[]
+    amlTypes = Int8[]
     amlName = "name"
     # expr.args[3] # arguments
      # argParams.args # empty
-    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlName)
+    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName = _aml(expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName)
 
     # defining outter constructors
     # Only define a constructor if the type has fields, otherwise we'll get a stack
@@ -114,6 +115,7 @@ macro aml(expr)
             amlVars = argVars[idAmlArgs]
             amlParams = argParams[idAmlArgs]
             amlDefVal = argDefVal[idAmlArgs]
+            amlTypes = amlTypes[idAmlArgs]
             argTypes  = argTypes[idAmlArgs]
 
             numAml = length(amlVars)
@@ -125,14 +127,15 @@ macro aml(expr)
                 argTypesI = argTypes[i]
                 amlVarsI = amlVars[i]
                 amlNamesI = amlNames[i]
-                if isa(argTypesI, Expr) || (!isa(argTypesI, Symbol) && argTypesI <: Array)
+                amlTypesI = amlTypes[i]
+                if isa(argTypesI, Expr) || (!isa(argTypesI, Symbol) && argTypesI <: Array) # vector
 
-                    amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI))
-                    amlext[i]=:($amlVarsI = findallcontent($argTypesI, $amlNamesI, aml))
+                        amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
+                        amlext[i]=:($amlVarsI = findallcontent($argTypesI, $amlNamesI, aml))
 
                 elseif isa(argTypesI, Symbol) || !(argTypesI <: Array)   # non vector
 
-                    amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI))
+                    amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
                     amlext[i]=:($amlVarsI = findfirstcontent($argTypesI, $amlNamesI, aml))
 
                 end
@@ -183,7 +186,7 @@ end
 # @aml helper function
 # var is a symbol
 # var::T or anything more complex is an expression
-function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName)
+function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName)
     lineNumber=1
     for i in eachindex(argExpr.args) # iterating over arguments of each type argument
         ei = argExpr.args[i] # type argument element i
@@ -199,10 +202,22 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
         else
             if ei.head == :tuple # var/var::T, "name"
 
-                ni = ei.args[2]
+                if length(ei.args[2]) == 2 # literal
+
+                    elmType = ei.args[2][1]
+                    push!(amlTypes, elmType) # literal type
+
+                    ni = ei.args[2][2]
+                    push!(argNames,ni)
+
+                else
+                    push!(amlTypes, 0) # non-literal
+
+                    ni = ei.args[2]
+                    push!(argNames,ni)
+                end
 
                 push!(argDefVal, missing)
-                push!(argNames,ni)
 
                 lhs = ei.args[1]
                 if lhs isa Symbol #  var, "name"
@@ -233,10 +248,23 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                 if ei.args[2].head == :tuple # var/var::T = defVal, name
 
                     defVal = ei.args[2].args[1]
-                    ni = ei.args[2].args[2]
+
+                    if length(ei.args[2].args[2]) == 2 # literal
+
+                        elmType = ei.args[2].args[2][1]
+                        push!(amlTypes, elmType) # literal type
+
+                        ni = ei.args[2].args[2][2]
+                        push!(argNames,ni)
+
+                    else
+                        push!(amlTypes, 0) # non-literal
+
+                        ni = ei.args[2].args[2]
+                        push!(argNames,ni)
+                    end
 
                     push!(argDefVal, defVal)
-                    push!(argNames,ni)
 
                     lhs = ei.args[1]
 
@@ -307,7 +335,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
                 end
 
-            else  # var/var::T
+            else  # var/var::T  # ignored for creating aml
                 if ei isa Symbol #  var
                     push!(argNames, missing) # argument ignored for aml
 
@@ -330,7 +358,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
                 elseif vi.head == :block  # anything else should be evaluated again
                     # can arise with use of @static inside type decl
-                    argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName)
+                    argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName)
                 else
                     continue
                 end
@@ -342,7 +370,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
     push!(argExpr.args,LineNumberNode(lineNumber+2))
     push!(argExpr.args,:(aml::Node))
 
-    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlName
+    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName
 end
 
 
