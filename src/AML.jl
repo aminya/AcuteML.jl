@@ -385,6 +385,20 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTyp
     return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName
 end
 
+# html document
+macro hd_str(s)
+    docOrElmType = -1
+    return docOrElmType, s
+end
+
+
+# xml document
+macro xd_str(s)
+    docOrElmType = -2
+    return docOrElmType, s
+end
+
+
 # attribute
 macro a_str(s)
     elmType = 2
