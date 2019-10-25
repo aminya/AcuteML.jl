@@ -215,10 +215,6 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                     var = lhs.args[1]
                     varType = lhs.args[2] # Type
 
-                    if !(@isdefined varType)
-                        varType = :(esc($varType))
-                    end
-
                     push!(argTypes, varType)
                     push!(argParams, var)
                     push!(argVars, var)
@@ -256,10 +252,6 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                         var = lhs.args[1]
                         varType = lhs.args[2] # Type
 
-                        if !(@isdefined varType)
-                            varType = :(esc($varType))
-                        end
-
                         push!(argTypes, varType)
                         push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
                         push!(argVars, var)
@@ -296,10 +288,6 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
                         var = lhs.args[1]
                         varType = lhs.args[2] # Type
 
-                        if !(@isdefined varType)
-                            varType = :(esc($varType))
-                        end
-
                         push!(argTypes, varType)
                         push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
                         push!(argVars, var)
@@ -330,10 +318,6 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlNam
 
                     var = ei.args[1]
                     varType = ei.args[2] # Type
-
-                    if !(@isdefined varType)
-                        varType = :(esc($varType))
-                    end
 
                     push!(argTypes, varType)
                     push!(argParams, var)
