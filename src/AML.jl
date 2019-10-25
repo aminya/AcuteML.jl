@@ -7,9 +7,9 @@ include("utilities.jl")
 # main macro
 export @aml
 # types
-export Node
+export Node, Document
 # literals
-export @a_str
+export @xd_str, @hd_str, @a_str
 ################################################################
 """
   @aml typedef
@@ -149,19 +149,20 @@ macro aml(expr)
 
             end
 
+            docOrElmconst = :( aml = docOrElmInit($docOrElmType, $amlName) )
 
             typeDefinition =:($expr)
 
             amlConstructor = quote
                 function ($(esc(T)))(; $(argParams...))
-                    aml = ElementNode($amlName)
+                    $docOrElmconst
                     $(amlconst...)
-                    return ($(esc(T)))($(argVars...),aml)
+                    return ($(esc(T)))($(argVars...), aml)
                 end
             end
 
             amlExtractor = quote
-                 function ($(esc(T)))(aml::Node)
+                 function ($(esc(T)))(aml::Union{Document, Node})
                      $(amlext...)
                      return ($(esc(T)))($(argVars...),aml)
                   end
@@ -212,9 +213,19 @@ function _aml(argExpr)
             continue
         end
 
-        if isa(ei, String) # struct name "aml name"
+        if isa(ei, String)  # struct name "aml name"
+
             amlName = ei # Type aml name
             argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
+            docOrElmType = 0
+
+        elseif isa(ei, Tuple) # literal# struct name xd/hd"aml name"
+
+            amlName = ei[2]
+            docOrElmType = ei[1]
+
+            argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
+
         else
             if ei.head == :tuple # var/var::T, "name"
 
@@ -384,7 +395,7 @@ function _aml(argExpr)
     end # endfor
 
     push!(argExpr.args,LineNumberNode(lineNumber+2))
-    push!(argExpr.args,:(aml::Node))
+    push!(argExpr.args,:(aml::Union{Document,Node}))
 
     return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType
 end
