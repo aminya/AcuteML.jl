@@ -189,6 +189,25 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int
         link!(aml,value[ii].aml)
     end
 end
+
+# doc or element initialize
+function docOrElmInit(type::Int64, name::String = nothing)
+
+    if type == 0 # element node
+
+        out = ElementNode(name)
+
+    elseif type == -1 # html
+
+        out = XMLDocument() # version 1
+
+    elseif type == -2 # xml
+
+        out = HTMLDocument() # no URI and external ID
+    end
+
+    return out
+end
 ################################################################
 function Base.print(x::Node)
     println("")
