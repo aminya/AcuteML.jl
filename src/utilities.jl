@@ -7,8 +7,8 @@ export findfirstcontent, findallcontent, addelementOne!, addelementVect!, print
 ################################################################
 # Extractors
 """
-    findfirstcontent(element,node)
-    findfirstcontent(type,element,node)
+findfirstcontent(element,node)
+findfirstcontent(type,element,node)
 
 
 Returns first element content. It also convert to the desired format by passing type. element is given as string.
@@ -50,7 +50,7 @@ end
 
 ################################################################
 """
-    findallcontent(type, string, node)
+findallcontent(type, string, node)
 
 Finds all the elements with the address of string in the node, and converts the elements to Type object.
 """
@@ -112,40 +112,79 @@ end
 # Constructors
 
 # strings
-function addelementOne!(aml::Node, name::String, value::String)
-    if !isnothing(value)
-        addelement!(aml, name, value)
+function addelementOne!(aml::Node, name::String, value::String, amlType::Int8)
+
+    if amlType == 0 # normal elements
+
+        if !isnothing(value)
+            addelement!(aml, name, value)
+        end
+
+    elseif amlType == 2 # Attributes
+
+        link!(aml, AttributeNode(name, value))
+
     end
 end
 
 # number
-function addelementOne!(aml::Node, name::String, value::T) where {T<:Number}
-    addelement!(aml, name, string(value))
+function addelementOne!(aml::Node, name::String, value::T, amlType::Int8) where {T<:Number}
+
+    if amlType == 0 # normal elements
+
+        addelement!(aml, name, string(value))
+
+    elseif amlType == 2 # Attributes
+
+        link!(aml, AttributeNode(name, string(value)))
+
+    end
 end
 
 #  defined or nothing
-function addelementOne!(aml::Node, name::String, value)
+function addelementOne!(aml::Node, name::String, value, amlType::Int8)
     if !isnothing(value)
         link!(aml,value.aml)
     end
 end
 
 # vector of strings
-function addelementVect!(aml::Node, name::String, value::Vector{String})
-    for ii = 1:length(value)
-        addelement!(aml, name, value[ii])
+function addelementVect!(aml::Node, name::String, value::Vector{String}, amlType::Int8)
+
+
+    if amlType == 0 # normal elements
+
+        for ii = 1:length(value)
+            addelement!(aml, name, value[ii])
+        end
+
+    elseif amlType == 2 # Attributes
+
+        for ii = 1:length(value)
+            link!(aml, AttributeNode(name, value[ii]))
+        end
     end
 end
 
 # vector of numbers
-function addelementVect!(aml::Node, name::String, value::Vector{T}) where {T<:Number}
-    for ii = 1:length(value)
-        addelement!(aml, name, string(value[ii]))
+function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int8) where {T<:Number}
+
+    if amlType == 0 # normal elements
+
+        for ii = 1:length(value)
+            addelement!(aml, name, string(value[ii]))
+        end
+
+    elseif amlType == 2 # Attributes
+
+        for ii = 1:length(value)
+            link!(aml, AttributeNode(name, string(value[ii])))
+        end
     end
 end
 
 #  vector of defined or nothing
-function addelementVect!(aml::Node, name::String, value::Vector{T}) where {T}
+function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int8) where {T}
     for ii = 1:length(value)
         link!(aml,value[ii].aml)
     end
