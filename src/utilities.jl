@@ -213,3 +213,7 @@ function Base.print(x::Node)
     println("")
     prettyprint(x)
 end
+function Base.print(x::Document)
+    println("")
+    prettyprint(x)
+end
