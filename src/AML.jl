@@ -102,16 +102,11 @@ macro aml(expr)
     # amlName = exprt.args[3].args[2] # Type aml name
 
     aml = Symbol(:aml)
-    argParams = Union{Expr,Symbol}[] # Expr(:parameters)[]
-    argVars = Union{Expr,Symbol}[]
-    argDefVal = Any[]
-    argTypes = Union{Missing,Type, Symbol, Expr}[]
-    argNames = Union{Missing,String}[]
-    amlTypes = Int8[]
-    amlName = "name"
+
     # expr.args[3] # arguments
      # argParams.args # empty
-    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName = _aml(expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName)
+    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType = _aml(expr.args[3])
+
 
     # defining outter constructors
     # Only define a constructor if the type has fields, otherwise we'll get a stack
@@ -198,7 +193,16 @@ end
 # @aml helper function
 # var is a symbol
 # var::T or anything more complex is an expression
-function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName)
+function _aml(argExpr)
+
+    argParams = Union{Expr,Symbol}[] # Expr(:parameters)[]
+    argVars = Union{Expr,Symbol}[]
+    argDefVal = Any[]
+    argTypes = Union{Missing,Type, Symbol, Expr}[]
+    argNames = Union{Missing,String}[]
+    amlTypes = Int8[]
+    amlName = "my type"
+    docOrElmType = 0
     lineNumber=1
     for i in eachindex(argExpr.args) # iterating over arguments of each type argument
         ei = argExpr.args[i] # type argument element i
@@ -370,7 +374,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTyp
 
                 elseif vi.head == :block  # anything else should be evaluated again
                     # can arise with use of @static inside type decl
-                    argParams, argDefVal, argTypes, argVars, argNames, amlName = _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName)
+                    argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType = _aml(argExpr)
                 else
                     continue
                 end
@@ -382,7 +386,7 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTyp
     push!(argExpr.args,LineNumberNode(lineNumber+2))
     push!(argExpr.args,:(aml::Node))
 
-    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName
+    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType
 end
 
 # html document
