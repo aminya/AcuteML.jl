@@ -4,7 +4,12 @@ import EzXML.Node
 
 include("utilities.jl")
 
-export @aml, Node
+# main macro
+export @aml
+# types
+export Node
+# literals
+export @a_str
 ################################################################
 """
   @aml typedef
