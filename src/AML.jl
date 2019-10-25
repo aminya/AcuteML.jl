@@ -373,6 +373,17 @@ function _aml(argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTyp
     return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName
 end
 
+# attribute
+macro a_str(s)
+    elmType = 2
+    return elmType, s
+end
+
+# namespace
+macro ns_str(s)
+    elmType = 18
+    return elmType, s
+end
 
 
 
