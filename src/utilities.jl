@@ -63,6 +63,7 @@ function findfirstcontent(::Type{T}, s::String, node::Node) where{T<:Union{Strin
         elm = findfirstlocal(s,node)
     end
 
+    if isnothing(elm) # return nothing if nothing is found
         return nothing
     else
         return elm.content
@@ -79,6 +80,8 @@ function findfirstcontent(::Type{T},s::String,node::Node) where {T<:Union{Number
     else
         elm = findfirstlocal(s,node)
     end
+
+    if isnothing(elm) # return nothing if nothing is found
         return nothing
     else
         return parse(T, elm.content)
@@ -94,6 +97,7 @@ function findfirstcontent(::Type{T},s::String,node::Node) where {T}
         elm = findfirstlocal(s,node)
     end
 
+    if isnothing(elm) # return nothing if nothing is found
         return nothing
     else
         return T(elm)
@@ -116,6 +120,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node) where{T<:Union
         elmsNode = findalllocal(s, node) # a vector of Node elements
     end
 
+    if isnothing(elmsNode)  # return nothing if nothing is found
         return nothing
     else
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
@@ -139,8 +144,7 @@ function findallcontent(::Type{T}, s::String, node::Node) where{T<:Union{Number,
         elmsNode = findalllocal(s, node) # a vector of Node elements
     end
 
-    elmsNode = findall(s, node) # a vector of Node elements
-    if isnothing(elmsNode)
+    if isnothing(elmsNode) # return nothing if nothing is found
         return nothing
     else
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
@@ -162,8 +166,7 @@ function findallcontent(::Type{T}, s::String, node::Node) where{T}
         elmsNode = findalllocal(s, node) # a vector of Node elements
     end
 
-    elmsNode = findall(s, node) # a vector of Node elements
-    if isnothing(elmsNode)
+    if isnothing(elmsNode) # return nothing if nothing is found
         return nothing
     else
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
