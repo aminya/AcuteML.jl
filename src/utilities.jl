@@ -45,8 +45,8 @@ end
 ################################################################
 # Single extraction
 """
-findfirstcontent(element,node)
-findfirstcontent(type,element,node)
+    findfirstcontent(element,node)
+    findfirstcontent(type,element,node)
 
 
 Returns first element content. It also convert to the desired format by passing type. element is given as string.
@@ -56,11 +56,11 @@ findfirstcontent(UInt8,"/midi-channel",node)
 ```
 """
 # for strings
-function findfirstcontent(::Type{T}, s::String, node::Node, amlType::Int8) where{T<:Union{String, Nothing}}
+function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Nothing}}
 
     if amlType == 0 # normal elements
 
-        if hasdocument(node)
+        if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
         else
             elm = findfirstlocal(s,node)
@@ -90,14 +90,14 @@ end
 
 
 # if no type is provided consider it to be string
-findfirstcontent(s::String,node::Node, amlType::Int8) = findfirstcontent(Union{String, Nothing}, s, node, amlType)
+findfirstcontent(s::String,node::Union{Node, Document}, amlType::Int64) = findfirstcontent(Union{String, Nothing}, s, node, amlType)
 
 # for numbers
-function findfirstcontent(::Type{T},s::String,node::Node, amlType::Int8) where {T<:Union{Number,Nothing}}
+function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlType::Int64) where {T<:Union{Number,Nothing}}
 
     if amlType == 0 # normal elements
 
-        if hasdocument(node)
+        if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
         else
             elm = findfirstlocal(s,node)
@@ -124,11 +124,11 @@ function findfirstcontent(::Type{T},s::String,node::Node, amlType::Int8) where {
 end
 
 # for defined types
-function findfirstcontent(::Type{T},s::String,node::Node, amlType::Int8) where {T}
+function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlType::Int64) where {T}
 
     if amlType == 0 # normal elements
 
-        if hasdocument(node)
+        if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
         else
             elm = findfirstlocal(s,node)
