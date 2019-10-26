@@ -10,11 +10,11 @@ end
 
 @aml struct University "university"
     name, a"university-name"
-    people::Vector{Person}, "students"
+    people::Vector{Person}, "person"
 end
 
 @aml struct Doc xd""
-    university::University, ""
+    university::University, "university"
 end
 
 

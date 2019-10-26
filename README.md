@@ -10,6 +10,7 @@ It automatically creates/extracts HTML/XML files from Julia types!
 
 Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
+# Type defnition
 
 * Use `xd""` or `hd""` to define a XML or HTML document:
 ```julia
@@ -23,9 +24,9 @@ Use `@aml` macro to define a Julia type, and then the package automatically crea
 ```julia
 age::UInt, "age"
 ```
-* For already `@aml` defined types, name doesn't matter.
+* For already `@aml` defined types, name should be the same as its real name
 ```julia
-university::University, ""
+university::University, "university"
 ```
 * If the value is going to be an attribute put `a` before its name
 ```julia
@@ -36,7 +37,7 @@ ID::Int64, a"id"
 GPA::Float64 = 4.5, "GPA"
 ```
 
-# Example
+# Example 1 - constructor
 ```julia
 using AML
 
@@ -50,11 +51,11 @@ end
 
 @aml struct University "university"
     name, a"university-name"
-    people::Vector{Person}, "students"
+    people::Vector{Person}, "person"
 end
 
 @aml struct Doc xd""
-    university::University, ""
+    university::University, "university"
 end
 
 

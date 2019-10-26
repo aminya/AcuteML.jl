@@ -28,9 +28,9 @@ Use @aml macro to define a Julia type, and then the package automatically create
 ```julia
 age::UInt, "age"
 ```
-* For already `@aml` defined types, name doesn't matter.
+* For already `@aml` defined types, name should be the same as its real name
 ```julia
-university::University, ""
+university::University, "university"
 ```
 * If the value is going to be an attribute put `a` before its name
 ```julia
@@ -41,7 +41,7 @@ ID::Int64, a"id"
 GPA::Float64 = 4.5, "GPA"
 ```
 
-# Examples
+# Example 1 - constructor
 ```julia
 using AML
 
@@ -55,11 +55,11 @@ end
 
 @aml struct University "university"
     name, a"university-name"
-    people::Vector{Person}, "students"
+    people::Vector{Person}, "person"
 end
 
 @aml struct Doc xd""
-    university::University, ""
+    university::University, "university"
 end
 
 
