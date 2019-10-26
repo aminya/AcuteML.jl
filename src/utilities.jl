@@ -6,6 +6,23 @@ export findfirstcontent, findallcontent, addelementOne!, addelementVect!, docOrE
 
 ################################################################
 # Extractors
+
+"""
+findfirstlocal(s, node)
+
+findfirst with ignoring namespaces. It considers element.name for returning the elements
+"""
+function findfirstlocal(s::String, node::Node)
+    out = nothing # return nothing if nothing is found
+    for child in eachelement(node)
+        if child.name == s
+            out = child
+            break
+        end
+    end
+    return out
+end
+
 """
 findfirstcontent(element,node)
 findfirstcontent(type,element,node)
