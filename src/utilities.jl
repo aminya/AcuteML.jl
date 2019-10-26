@@ -65,20 +65,29 @@ function findfirstcontent(::Type{T}, s::String, node::Node, amlType::Int8) where
             elm = findfirstlocal(s,node)
         end
 
+        if isnothing(elm) # return nothing if nothing is found
+            return nothing
+        else
+            return elm.content
+        end
+
     elseif amlType == 2 # Attributes
 
         elm = node[s]
+
+        if isnothing(elm) # return nothing if nothing is found
+            return nothing
+        else
+            return elm
+        end
+
     end
 
-    if isnothing(elm) # return nothing if nothing is found
-        return nothing
-    else
-        return elm.content
-    end
-    
-end
+
 
 end
+
+
 # if no type is provided consider it to be string
 findfirstcontent(s::String,node::Node, amlType::Int8) = findfirstcontent(Union{String, Nothing}, s, node, amlType)
 
@@ -93,17 +102,24 @@ function findfirstcontent(::Type{T},s::String,node::Node, amlType::Int8) where {
             elm = findfirstlocal(s,node)
         end
 
+        if isnothing(elm) # return nothing if nothing is found
+            return nothing
+        else
+            return parse(T, elm.content)
+        end
 
     elseif amlType == 2 # Attributes
 
         elm = parse(T, node[s])
+
+        if isnothing(elm) # return nothing if nothing is found
+            return nothing
+        else
+            return elm
+        end
     end
 
-    if isnothing(elm) # return nothing if nothing is found
-        return nothing
-    else
-        return parse(T, elm.content)
-    end
+
 end
 
 # for defined types
@@ -117,17 +133,25 @@ function findfirstcontent(::Type{T},s::String,node::Node, amlType::Int8) where {
             elm = findfirstlocal(s,node)
         end
 
+        if isnothing(elm) # return nothing if nothing is found
+            return nothing
+        else
+            return T(elm)
+        end
+
     elseif amlType == 2 # Attributes
 
         elm = node[s]
 
+        if isnothing(elm) # return nothing if nothing is found
+            return nothing
+        else
+            return elm
+        end
+
     end
 
-    if isnothing(elm) # return nothing if nothing is found
-        return nothing
-    else
-        return T(elm)
-    end
+
 end
 
 ################################################################
@@ -148,23 +172,37 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8)
             elmsNode = findalllocal(s, node) # a vector of Node elements
         end
 
+        if isnothing(elmsNode)  # return nothing if nothing is found
+            return nothing
+        else
+            elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+            i=1
+            for elm in elmsNode
+                elmsType[i]=elm.content
+                i=+1
+            end
+            return elmsType
+        end
+
     elseif amlType == 2 # Attributes
 
         elmsNode = node[s]
 
+        if isnothing(elmsNode)  # return nothing if nothing is found
+            return nothing
+        else
+            elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+            i=1
+            for elm in elmsNode
+                elmsType[i]=elm
+                i=+1
+            end
+            return elmsType
+        end
+
     end
 
-    if isnothing(elmsNode)  # return nothing if nothing is found
-        return nothing
-    else
-        elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
-        i=1
-        for elm in elmsNode
-            elmsType[i]=elm.content
-            i=+1
-        end
-        return elmsType
-    end
+
 
 end
 # if no type is provided consider it to be string
@@ -181,23 +219,37 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8)
             elmsNode = findalllocal(s, node) # a vector of Node elements
         end
 
+        if isnothing(elmsNode) # return nothing if nothing is found
+            return nothing
+        else
+            elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+            i=1
+            for elm in elmsNode
+                elmsType[i]=parse(T, elm.content)
+                i=+1
+            end
+            return elmsType
+        end
+
     elseif amlType == 2 # Attributes
 
         elmsNode = parse(T, node[s])
 
+        if isnothing(elmsNode) # return nothing if nothing is found
+            return nothing
+        else
+            elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+            i=1
+            for elm in elmsNode
+                elmsType[i]=parse(T, elm)
+                i=+1
+            end
+            return elmsType
+        end
+
     end
 
-    if isnothing(elmsNode) # return nothing if nothing is found
-        return nothing
-    else
-        elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
-        i=1
-        for elm in elmsNode
-            elmsType[i]=parse(T, elm.content)
-            i=+1
-        end
-        return elmsType
-    end
+
 
 end
 
