@@ -204,11 +204,20 @@ end
 # for defined types
 function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8) where{T}
 
-    if hasdocument(node)
-        elmsNode = findall(s, node) # a vector of Node elements
-    else
-        elmsNode = findalllocal(s, node) # a vector of Node elements
+    if amlType == 0 # normal elements
+
+        if hasdocument(node)
+            elmsNode = findall(s, node) # a vector of Node elements
+        else
+            elmsNode = findalllocal(s, node) # a vector of Node elements
+        end
+
+    elseif amlType == 2 # Attributes
+
+        elmsNode = node[s]
+
     end
+
 
     if isnothing(elmsNode) # return nothing if nothing is found
         return nothing
