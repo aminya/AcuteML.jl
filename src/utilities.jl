@@ -4,20 +4,6 @@ import EzXML: Document, Node
 export findalllocal, findfirstlocal, findfirstcontent, findallcontent, addelementOne!, addelementVect!, docOrElmInit, print
 
 ################################################################
-# from EzXML
-funs = [:parsexml, :parsehtml, :readxml, :readhtml]
-for fun in funs
-
-    @eval begin
-
-        # doc
-        @doc @doc $(fun)
-
-        # exporting
-        export $(fun)
-    end
-end
-################################################################
 # Extractors
 
 """
@@ -67,8 +53,8 @@ findfirstcontent("/instrument-name",node)
 findfirstcontent(UInt8,"/midi-channel",node)
 ```
 """
-# for strings
-function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Nothing}}
+function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Nothing}} # for strings
+
 
     if amlType == 0 # normal elements
 
@@ -174,8 +160,8 @@ end
 
 Finds all the elements with the address of string in the node, and converts the elements to Type object.
 """
-# for strings
-function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Nothing}}
+function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Nothing}} # for strings
+
 
     if amlType == 0 # normal elements
 
