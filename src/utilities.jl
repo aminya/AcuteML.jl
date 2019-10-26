@@ -9,11 +9,11 @@ export parsexml, parsehtml, readxml, readhtml
 # Extractors
 
 """
-findfirstlocal(s, node)
+    findfirstlocal(s, node)
 
 findfirst with ignoring namespaces. It considers element.name for returning the elements
 """
-function findfirstlocal(s::String, node::Node)
+function findfirstlocal(s::String, node::Union{Node, Document})
     out = nothing # return nothing if nothing is found
     for child in eachelement(node)
         if child.name == s
