@@ -24,6 +24,26 @@ function findfirstlocal(s::String, node::Node)
 end
 
 """
+findalllocal(s,node)
+
+findalllocal with ignoring namespaces. It considers element.name for returning the elements
+"""
+function findalllocal(s::String, node::Node)
+    out = Node[]
+    for child in eachelement(node)
+        if child.name == s
+            push!(out, child)
+        end
+    end
+    if !isempty(out)
+        return out
+    else # return nothing if nothing is found
+        return nothing
+    end
+end
+################################################################
+# Single extraction
+"""
 findfirstcontent(element,node)
 findfirstcontent(type,element,node)
 
