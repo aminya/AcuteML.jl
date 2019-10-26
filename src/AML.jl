@@ -16,6 +16,8 @@ export @xd_str, @hd_str, @a_str
 
 Use @aml macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
+# Type defnition
+
 * Use `xd""` or `hd""` to define a XML or HTML document:
 ```julia
 @aml struct Doc xd""
@@ -245,12 +247,13 @@ macro aml(expr)
                 if isa(argTypesI, Expr) || (!isa(argTypesI, Symbol) && argTypesI <: Array) # vector
 
                         amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
-                        amlext[i]=:($amlVarsI = findallcontent($argTypesI, $amlNamesI, aml, $amlTypesI))
+
+                        amlext[i]=:($amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
                 elseif isa(argTypesI, Symbol) || !(argTypesI <: Array)   # non vector
 
                     amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
-                    amlext[i]=:($amlVarsI = findfirstcontent($argTypesI, $amlNamesI, aml, $amlTypesI))
+                    amlext[i]=:($amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
                 end
 
@@ -271,7 +274,7 @@ macro aml(expr)
             amlExtractor = quote
                  function ($(esc(T)))(aml::Union{Document, Node})
                      $(amlext...)
-                     return ($(esc(T)))($(argVars...),aml)
+                     return ($(esc(T)))($(argVars...), aml)
                   end
 
             end
