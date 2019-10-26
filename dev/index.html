@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · AML</title><link rel="canonical" href="https://aminya.github.io/AML/index.html"/><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link href="assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>AML</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li class="current"><a class="toctext" href>Home</a><ul class="internal"></ul></li></ul></nav><article id="docs"><header><nav><ul><li><a href>Home</a></li></ul><a class="edit-page" href="https://github.com/aminya/AML/blob/master/docs/src/index.md#L"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Home</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="AML-1" href="#AML-1">AML</a></h1><p>AML web development framework in Julia</p><p>It automatically creates/extracts HTML/XML files from Julia types!</p><ul><li><a href="#AML.findalllocal-Tuple{String,Node}"><code>AML.findalllocal</code></a></li><li><a href="#AML.findfirstlocal-Tuple{String,Node}"><code>AML.findfirstlocal</code></a></li><li><a href="#AML.@aml-Tuple{Any}"><code>AML.@aml</code></a></li></ul><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="AML.@aml-Tuple{Any}" href="#AML.@aml-Tuple{Any}"><code>AML.@aml</code></a> — <span class="docstring-category">Macro</span>.</div><div><div><p>@aml typedef</p><p>Use @aml macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.</p><ul><li>Use <code>xd&quot;&quot;</code> or <code>hd&quot;&quot;</code> to define a XML or HTML document:</li></ul><pre><code class="language-julia">@aml struct Doc xd&quot;&quot;</code></pre><ul><li>Specify the element name in a string after the struct name</li></ul><pre><code class="language-julia">@aml struct Person &quot;person&quot;</code></pre><ul><li>Sepecify the html/xml names for childs in strings in front of the struct fields after <code>,</code></li></ul><pre><code class="language-julia">age::UInt, &quot;age&quot;</code></pre><ul><li>For already <code>@aml</code> defined types, name doesn&#39;t matter.</li></ul><pre><code class="language-julia">university::University, &quot;&quot;</code></pre><ul><li>If the value is going to be an attribute put <code>a</code> before its name</li></ul><pre><code class="language-julia">ID::Int64, a&quot;id&quot;</code></pre><ul><li>You can specify the default value for an argument by using <code>= defVal</code> syntax</li></ul><pre><code class="language-julia">GPA::Float64 = 4.5, &quot;GPA&quot;</code></pre><p><strong>Examples</strong></p><pre><code class="language-julia">using AML
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · AML</title><link rel="canonical" href="https://aminya.github.io/AML/index.html"/><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link href="assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>AML</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li class="current"><a class="toctext" href>Home</a><ul class="internal"></ul></li></ul></nav><article id="docs"><header><nav><ul><li><a href>Home</a></li></ul><a class="edit-page" href="https://github.com/aminya/AML/blob/master/docs/src/index.md#L"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Home</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="AML-1" href="#AML-1">AML</a></h1><p>AML web development framework in Julia</p><p>It automatically creates/extracts HTML/XML files from Julia types!</p><ul><li><a href="#AML.findalllocal-Tuple{String,Union{Document, Node}}"><code>AML.findalllocal</code></a></li><li><a href="#AML.findfirstlocal-Tuple{String,Union{Document, Node}}"><code>AML.findfirstlocal</code></a></li><li><a href="#AML.@aml-Tuple{Any}"><code>AML.@aml</code></a></li></ul><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="AML.findalllocal-Tuple{String,Union{Document, Node}}" href="#AML.findalllocal-Tuple{String,Union{Document, Node}}"><code>AML.findalllocal</code></a> — <span class="docstring-category">Method</span>.</div><div><div><pre><code class="language-julia">findalllocal(s,node)</code></pre><p>findalllocal with ignoring namespaces. It considers element.name for returning the elements</p></div></div><a class="source-link" target="_blank" href="https://github.com/aminya/AML/blob/67846af70aa47e551399fc06b4d9fdca29d41b7c/src/utilities.jl#LL27-L31">source</a></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="AML.findfirstlocal-Tuple{String,Union{Document, Node}}" href="#AML.findfirstlocal-Tuple{String,Union{Document, Node}}"><code>AML.findfirstlocal</code></a> — <span class="docstring-category">Method</span>.</div><div><div><pre><code class="language-julia">findfirstlocal(s, node)</code></pre><p>findfirst with ignoring namespaces. It considers element.name for returning the elements</p></div></div><a class="source-link" target="_blank" href="https://github.com/aminya/AML/blob/67846af70aa47e551399fc06b4d9fdca29d41b7c/src/utilities.jl#LL11-L15">source</a></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="AML.@aml-Tuple{Any}" href="#AML.@aml-Tuple{Any}"><code>AML.@aml</code></a> — <span class="docstring-category">Macro</span>.</div><div><div><p>@aml typedef</p><p>Use @aml macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.</p><p><strong>Type defnition</strong></p><ul><li>Use <code>xd&quot;&quot;</code> or <code>hd&quot;&quot;</code> to define a XML or HTML document:</li></ul><pre><code class="language-julia">@aml struct Doc xd&quot;&quot;</code></pre><ul><li>Specify the element name in a string after the struct name</li></ul><pre><code class="language-julia">@aml struct Person &quot;person&quot;</code></pre><ul><li>Sepecify the html/xml names for childs in strings in front of the struct fields after <code>,</code></li></ul><pre><code class="language-julia">age::UInt, &quot;age&quot;</code></pre><ul><li>For already <code>@aml</code> defined types, name should be the same as its real name</li></ul><pre><code class="language-julia">university::University, &quot;university&quot;</code></pre><ul><li>If the value is going to be an attribute put <code>a</code> before its name</li></ul><pre><code class="language-julia">ID::Int64, a&quot;id&quot;</code></pre><ul><li>You can specify the default value for an argument by using <code>= defVal</code> syntax</li></ul><pre><code class="language-julia">GPA::Float64 = 4.5, &quot;GPA&quot;</code></pre><p><strong>Example 1 - constructor</strong></p><pre><code class="language-julia">using AML
 
 @aml struct Person &quot;person&quot;
     age::UInt, &quot;age&quot;
@@ -11,11 +11,11 @@ end
 
 @aml struct University &quot;university&quot;
     name, a&quot;university-name&quot;
-    people::Vector{Person}, &quot;students&quot;
+    people::Vector{Person}, &quot;person&quot;
 end
 
 @aml struct Doc xd&quot;&quot;
-    university::University, &quot;&quot;
+    university::University, &quot;university&quot;
 end
 
 
@@ -75,4 +75,74 @@ julia&gt; print(D.aml)
     &lt;taken-courses&gt;Julia&lt;/taken-courses&gt;
   &lt;/person&gt;
 &lt;/university&gt;
-</code></pre></div></div><a class="source-link" target="_blank" href="https://github.com/aminya/AML/blob/eee3f5c589c80444eb8ef9a380d509027539ea69/src/AML.jl#LL14-L128">source</a></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="AML.findalllocal-Tuple{String,Node}" href="#AML.findalllocal-Tuple{String,Node}"><code>AML.findalllocal</code></a> — <span class="docstring-category">Method</span>.</div><div><div><p>findalllocal(s,node)</p><p>findalllocal with ignoring namespaces. It considers element.name for returning the elements</p></div></div><a class="source-link" target="_blank" href="https://github.com/aminya/AML/blob/eee3f5c589c80444eb8ef9a380d509027539ea69/src/utilities.jl#LL26-L30">source</a></section><section class="docstring"><div class="docstring-header"><a class="docstring-binding" id="AML.findfirstlocal-Tuple{String,Node}" href="#AML.findfirstlocal-Tuple{String,Node}"><code>AML.findfirstlocal</code></a> — <span class="docstring-category">Method</span>.</div><div><div><p>findfirstlocal(s, node)</p><p>findfirst with ignoring namespaces. It considers element.name for returning the elements</p></div></div><a class="source-link" target="_blank" href="https://github.com/aminya/AML/blob/eee3f5c589c80444eb8ef9a380d509027539ea69/src/utilities.jl#LL10-L14">source</a></section><footer><hr/></footer></article></body></html>
+</code></pre><p><strong>Example 2 - extractor</strong></p><pre><code class="language-julia">using AML
+
+xml = parsexml(&quot;&quot;&quot;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/REC-html40/loose.dtd&quot;&gt;
+&lt;university university-name=&quot;Julia University&quot;&gt;
+  &lt;person id=&quot;1&quot;&gt;
+    &lt;age&gt;24&lt;/age&gt;
+    &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4.5&lt;/GPA&gt;
+    &lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
+    &lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
+  &lt;/person&gt;
+  &lt;person id=&quot;2&quot;&gt;
+    &lt;age&gt;18&lt;/age&gt;
+    &lt;study-field&gt;Computer Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4&lt;/GPA&gt;
+    &lt;taken-courses&gt;Julia&lt;/taken-courses&gt;
+  &lt;/person&gt;
+&lt;/university&gt;
+&quot;&quot;&quot;)
+
+@aml struct Person &quot;person&quot;
+    age::UInt, &quot;age&quot;
+    field::String, &quot;study-field&quot;
+    GPA::Float64 = 4.5, &quot;GPA&quot;
+    courses::Vector{String}, &quot;taken-courses&quot;
+    ID::Int64, a&quot;id&quot;
+end
+
+@aml struct University &quot;university&quot;
+    name, a&quot;university-name&quot;
+    people::Vector{Person}, &quot;person&quot;
+end
+
+@aml struct Doc xd&quot;&quot;
+    university::University, &quot;university&quot;
+end
+
+# extract Doc
+
+D = Doc(xml)
+
+
+# extract University
+
+U = University(D.university)
+
+julia&gt;U.name # Julia University
+
+
+# extract Person
+
+P1 = Person(U.people[1])
+
+julia&gt;P1.age
+24
+
+julia&gt;P1.field
+Mechanical Engineering
+
+julia&gt;P1.GPA
+4.5
+
+julia&gt;P1.courses
+[&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;]
+
+julia&gt;P1.ID
+1
+
+P2 = Person(U.people[2])
+</code></pre></div></div><a class="source-link" target="_blank" href="https://github.com/aminya/AML/blob/67846af70aa47e551399fc06b4d9fdca29d41b7c/src/AML.jl#LL14-L205">source</a></section><footer><hr/></footer></article></body></html>
