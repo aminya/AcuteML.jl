@@ -1,9 +1,10 @@
 using EzXML
 import EzXML: Document, Node
 
-export findfirstcontent, findallcontent, addelementOne!, addelementVect!, docOrElmInit, print
+export findalllocal, findfirstlocal, findfirstcontent, findallcontent, addelementOne!, addelementVect!, docOrElmInit, print
 
-
+# from EzXML
+export parsexml, parsehtml, readxml, readhtml
 ################################################################
 # Extractors
 
