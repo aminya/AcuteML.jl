@@ -185,13 +185,14 @@ end
 #  defined or nothing
 function addelementOne!(aml::Document, name::String, value, amlType::Int8)
 
-    if hasroot(aml)
-        amlNode = root(aml)
-        if !isnothing(value)
+    if !isnothing(value) # do nothing if value is nothing
+
+        if hasroot(aml)
+            amlNode = root(aml)
             link!(amlNode,value.aml)
+        else
+            setroot!(aml, value.aml)
         end
-    else
-        setroot!(aml, value.aml)
     end
 
 end
@@ -199,30 +200,33 @@ end
 # strings
 function addelementOne!(aml::Node, name::String, value::String, amlType::Int8)
 
-    if amlType == 0 # normal elements
+    if !isnothing(value) # do nothing if value is nothing
 
-        if !isnothing(value)
+        if amlType == 0 # normal elements
+
             addelement!(aml, name, value)
+
+        elseif amlType == 2 # Attributes
+
+            link!(aml, AttributeNode(name, value))
+
         end
-
-    elseif amlType == 2 # Attributes
-
-        link!(aml, AttributeNode(name, value))
-
     end
 end
 
 # number
 function addelementOne!(aml::Node, name::String, value::T, amlType::Int8) where {T<:Number}
 
-    if amlType == 0 # normal elements
+    if !isnothing(value) # do nothing if value is nothing
 
-        addelement!(aml, name, string(value))
+        if amlType == 0 # normal elements
 
-    elseif amlType == 2 # Attributes
+            addelement!(aml, name, string(value))
+        elseif amlType == 2 # Attributes
 
-        link!(aml, AttributeNode(name, string(value)))
+            link!(aml, AttributeNode(name, string(value)))
 
+        end
     end
 end
 
@@ -240,13 +244,17 @@ function addelementVect!(aml::Node, name::String, value::Vector{String}, amlType
     if amlType == 0 # normal elements
 
         for ii = 1:length(value)
-            addelement!(aml, name, value[ii])
+            if !isnothing(value[ii]) # do nothing if value is nothing
+                addelement!(aml, name, value[ii])
+            end
         end
 
     elseif amlType == 2 # Attributes
 
         for ii = 1:length(value)
-            link!(aml, AttributeNode(name, value[ii]))
+            if !isnothing(value[ii]) # do nothing if value is nothing
+                link!(aml, AttributeNode(name, value[ii]))
+            end
         end
     end
 end
@@ -257,13 +265,17 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int
     if amlType == 0 # normal elements
 
         for ii = 1:length(value)
-            addelement!(aml, name, string(value[ii]))
+            if !isnothing(value[ii]) # do nothing if value is nothing
+                addelement!(aml, name, string(value[ii]))
+            end
         end
 
     elseif amlType == 2 # Attributes
 
         for ii = 1:length(value)
-            link!(aml, AttributeNode(name, string(value[ii])))
+            if !isnothing(value[ii]) # do nothing if value is nothing
+                link!(aml, AttributeNode(name, string(value[ii])))
+            end
         end
     end
 end
@@ -271,7 +283,9 @@ end
 #  vector of defined or nothing
 function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int8) where {T}
     for ii = 1:length(value)
-        link!(aml,value[ii].aml)
+        if !isnothing(value[ii]) # do nothing if value is nothing
+            link!(aml,value[ii].aml)
+        end
     end
 end
 
