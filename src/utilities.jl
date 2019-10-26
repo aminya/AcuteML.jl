@@ -179,7 +179,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8)
             i=1
             for elm in elmsNode
                 elmsType[i]=elm.content
-                i=+1
+                i+=1
             end
             return elmsType
         end
@@ -195,7 +195,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8)
             i=1
             for elm in elmsNode
                 elmsType[i]=elm
-                i=+1
+                i+=1
             end
             return elmsType
         end
@@ -226,7 +226,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8)
             i=1
             for elm in elmsNode
                 elmsType[i]=parse(T, elm.content)
-                i=+1
+                i+=1
             end
             return elmsType
         end
@@ -242,7 +242,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8)
             i=1
             for elm in elmsNode
                 elmsType[i]=parse(T, elm)
-                i=+1
+                i+=1
             end
             return elmsType
         end
@@ -278,7 +278,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8)
         i=1
         for elm in elmsNode
             elmsType[i]=T(elm)
-            i=+1
+            i+=1
         end
         return elmsType
     end
