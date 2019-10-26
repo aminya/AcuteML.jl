@@ -45,8 +45,12 @@ GPA::Float64 = 4.5, "GPA"
 ```julia
 using AML
 
-@aml struct Doc xd""
-    university::University, ""
+@aml struct Person "person"
+    age::UInt, "age"
+    field::String, "study-field"
+    GPA::Float64 = 4.5, "GPA"
+    courses::Vector{String}, "taken-courses"
+    ID::Int64, a"id"
 end
 
 @aml struct University "university"
@@ -54,12 +58,8 @@ end
     people::Vector{Person}, "students"
 end
 
-@aml struct Person "person"
-    age::UInt, "age"
-    field::String, "study-field"
-    GPA::Float64 = 4.5, "GPA"
-    courses::Vector{String}, "taken-courses"
-    ID::Int64, a"id"
+@aml struct Doc xd""
+    university::University, ""
 end
 
 
