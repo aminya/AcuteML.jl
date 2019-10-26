@@ -3,8 +3,20 @@ import EzXML: Document, Node
 
 export findalllocal, findfirstlocal, findfirstcontent, findallcontent, addelementOne!, addelementVect!, docOrElmInit, print
 
+################################################################
 # from EzXML
-export parsexml, parsehtml, readxml, readhtml
+funs = [:parsexml, :parsehtml, :readxml, :readhtml]
+for fun in funs
+
+    @eval begin
+
+        # doc
+        @doc @doc $(fun)
+
+        # exporting
+        export $(fun)
+    end
+end
 ################################################################
 # Extractors
 
