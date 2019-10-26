@@ -177,8 +177,8 @@ D = Doc(xml)
 
 U = University(D.university)
 
-julia>U.name # Julia University
-
+julia>U.name
+"Julia University"
 
 # extract Person
 
