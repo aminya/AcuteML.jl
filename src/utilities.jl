@@ -85,10 +85,18 @@ findfirstcontent(s::String,node::Node, amlType::Int8) = findfirstcontent(Union{S
 # for numbers
 function findfirstcontent(::Type{T},s::String,node::Node, amlType::Int8) where {T<:Union{Number,Nothing}}
 
-    if hasdocument(node)
-        elm = findfirst(s,node)
-    else
-        elm = findfirstlocal(s,node)
+    if amlType == 0 # normal elements
+
+        if hasdocument(node)
+            elm = findfirst(s,node)
+        else
+            elm = findfirstlocal(s,node)
+        end
+
+
+    elseif amlType == 2 # Attributes
+
+        elm = parse(T, node[s])
     end
 
     if isnothing(elm) # return nothing if nothing is found
