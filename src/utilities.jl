@@ -173,10 +173,18 @@ findallcontent(s::String, node::Node, amlType::Int8) = findallcontent(Vector{Uni
 # for numbers
 function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8) where{T<:Union{Number,Nothing}}
 
-    if hasdocument(node)
-        elmsNode = findall(s, node) # a vector of Node elements
-    else
-        elmsNode = findalllocal(s, node) # a vector of Node elements
+    if amlType == 0 # normal elements
+
+        if hasdocument(node)
+            elmsNode = findall(s, node) # a vector of Node elements
+        else
+            elmsNode = findalllocal(s, node) # a vector of Node elements
+        end
+
+    elseif amlType == 2 # Attributes
+
+        elmsNode = parse(T, node[s])
+
     end
 
     if isnothing(elmsNode) # return nothing if nothing is found
