@@ -57,10 +57,17 @@ findfirstcontent(UInt8,"/midi-channel",node)
 # for strings
 function findfirstcontent(::Type{T}, s::String, node::Node, amlType::Int8) where{T<:Union{String, Nothing}}
 
-    if hasdocument(node)
-        elm = findfirst(s,node)
-    else
-        elm = findfirstlocal(s,node)
+    if amlType == 0 # normal elements
+
+        if hasdocument(node)
+            elm = findfirst(s,node)
+        else
+            elm = findfirstlocal(s,node)
+        end
+
+    elseif amlType == 2 # Attributes
+
+        elm = node[s]
     end
 
     if isnothing(elm) # return nothing if nothing is found
@@ -68,6 +75,9 @@ function findfirstcontent(::Type{T}, s::String, node::Node, amlType::Int8) where
     else
         return elm.content
     end
+    
+end
+
 end
 # if no type is provided consider it to be string
 findfirstcontent(s::String,node::Node, amlType::Int8) = findfirstcontent(Union{String, Nothing}, s, node, amlType)
