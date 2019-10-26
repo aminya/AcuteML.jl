@@ -133,10 +133,11 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node) where{T<:Union
     end
 
 end
-findallcontent(s::String, node::Node) = findallcontent(Union{String, Nothing},s, node)
+# if no type is provided consider it to be string
+findallcontent(s::String, node::Node) = findallcontent(Vector{Union{String, Nothing}},s, node)
 
 # for numbers
-function findallcontent(::Type{T}, s::String, node::Node) where{T<:Union{Number,Nothing}}
+function findallcontent(::Type{Vector{T}}, s::String, node::Node) where{T<:Union{Number,Nothing}}
 
     if hasdocument(node)
         elmsNode = findall(s, node) # a vector of Node elements
@@ -159,7 +160,8 @@ function findallcontent(::Type{T}, s::String, node::Node) where{T<:Union{Number,
 end
 
 # for defined types
-function findallcontent(::Type{T}, s::String, node::Node) where{T}
+function findallcontent(::Type{Vector{T}}, s::String, node::Node) where{T}
+
     if hasdocument(node)
         elmsNode = findall(s, node) # a vector of Node elements
     else
