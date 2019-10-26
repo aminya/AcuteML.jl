@@ -158,16 +158,16 @@ end
 ################################################################
 # Vector extraction
 """
-findallcontent(type, string, node)
+    findallcontent(type, string, node)
 
 Finds all the elements with the address of string in the node, and converts the elements to Type object.
 """
 # for strings
-function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8) where{T<:Union{String, Nothing}}
+function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Nothing}}
 
     if amlType == 0 # normal elements
 
-        if hasdocument(node)
+        if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
         else
             elmsNode = findalllocal(s, node) # a vector of Node elements
@@ -207,14 +207,14 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8)
 
 end
 # if no type is provided consider it to be string
-findallcontent(s::String, node::Node, amlType::Int8) = findallcontent(Vector{Union{String, Nothing}},s, node, amlType)
+findallcontent(s::String, node::Union{Node, Document}, amlType::Int64) = findallcontent(Vector{Union{String, Nothing}},s, node, amlType)
 
 # for numbers
-function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8) where{T<:Union{Number,Nothing}}
+function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{Number,Nothing}}
 
     if amlType == 0 # normal elements
 
-        if hasdocument(node)
+        if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
         else
             elmsNode = findalllocal(s, node) # a vector of Node elements
@@ -255,11 +255,11 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8)
 end
 
 # for defined types
-function findallcontent(::Type{Vector{T}}, s::String, node::Node, amlType::Int8) where{T}
+function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T}
 
     if amlType == 0 # normal elements
 
-        if hasdocument(node)
+        if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
         else
             elmsNode = findalllocal(s, node) # a vector of Node elements
