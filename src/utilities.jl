@@ -25,11 +25,11 @@ function findfirstlocal(s::String, node::Union{Node, Document})
 end
 
 """
-findalllocal(s,node)
+    findalllocal(s,node)
 
 findalllocal with ignoring namespaces. It considers element.name for returning the elements
 """
-function findalllocal(s::String, node::Node)
+function findalllocal(s::String, node::Union{Node, Document})
     out = Node[]
     for child in eachelement(node)
         if child.name == s
