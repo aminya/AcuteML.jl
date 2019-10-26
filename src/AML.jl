@@ -308,7 +308,7 @@ function _aml(argExpr)
     argDefVal = Any[]
     argTypes = Union{Missing,Type, Symbol, Expr}[]
     argNames = Union{Missing,String}[]
-    amlTypes = Int8[]
+    amlTypes = Int64[]
     amlName = "my type"
     docOrElmType = 0
     lineNumber=1

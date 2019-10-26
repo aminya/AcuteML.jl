@@ -288,7 +288,7 @@ end
 # Constructors
 
 #  defined or nothing
-function addelementOne!(aml::Document, name::String, value, amlType::Int8)
+function addelementOne!(aml::Document, name::String, value, amlType::Int64)
 
     if !isnothing(value) # do nothing if value is nothing
 
@@ -303,7 +303,7 @@ function addelementOne!(aml::Document, name::String, value, amlType::Int8)
 end
 
 # strings
-function addelementOne!(aml::Node, name::String, value::String, amlType::Int8)
+function addelementOne!(aml::Node, name::String, value::String, amlType::Int64)
 
     if !isnothing(value) # do nothing if value is nothing
 
@@ -320,7 +320,7 @@ function addelementOne!(aml::Node, name::String, value::String, amlType::Int8)
 end
 
 # number
-function addelementOne!(aml::Node, name::String, value::T, amlType::Int8) where {T<:Number}
+function addelementOne!(aml::Node, name::String, value::T, amlType::Int64) where {T<:Number}
 
     if !isnothing(value) # do nothing if value is nothing
 
@@ -336,14 +336,14 @@ function addelementOne!(aml::Node, name::String, value::T, amlType::Int8) where 
 end
 
 #  defined or nothing
-function addelementOne!(aml::Node, name::String, value, amlType::Int8)
+function addelementOne!(aml::Node, name::String, value, amlType::Int64)
     if !isnothing(value)
         link!(aml,value.aml)
     end
 end
 
 # vector of strings
-function addelementVect!(aml::Node, name::String, value::Vector{String}, amlType::Int8)
+function addelementVect!(aml::Node, name::String, value::Vector{String}, amlType::Int64)
 
 
     if amlType == 0 # normal elements
@@ -365,7 +365,7 @@ function addelementVect!(aml::Node, name::String, value::Vector{String}, amlType
 end
 
 # vector of numbers
-function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int8) where {T<:Number}
+function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int64) where {T<:Number}
 
     if amlType == 0 # normal elements
 
@@ -386,7 +386,7 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int
 end
 
 #  vector of defined or nothing
-function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int8) where {T}
+function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int64) where {T}
     for ii = 1:length(value)
         if !isnothing(value[ii]) # do nothing if value is nothing
             link!(aml,value[ii].aml)
