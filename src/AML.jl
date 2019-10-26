@@ -170,12 +170,12 @@ macro aml(expr)
                 if isa(argTypesI, Expr) || (!isa(argTypesI, Symbol) && argTypesI <: Array) # vector
 
                         amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
-                        amlext[i]=:($amlVarsI = findallcontent($argTypesI, $amlNamesI, aml))
+                        amlext[i]=:($amlVarsI = findallcontent($argTypesI, $amlNamesI, aml, $amlTypesI))
 
                 elseif isa(argTypesI, Symbol) || !(argTypesI <: Array)   # non vector
 
                     amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
-                    amlext[i]=:($amlVarsI = findfirstcontent($argTypesI, $amlNamesI, aml))
+                    amlext[i]=:($amlVarsI = findfirstcontent($argTypesI, $amlNamesI, aml, $amlTypesI))
 
                 end
 
