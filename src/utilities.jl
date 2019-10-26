@@ -55,20 +55,30 @@ findfirstcontent(UInt8,"/midi-channel",node)
 ```
 """
 # for strings
-function findfirstcontent(::Type{T}, s::String,node::Node) where{T<:Union{String, Nothing}}
-    elm = findfirst(s,node)
-    if isnothing(elm)
+function findfirstcontent(::Type{T}, s::String, node::Node) where{T<:Union{String, Nothing}}
+
+    if hasdocument(node)
+        elm = findfirst(s,node)
+    else
+        elm = findfirstlocal(s,node)
+    end
+
         return nothing
     else
         return elm.content
     end
 end
+# if no type is provided consider it to be string
 findfirstcontent(s::String,node::Node) = findfirstcontent(Union{String, Nothing}, s::String, node::Node)
 
 # for numbers
 function findfirstcontent(::Type{T},s::String,node::Node) where {T<:Union{Number,Nothing}}
-    elm = findfirst(s,node)
-    if isnothing(elm)
+
+    if hasdocument(node)
+        elm = findfirst(s,node)
+    else
+        elm = findfirstlocal(s,node)
+    end
         return nothing
     else
         return parse(T, elm.content)
@@ -77,8 +87,13 @@ end
 
 # for defined types
 function findfirstcontent(::Type{T},s::String,node::Node) where {T}
-    elm = findfirst(s,node)
-    if isnothing(elm)
+
+    if hasdocument(node)
+        elm = findfirst(s,node)
+    else
+        elm = findfirstlocal(s,node)
+    end
+
         return nothing
     else
         return T(elm)
@@ -86,16 +101,21 @@ function findfirstcontent(::Type{T},s::String,node::Node) where {T}
 end
 
 ################################################################
+# Vector extraction
 """
 findallcontent(type, string, node)
 
 Finds all the elements with the address of string in the node, and converts the elements to Type object.
 """
 # for strings
-function findallcontent(::Type{T}, s::String, node::Node) where{T<:Union{String, Nothing}}
+function findallcontent(::Type{Vector{T}}, s::String, node::Node) where{T<:Union{String, Nothing}}
 
-    elmsNode = findall(s, node) # a vector of Node elements
-    if isnothing(elmsNode)
+    if hasdocument(node)
+        elmsNode = findall(s, node) # a vector of Node elements
+    else
+        elmsNode = findalllocal(s, node) # a vector of Node elements
+    end
+
         return nothing
     else
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
@@ -112,6 +132,12 @@ findallcontent(s::String, node::Node) = findallcontent(Union{String, Nothing},s,
 
 # for numbers
 function findallcontent(::Type{T}, s::String, node::Node) where{T<:Union{Number,Nothing}}
+
+    if hasdocument(node)
+        elmsNode = findall(s, node) # a vector of Node elements
+    else
+        elmsNode = findalllocal(s, node) # a vector of Node elements
+    end
 
     elmsNode = findall(s, node) # a vector of Node elements
     if isnothing(elmsNode)
@@ -130,6 +156,11 @@ end
 
 # for defined types
 function findallcontent(::Type{T}, s::String, node::Node) where{T}
+    if hasdocument(node)
+        elmsNode = findall(s, node) # a vector of Node elements
+    else
+        elmsNode = findalllocal(s, node) # a vector of Node elements
+    end
 
     elmsNode = findall(s, node) # a vector of Node elements
     if isnothing(elmsNode)
