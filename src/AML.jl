@@ -3,6 +3,7 @@ module AML
 import EzXML.Node
 
 include("utilities.jl")
+include("templating.jl")
 
 # main macro
 export @aml
