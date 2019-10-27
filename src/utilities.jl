@@ -91,7 +91,7 @@ end
 findfirstcontent(s::String,node::Union{Node, Document}, amlType::Int64) = findfirstcontent(Union{String, Nothing}, s, node, amlType)
 
 # for numbers
-function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlType::Int64) where {T<:Union{Number,Nothing}}
+function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlType::Int64) where {T<:Union{Number,Bool,Nothing}}
 
     if amlType == 0 # normal elements
 
@@ -208,7 +208,7 @@ end
 findallcontent(s::String, node::Union{Node, Document}, amlType::Int64) = findallcontent(Vector{Union{String, Nothing}},s, node, amlType)
 
 # for numbers
-function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{Number,Nothing}}
+function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{Number,Bool,Nothing}}
 
     if amlType == 0 # normal elements
 
@@ -286,7 +286,7 @@ end
 ################################################################
 # Constructors
 
-#  defined or nothing
+#  defined or nothing for Documents
 function addelementOne!(aml::Document, name::String, value, amlType::Int64)
 
     if !isnothing(value) # do nothing if value is nothing
@@ -319,7 +319,7 @@ function addelementOne!(aml::Node, name::String, value::String, amlType::Int64)
 end
 
 # number
-function addelementOne!(aml::Node, name::String, value::T, amlType::Int64) where {T<:Number}
+function addelementOne!(aml::Node, name::String, value::T, amlType::Int64) where {T<:Union{Number, Bool}}
 
     if !isnothing(value) # do nothing if value is nothing
 
@@ -364,7 +364,7 @@ function addelementVect!(aml::Node, name::String, value::Vector{String}, amlType
 end
 
 # vector of numbers
-function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int64) where {T<:Number}
+function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int64) where {T<:Union{Number, Bool}}
 
     if amlType == 0 # normal elements
 
