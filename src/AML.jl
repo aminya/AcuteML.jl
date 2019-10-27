@@ -26,11 +26,11 @@ Use @aml macro to define a Julia type, and then the package automatically create
 ```julia
 @aml struct Person "person"
 ```
-* Sepecify the html/xml names for childs in strings in front of the struct fields after `,`
+* Sepecify the html/xml name for childs in a string in front of the field after `,`
 ```julia
 age::UInt, "age"
 ```
-* For already `@aml` defined types, name should be the same as its real name
+* For already `@aml` defined types, name should be the same as its html/xml name
 ```julia
 university::University, "university"
 ```
