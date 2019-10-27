@@ -506,6 +506,19 @@ function _aml(argExpr)
         end
     end # endfor
 
+    if  docOrElmType == 10 # self closing tags
+        # add a field with nothing type
+        push!(argNames, "content") # argument ignored for aml
+        push!(argTypes, Nothing)
+        push!(amlTypes,10)
+        push!(argParams, Expr(:kw, :content, nothing))
+        push!(argVars, :content)
+        push!(argDefVal, nothing)
+        push!(argExpr.args,LineNumberNode(lineNumber+1))
+        push!(argExpr.args,:(content::Nothing))
+        # argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType = _aml(argExpr)
+    end
+
     push!(argExpr.args,LineNumberNode(lineNumber+2))
     push!(argExpr.args,:(aml::Union{Document,Node}))
 
