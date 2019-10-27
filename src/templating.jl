@@ -13,6 +13,11 @@ Prints a function to be used as a template
 ```julia
 # you can create a file and edit the file directly by using
 newTemplate("person")
+
+## create person function to store out html template
+newTemplate("person", :function)
+```
+"""
 function newTemplate(name, type::Symbol = :file, template::Union{String,Nothing} = nothing)
 
     if type == :file
@@ -36,6 +41,35 @@ function newTemplate(name, type::Symbol = :file, template::Union{String,Nothing}
                 Atom.edit(filePath)
             end
         end
+
+    elseif type == :function
+
+        if !isnothing(template) # doesn't work because $ are evaluated outside of the function
+            prt = template
+        else
+            prt = """
+            # enter your html code here
+            # use \$() to evaluate julia variables or code
+            """
+        end
+
+    # todo: append this to controller file
+        println("""
+
+        function $(name)(; put_variables_here)
+
+        # use your any julia code here to control the outputed html string.
+
+        \"\"\"
+        $prt
+        \"\"\"
+
+        end
+        """)
+
+    end
+
+end
 ################################################################
 
 """
