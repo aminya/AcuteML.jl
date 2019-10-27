@@ -10,7 +10,7 @@ export @aml
 # types
 export Node, Document
 # literals
-export @xd_str, @hd_str, @a_str
+export @xd_str, @hd_str, @sc_str, @a_str
 ################################################################
 """
   @aml typedef
@@ -521,6 +521,12 @@ end
 # xml document
 macro xd_str(s)
     docOrElmType = -2
+    return docOrElmType, s
+end
+
+# self-closing
+macro sc_str(s)
+    docOrElmType= 10
     return docOrElmType, s
 end
 

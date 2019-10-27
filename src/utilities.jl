@@ -400,6 +400,10 @@ function docOrElmInit(type::Int64, name::String = nothing)
 
         out = ElementNode(name)
 
+    elseif type == 10 # empty element node
+
+        out = ElementNode(name)
+
     elseif type == -1 # html
 
         out = XMLDocument() # version 1
