@@ -11,7 +11,7 @@ It automatically creates/extracts HTML/XML files from Julia types!
 # Installation
 Add the package
 ```julia
-]add https://github.com/aminya/AML
+]add https://github.com/aminya/AML.jl
 ```
 # Usage
 Use the package:

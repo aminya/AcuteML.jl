@@ -1,7 +1,7 @@
 # AML
 
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AML/dev)
-[![Build Status](https://travis-ci.com/aminya/AML.svg?branch=master)](https://travis-ci.com/aminya/AML)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AML.jl/dev)
+[![Build Status](https://travis-ci.com/aminya/AML.jl.svg?branch=master)](https://travis-ci.com/aminya/AML.jl)
 
 AML web development package in Julia
 
@@ -10,7 +10,7 @@ It automatically creates/extracts HTML/XML files from Julia types!
 # Installation
 Add the package
 ```julia
-]add https://github.com/aminya/AML
+]add https://github.com/aminya/AML.jl
 ```
 # Usage
 Use the package:
@@ -19,7 +19,7 @@ using AML
 ```
 
 # Documentation
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AML/dev)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AML.jl/dev)
 
 Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 

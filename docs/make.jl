@@ -4,10 +4,10 @@ using Documenter
 makedocs(;
     modules=[AML],
     authors="Amin Yahyaabadi",
-    repo="https://github.com/aminya/AML/blob/{commit}{path}#L{line}",
-    sitename="AML",
+    repo="https://github.com/aminya/AML.jl/blob/{commit}{path}#L{line}",
+    sitename="AML.jl",
     format=Documenter.HTML(;
-        canonical="https://aminya.github.io/AML",
+        canonical="https://aminya.github.io/AML.jl",
         assets=String[],
     ),
     pages=[
@@ -16,5 +16,5 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/aminya/AML",
+    repo="github.com/aminya/AML.jl",
 )
