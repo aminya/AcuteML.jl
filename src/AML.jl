@@ -43,6 +43,10 @@ ID::Int64, a"id"
 ```julia
 GPA::Float64 = 4.5, "GPA"
 ```
+* Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
+```julia
+@aml struct rest sc"rest"
+```
 
 # Example 1 - constructor
 ```julia
