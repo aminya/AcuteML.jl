@@ -251,7 +251,7 @@ macro aml(expr)
 
                         amlext[i]=:($amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
-                elseif isa(argTypesI, Symbol) || !(argTypesI <: Array)   # non vector
+                elseif isa(argTypesI, Symbol) || (isa(argTypesI, Expr) && argTypesI.args[1] == :Union) || !(argTypesI <: Array)   # non vector
 
                     amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
                     amlext[i]=:($amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
@@ -316,6 +316,7 @@ function _aml(argExpr)
     amlName = "my type"
     docOrElmType = 0
     lineNumber=1
+
     for i in eachindex(argExpr.args) # iterating over arguments of each type argument
         ei = argExpr.args[i] # type argument element i
 
