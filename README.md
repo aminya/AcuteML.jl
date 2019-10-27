@@ -238,7 +238,7 @@ function person(;id, age, field, GPA, courses)
     loopOut = loopout * """ <taken-courses>$(course)</taken-courses>   """
   end
 
-  # Append all the sections and varuables together
+  # Append all the sections and variables together
   out = """
   <person id=$(id)>
     <age>$(age)</age>
