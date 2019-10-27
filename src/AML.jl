@@ -245,7 +245,7 @@ macro aml(expr)
                 amlVarsI = amlVars[i]
                 amlNamesI = amlNames[i]
                 amlTypesI = amlTypes[i]
-                if isa(argTypesI, Expr) || (!isa(argTypesI, Symbol) && argTypesI <: Array) # vector
+                if (isa(argTypesI, Expr) && argTypesI.args[1] == :Vector) || (!isa(argTypesI, Union{Symbol, Expr}) && argTypesI <: Array) # vector
 
                         amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
 
