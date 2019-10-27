@@ -32,3 +32,33 @@ out =render2file("person", false,
 
 # you pass `true` as the 2nd argument to owerwrite person.html statically.
 
+#################################################################
+# Rendering using Functions - example:
+
+## create person function to store out html template
+newTemplate("person", :function)
+
+
+function person(;id, age, field, GPA, courses)
+
+"""
+<person id=$(id)>
+  <age>$(age)</age>
+  <study-field>$(field)</study-field>
+  <GPA>$(GPA)</GPA>
+  <taken-courses>$(courses[1])</taken-courses>
+  <taken-courses>$(courses[2])</taken-courses>
+</person>
+"""
+
+end
+
+out = person(
+  id = "1",
+  age = "24",
+  field = "Mechanical Engineering",
+  GPA = "4.5",
+  courses = ["Artificial Intelligence", "Robotics"]
+)
+
+print(out)
