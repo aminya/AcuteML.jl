@@ -154,6 +154,8 @@ function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlTy
 
 end
 
+# Union with Nothing
+findfirstcontent(::Type{UN{T}},s::String,node::Union{Node, Document}, amlType::Int64) where {T} = findfirstcontent(T,s,node, amlType)
 ################################################################
 # Vector extraction
 """
@@ -284,6 +286,9 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
     end
 
 end
+
+# Union with Nothing
+findallcontent(::Type{Vector{UN{T}}},s::String,node::Union{Node, Document}, amlType::Int64) where {T} = findallcontent(Vecotr{T},s,node, amlType)
 ################################################################
 # Constructors
 
