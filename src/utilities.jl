@@ -56,7 +56,6 @@ findfirstcontent(UInt8,"/midi-channel",node)
 """
 function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Nothing}} # for strings
 
-
     if amlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
@@ -73,11 +72,12 @@ function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, aml
 
     elseif amlType == 2 # Attributes
 
-        elm = node[s]
+        if haskey(node, s)
+            elm = node[s]
+            return elm
 
-        if isnothing(elm) # return nothing if nothing is found
-            return nothing
-        else
+        else # return nothing if nothing is found
+            elm = nothing
             return elm
         end
 
@@ -110,13 +110,15 @@ function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlTy
 
     elseif amlType == 2 # Attributes
 
-        elm = parse(T, node[s])
+        if haskey(node, s)
+            elm = parse(T, node[s])
+            return elm
 
-        if isnothing(elm) # return nothing if nothing is found
-            return nothing
-        else
+        else # return nothing if nothing is found
+            elm = nothing
             return elm
         end
+
     end
 
 
@@ -141,11 +143,12 @@ function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlTy
 
     elseif amlType == 2 # Attributes
 
-        elm = node[s]
+        if haskey(node, s)
+            elm = node[s]
+            return elm
 
-        if isnothing(elm) # return nothing if nothing is found
-            return nothing
-        else
+        else # return nothing if nothing is found
+            elm = nothing
             return elm
         end
 
@@ -188,11 +191,8 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
 
     elseif amlType == 2 # Attributes
 
-        elmsNode = node[s]
-
-        if isnothing(elmsNode)  # return nothing if nothing is found
-            return nothing
-        else
+        if haskey(node, s)
+            elmsNode = node[s]
             elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
             i=1
             for elm in elmsNode
@@ -200,12 +200,10 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
                 i+=1
             end
             return elmsType
+        else  # return nothing if nothing is found
+            elmsNode = nothing
         end
-
     end
-
-
-
 end
 # if no type is provided consider it to be string
 findallcontent(s::String, node::Union{Node, Document}, amlType::Int64) = findallcontent(Vector{Union{String, Nothing}},s, node, amlType)
@@ -235,11 +233,8 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
 
     elseif amlType == 2 # Attributes
 
-        elmsNode = parse(T, node[s])
-
-        if isnothing(elmsNode) # return nothing if nothing is found
-            return nothing
-        else
+        if haskey(node, s)
+            elmsNode = parse(T, node[s])
             elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
             i=1
             for elm in elmsNode
@@ -247,6 +242,8 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
                 i+=1
             end
             return elmsType
+        else  # return nothing if nothing is found
+            elmsNode = nothing
         end
 
     end
@@ -268,8 +265,11 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
 
     elseif amlType == 2 # Attributes
 
-        elmsNode = node[s]
-
+        if haskey(node, s)
+            elmsNode = node[s]
+        else  # return nothing if nothing is found
+            elmsNode = nothing
+        end
     end
 
 
