@@ -1,8 +1,9 @@
 using EzXML
 import EzXML: Document, Node
 
-export findalllocal, findfirstlocal, findfirstcontent, findallcontent, addelementOne!, addelementVect!, docOrElmInit, print
-
+export findalllocal, findfirstlocal, findfirstcontent, findallcontent, addelementOne!, addelementVect!, docOrElmInit, print, UN
+################################################################
+UN{T}= Union{T, Nothing}
 ################################################################
 # Extractors
 

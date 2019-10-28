@@ -285,6 +285,7 @@ macro aml(expr)
             end
 
             nothingMethod = :( ($(esc(T)))(::Nothing) = nothing )
+            # convertNothingMethod = :(Base.convert(::Type{($(esc(T)))}, ::Nothing) = nothing)
             selfMethod = :( ($(esc(T)))(in::$(esc(T))) = $(esc(T))(in.aml) )
 
             out = quote
@@ -292,6 +293,7 @@ macro aml(expr)
                $amlConstructor
                $amlExtractor
                $nothingMethod
+               # $convertNothingMethod
                $selfMethod
             end
 
