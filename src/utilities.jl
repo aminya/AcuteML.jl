@@ -54,7 +54,7 @@ findfirstcontent("/instrument-name",node)
 findfirstcontent(UInt8,"/midi-channel",node)
 ```
 """
-function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Nothing}} # for strings
+function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:String} # for strings
 
     if amlType == 0 # normal elements
 
@@ -92,7 +92,7 @@ end
 findfirstcontent(s::String,node::Union{Node, Document}, amlType::Int64) = findfirstcontent(Union{String, Nothing}, s, node, amlType)
 
 # for numbers
-function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlType::Int64) where {T<:Union{Number,Bool,Nothing}}
+function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlType::Int64) where {T<:Union{Number,Bool}}
 
     if amlType == 0 # normal elements
 
@@ -166,7 +166,7 @@ findfirstcontent(::Type{UN{T}},s::String,node::Union{Node, Document}, amlType::I
 
 Finds all the elements with the address of string in the node, and converts the elements to Type object.
 """
-function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Nothing}} # for strings
+function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:String} # for strings
 
 
     if amlType == 0 # normal elements
@@ -209,7 +209,7 @@ end
 findallcontent(s::String, node::Union{Node, Document}, amlType::Int64) = findallcontent(Vector{Union{String, Nothing}},s, node, amlType)
 
 # for numbers
-function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{Number,Bool,Nothing}}
+function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{Number,Bool}}
 
     if amlType == 0 # normal elements
 
