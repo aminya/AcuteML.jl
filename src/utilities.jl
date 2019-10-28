@@ -1,7 +1,7 @@
 using EzXML
 import EzXML: Document, Node
 
-export findalllocal, findfirstlocal, findfirstcontent, findallcontent, addelementOne!, addelementVect!, docOrElmInit, print, UN
+export findalllocal, findfirstlocal, findfirstcontent, findallcontent, addelementOne!, addelementVect!, docOrElmInit, UN
 ################################################################
 UN{T}= Union{T, Nothing}
 ################################################################
@@ -428,11 +428,12 @@ function docOrElmInit(type::Int64, name::String = nothing)
     return out
 end
 ################################################################
-function Base.print(x::Node)
-    println("")
-    prettyprint(x)
-end
-function Base.print(x::Document)
-    println("")
-    prettyprint(x)
-end
+# moved to my fork of EzXML
+# function Base.print(x::Node)
+#     println("")
+#     prettyprint(x)
+# end
+# function Base.print(x::Document)
+#     println("")
+#     prettyprint(x)
+# end
