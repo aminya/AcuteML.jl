@@ -8,7 +8,7 @@ version = "0.5.7"
 
 [[EzXML]]
 deps = ["BinaryProvider", "Libdl", "Printf"]
-git-tree-sha1 = "7d302215d2ae5a277b8dab8a4ccfc4f2e00fa8f0"
+git-tree-sha1 = "6af13a0a2932e6e57e06a419d97205708f69ee3d"
 repo-rev = "master"
 repo-url = "https://github.com/aminya/EzXML.jl"
 uuid = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
