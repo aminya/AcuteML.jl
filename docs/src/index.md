@@ -1,22 +1,25 @@
 ```@meta
-CurrentModule = AML
+CurrentModule = AcuteML
 ```
 
-# AML
+# AcuteML
+## Acute Markup Language
 
-AML web development package in Julia
+AcuteML is an Acute Markup Language (AML) for Web/XML development in Julia.
 
-It automatically creates/extracts HTML/XML files from Julia types!
+* It automatically creates or extracts HTML/XML files from Julia types!
+
+* It also has a general templating engine, which can be used for any type of documents.
 
 # Installation
 Add the package
 ```julia
-]add https://github.com/aminya/AML.jl
+]add https://github.com/aminya/AcuteML.jl
 ```
 # Usage
 Use the package:
 ```julia
-using AML
+using AcuteML
 ```
 
 # Main macro and I/O
@@ -57,7 +60,7 @@ GPA::Float64 = 4.5, "GPA"
 
 # Example 1 - Constructor
 ```julia
-using AML
+using AcuteML
 
 @aml struct Person "person"
     age::UInt, "age"
@@ -143,7 +146,7 @@ julia> print(D.aml)
 
 # Example 2 - Extractor
 ```julia
-using AML
+using AcuteML
 
 xml = parsexml("""
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">

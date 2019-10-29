@@ -1,14 +1,14 @@
-using AML
+using AcuteML
 using Documenter
 
 makedocs(;
-    modules=[AML],
+    modules=[AcuteML],
     authors="Amin Yahyaabadi",
-    repo="https://github.com/aminya/AML.jl/blob/{commit}{path}#L{line}",
-    sitename="AML.jl",
+    repo="https://github.com/aminya/AcuteML.jl/blob/{commit}{path}#L{line}",
+    sitename="AcuteML.jl",
     format=Documenter.HTML(;
         prettyurls = prettyurls = get(ENV, "CI", nothing) == "true",
-        # canonical="https://aminya.github.io/AML.jl",
+        # canonical="https://aminya.github.io/AcuteML.jl",
         # assets=String[],
     ),
     pages=[
@@ -19,5 +19,5 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/aminya/AML.jl",
+    repo="github.com/aminya/AcuteML.jl",
 )

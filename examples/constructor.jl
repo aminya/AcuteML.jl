@@ -1,4 +1,4 @@
-using AML
+using AcuteML
 
 @aml struct Person "person"
     age::UInt, "age"

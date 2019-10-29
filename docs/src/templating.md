@@ -1,5 +1,5 @@
 # Templating
-AML also provides a templating engine if you want to use templates instead of creating the types.
+AcuteML also provides a templating engine if you want to use templates instead of creating the types.
 
 -------------------------------------------------------
 

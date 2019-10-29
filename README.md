@@ -1,25 +1,28 @@
-# AML
+# AcuteML
+## Acute Markup Language
 
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AML.jl/dev)
-[![Build Status](https://travis-ci.com/aminya/AML.jl.svg?branch=master)](https://travis-ci.com/aminya/AML.jl)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AcuteML.jl/dev)
+[![Build Status](https://travis-ci.com/aminya/AcuteML.jl.svg?branch=master)](https://travis-ci.com/aminya/AcuteML.jl)
 
-AML web development package in Julia
+AcuteML is an Acute Markup Language (AML) for Web/XML development in Julia.
 
-It automatically creates/extracts HTML/XML files from Julia types!
+* It automatically creates or extracts HTML/XML files from Julia types!
+
+* It also has a general templating engine, which can be used for any type of documents.
 
 # Installation
 Add the package
 ```julia
-]add https://github.com/aminya/AML.jl
+]add https://github.com/aminya/AcuteML.jl
 ```
 # Usage
 Use the package:
 ```julia
-using AML
+using AcuteML
 ```
 
 # Documentation
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AML.jl/dev)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AcuteML.jl/dev)
 
 -------------------------------------------------------
 
@@ -59,7 +62,7 @@ GPA::Float64 = 4.5, "GPA"
 
 # Example 1 - Constructor
 ```julia
-using AML
+using AcuteML
 
 @aml struct Person "person"
     age::UInt, "age"
@@ -145,7 +148,7 @@ julia> print(D.aml)
 
 # Example 2 - Extractor
 ```julia
-using AML
+using AcuteML
 
 xml = parsexml("""
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
@@ -221,7 +224,7 @@ P2 = Person(U.people[2])
 
 -------------------------------------------------------
 # Templating
-AML also provides a templating engine if you want to use templates instead of creating the types.
+AcuteML also provides a templating engine if you want to use templates instead of creating the types.
 
 -------------------------------------------------------
 

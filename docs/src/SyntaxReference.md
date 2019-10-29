@@ -4,21 +4,21 @@
 # Main Macro and IO
 
 ```@autodocs
-Modules = [AML]
-Pages   = ["AML.jl"]
+Modules = [AcuteML]
+Pages   = ["AcuteML.jl"]
 ```
 
 
 # Templating
 
 ```@autodocs
-Modules = [AML]
+Modules = [AcuteML]
 Pages   = ["templating.jl"]
 ```
 
 # Backend utilities
 
 ```@autodocs
-Modules = [AML]
+Modules = [AcuteML]
 Pages   = ["utilities.jl"]
 ```

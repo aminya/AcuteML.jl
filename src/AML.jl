@@ -1,4 +1,4 @@
-module AML
+module AcuteML
 
 import EzXML.Node
 
@@ -50,7 +50,7 @@ GPA::Float64 = 4.5, "GPA"
 
 # Example 1 - constructor
 ```julia
-using AML
+using AcuteML
 
 @aml struct Person "person"
     age::UInt, "age"
@@ -135,7 +135,7 @@ julia> print(D.aml)
 
 # Example 2 - extractor
 ```julia
-using AML
+using AcuteML
 
 xml = parsexml(\"\"\"
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">

@@ -1,4 +1,4 @@
-using AML
+using AcuteML
 
 # Example 3 - Template Rendering using Functions
 
