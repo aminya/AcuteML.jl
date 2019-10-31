@@ -307,10 +307,11 @@ macro aml(expr)
     return out
 end
 
-
-# @aml helper function
+################################################################
 # var is a symbol
 # var::T or anything more complex is an expression
+################################################################
+# @aml helper function
 function _aml(argExpr)
 
     argParams = Union{Expr,Symbol}[] # Expr(:parameters)[]
@@ -326,17 +327,23 @@ function _aml(argExpr)
     for i in eachindex(argExpr.args) # iterating over arguments of each type argument
         ei = argExpr.args[i] # type argument element i
 
+        ########################
+        # Line number skipper
         if typeof(ei) == LineNumberNode
             lineNumber +=2
             continue
         end
 
+        ########################
+        # struct aml name chcker
         if isa(ei, String)  # struct name "aml name"
 
             amlName = ei # Type aml name
             argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
             docOrElmType = 0
 
+        ########################
+        # struct document/element type checker
         elseif isa(ei, Tuple) # literal# struct name xd/hd"aml name"
 
             amlName = ei[2]
@@ -345,8 +352,39 @@ function _aml(argExpr)
             argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
 
         else
+            ################################################################
+            # No Def Value
             if ei.head == :tuple # var/var::T, "name"
 
+                # Def Value
+                push!(argDefVal, missing)
+
+                # Type Checker
+                lhs = ei.args[1]
+                if lhs isa Symbol #  var, "name"
+
+                    var = ei.args[1]
+
+                    push!(argTypes, String) # consider String as the type
+                    push!(argParams, var)
+                    push!(argVars, var)
+
+                    argExpr.args[i]=var  # removing "name",...
+
+                elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T, "name"
+
+                    var = lhs.args[1]
+                    varType = lhs.args[2] # Type
+
+                    push!(argTypes, varType)
+                    push!(argParams, var)
+                    push!(argVars, var)
+
+                    argExpr.args[i]=lhs  # removing "name",...
+
+                end
+
+                # Literal Checker
                 if length(ei.args[2]) == 2 # literal
 
                     elmType = ei.args[2][1]
@@ -362,38 +400,57 @@ function _aml(argExpr)
                     push!(argNames,ni)
                 end
 
-                push!(argDefVal, missing)
+                        ni = ei.args[2].args[2][2]
+                        push!(argNames,ni)
 
-                lhs = ei.args[1]
-                if lhs isa Symbol #  var, "name"
+                    else
+                        push!(amlTypes, 0) # non-literal
 
-                    var = ei.args[1]
+                        ni = ei.args[2].args[2]
+                        push!(argNames,ni)
+                    end
 
-                    push!(argTypes, String) # consider String as the type
-                    push!(argParams, var)
-                    push!(argVars, var)
-
-                    argExpr.args[i]=var  # removing "name"
-
-                elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T, "name"
-
-                    var = lhs.args[1]
-                    varType = lhs.args[2] # Type
-
-                    push!(argTypes, varType)
-                    push!(argParams, var)
-                    push!(argVars, var)
-
-                    argExpr.args[i]=lhs  # removing "name"
-
-                end
-
+            ################################################################
+            # Def Value
             elseif ei.head == :(=) # def value provided
 
-                if ei.args[2].head == :tuple # var/var::T = defVal, name
+                # aml name Checker
+                if ei.args[2].head == :tuple # var/var::T = defVal, "name"
 
+                    # Def Value
                     defVal = ei.args[2].args[1]
 
+                    push!(argDefVal, defVal)
+
+                    lhs = ei.args[1]
+
+                    argExpr.args[i]=lhs # remove =defVal for type definition
+
+                    # Type Checker
+                    if lhs isa Symbol #  var = defVal, "name"
+
+                        var = ei.args[1]
+
+                        push!(argTypes, String) # consider String as the type
+                        push!(argParams, Expr(:kw, var, defVal))
+                        push!(argVars, var)
+
+                        argExpr.args[i]=var  # removing "name",...
+
+                    elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal, "name"
+
+                        var = lhs.args[1]
+                        varType = lhs.args[2] # Type
+
+                        push!(argTypes, varType)
+                        push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
+                        push!(argVars, var)
+
+                        argExpr.args[i]=lhs  # removing "name",...
+
+                    end
+
+                    # Literal Checker
                     if length(ei.args[2].args[2]) == 2 # literal
 
                         elmType = ei.args[2].args[2][1]
@@ -409,37 +466,13 @@ function _aml(argExpr)
                         push!(argNames,ni)
                     end
 
-                    push!(argDefVal, defVal)
-
-                    lhs = ei.args[1]
-
-                    argExpr.args[i]=lhs # remove =defVal for type definition
-
-                    if lhs isa Symbol #  var = defVal, "name"
-
-                        var = ei.args[1]
-
-                        push!(argTypes, String) # consider String as the type
-                        push!(argParams, Expr(:kw, var, defVal))
-                        push!(argVars, var)
-
-                        argExpr.args[i]=var  # removing "name"
-
-                    elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal, "name"
-
-                        var = lhs.args[1]
-                        varType = lhs.args[2] # Type
-
-                        push!(argTypes, varType)
-                        push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
-                        push!(argVars, var)
-
-                        argExpr.args[i]=lhs  # removing "name"
-
                     end
 
+                ########################
+                #  No aml Name
                 else # var/var::T = defVal # ignored for creating aml
 
+                    # Type Checker
                     lhs = ei.args[1]
                     if lhs isa Symbol #  var = defVal
 
@@ -480,9 +513,14 @@ function _aml(argExpr)
 
                 end
 
+            ################################################################
+            # No aml name
             else  # var/var::T  # ignored for creating aml
+
+                # Type Checker
                 if ei isa Symbol #  var
                     push!(argNames, missing) # argument ignored for aml
+                    push!(argFun, missing) # ignored for creating aml
 
                     push!(argTypes, String)
 
@@ -493,6 +531,7 @@ function _aml(argExpr)
 
                 elseif ei.head == :(::) && ei.args[1] isa Symbol # var::T
                     push!(argNames, missing) # argument ignored for aml
+                    push!(argFun, missing) # ignored for creating aml
 
                     var = ei.args[1]
                     varType = ei.args[2] # Type
@@ -512,7 +551,9 @@ function _aml(argExpr)
         end
     end # endfor
 
-    if  docOrElmType == 10 # self closing tags
+    ########################
+    # self closing tags checker
+    if  docOrElmType == 10
         # add a field with nothing type
         push!(argNames, "content") # argument ignored for aml
         push!(argTypes, Nothing)
@@ -525,12 +566,16 @@ function _aml(argExpr)
         # argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType = _aml(argExpr)
     end
 
+    ########################
+    # aml::Node adder
     push!(argExpr.args,LineNumberNode(lineNumber+2))
     push!(argExpr.args,:(aml::Union{Document,Node}))
 
     return argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType
 end
 
+################################################################
+# Literal Macros:
 # html document
 macro hd_str(s)
     docOrElmType = -1
@@ -562,8 +607,8 @@ macro ns_str(s)
     elmType = 18
     return elmType, s
 end
-
 ################################################################
+# I/O
 import EzXML: parsexml, parsehtml, readxml, readhtml
 # from EzXML
 funs = [:parsexml, :parsehtml, :readxml, :readhtml]
