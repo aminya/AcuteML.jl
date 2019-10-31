@@ -319,6 +319,7 @@ function _aml(argExpr)
     argDefVal = Any[]
     argTypes = Union{Missing,Type, Symbol, Expr}[]
     argNames = Union{Missing,String}[]
+    argFun = Union{Missing, Symbol, Function}[]
     amlTypes = Int64[]
     amlName = "my type"
     docOrElmType = 0
@@ -400,15 +401,15 @@ function _aml(argExpr)
                     push!(argNames,ni)
                 end
 
-                        ni = ei.args[2].args[2][2]
-                        push!(argNames,ni)
+                # Function Checker
+                if length(ei.args) == 3 && isa(ei.args[3], Union{Function, Symbol}) #  var/var::T, "name", f
 
-                    else
-                        push!(amlTypes, 0) # non-literal
+                    fun = ei.args[3]   # function
+                    push!(argFun, fun)
 
-                        ni = ei.args[2].args[2]
-                        push!(argNames,ni)
-                    end
+                else # function name isn't given
+                    push!(argFun, missing)
+                end
 
             ################################################################
             # Def Value
@@ -466,6 +467,14 @@ function _aml(argExpr)
                         push!(argNames,ni)
                     end
 
+                    # Function Checker
+                    if length(ei.args[2].args) == 3 && isa(ei.args[2].args[3], Union{Function, Symbol}) #  var/var::T  = defVal, "name", f
+
+                        fun = ei.args[2].args[3]  # function
+                        push!(argFun, fun)
+
+                    else # function name isn't given
+                        push!(argFun, missing)
                     end
 
                 ########################
@@ -480,6 +489,7 @@ function _aml(argExpr)
 
                         push!(argDefVal, defVal)
                         push!(argNames,missing) # ignored for creating aml
+                        push!(argFun, missing) # ignored for creating aml
 
                         var = ei.args[1]
 
@@ -495,6 +505,7 @@ function _aml(argExpr)
 
                         push!(argDefVal, defVal)
                         push!(argNames,missing) # ignored for creating aml
+                        push!(argFun, missing) # ignored for creating aml
 
                         var = lhs.args[1]
                         varType = lhs.args[2] # Type
