@@ -422,7 +422,7 @@ function docOrElmInit(type::Int64, name::String = nothing)
 
     elseif type == -2 # xml
 
-        out = HTMLDocument() # no URI and external ID
+        out = HTMLDocument() # no URI and external id
     end
 
     return out

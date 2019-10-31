@@ -7,7 +7,7 @@ using Test
     field::String, "study-field"
     GPA::Float64 = 4.5, "GPA"
     courses::Vector{String}, "taken-courses"
-    ID::Int64, a"id"
+    id::Int64, a"id"
 end
 
 @aml struct University "university"
@@ -21,8 +21,8 @@ end
 
 @testset "constructor" begin
 
-    P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], ID = 1)
-    P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], ID = 2)
+    P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
+    P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
 
     U = University(name="Julia University", people=[P1, P2])
 
@@ -128,7 +128,7 @@ end
     @test P1.field == "Mechanical Engineering"
     @test P1.GPA == 4.5
     @test P1.courses == ["Artificial Intelligence", "Robotics"]
-    @test P1.ID == 1
+    @test P1.id == 1
 
     P2 = Person(U.people[2])
 

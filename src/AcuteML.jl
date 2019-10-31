@@ -45,7 +45,7 @@ university::University, "university"
 ```
 * If the value is going to be an attribute put `a` before its name
 ```julia
-ID::Int64, a"id"
+id::Int64, a"id"
 ```
 * You can specify the default value for an argument by using `= defVal` syntax
 ```julia
@@ -60,7 +60,11 @@ GPA::Float64, "GPA", GPAcheck
 @aml struct rest sc"rest"
   # add fields(elements) here
 end
-````
+```
+* If you don't specify the type of a variable, it is considered to be string:
+```julia
+field, "study-field"
+```
 
 # Example 1 - constructor
 ```julia
@@ -85,9 +89,8 @@ end
     university::University, "~"
 end
 
-
-P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], ID = 1)
-P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], ID = 2)
+P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
+P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
 
 U = University(name="Julia University", people=[P1, P2])
 
@@ -96,7 +99,7 @@ D = Doc(university = U)
 
 ```julia
 # An example that doesn't meet the critertia function for GPA because GPA is more than 4.5
-P3 = Person(age=99, field="Macro Wizard", GPA=10, courses=["Julia Magic"], ID = 3)
+P3 = Person(age=99, field="Macro Wizard", GPA=10, courses=["Julia Magic"], id = 3)
 julia>
 GPA doesn't meet criteria function
 ```
@@ -186,7 +189,7 @@ GPAcheck(x) = x <= 4.5 && x >= 0
     field::String, "study-field"
     GPA::Float64 = 4.5, "GPA", GPAcheck
     courses::Vector{String}, "taken-courses"
-    ID::Int64, a"id"
+    id::Int64, a"id"
 end
 
 @aml struct University "university"
@@ -226,7 +229,7 @@ julia>P1.GPA
 julia>P1.courses
 ["Artificial Intelligence", "Robotics"]
 
-julia>P1.ID
+julia>P1.id
 1
 
 P2 = Person(U.people[2])
