@@ -244,25 +244,32 @@ macro aml(expr)
             amlconst=Vector{Expr}(undef,numAml)
             amlext=Vector{Expr}(undef,numAml)
 
+            ##########################
+            # Each argument of the struct
             for i=1:numAml
                 argTypesI = argTypes[i]
                 amlVarsI = amlVars[i]
                 amlNamesI = amlNames[i]
                 amlTypesI = amlTypes[i]
                 if (isa(argTypesI, Expr) && argTypesI.args[1] == :Vector) || (!isa(argTypesI, Union{Symbol, Expr}) && argTypesI <: Array) # vector
+                ##########################
+                # Vector
 
                         amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
 
                         amlext[i]=:($amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
                 elseif isa(argTypesI, Symbol) || (isa(argTypesI, Expr) && argTypesI.args[1] == :Union ) || (isa(argTypesI, Expr) && argTypesI.args[1] == :UN) || !(argTypesI <: Array)   # non vector
+                ##########################
+                # Non Vector
 
                     amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
                     amlext[i]=:($amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
                 end
 
-            end
+            end # endfor
+            ##########################
 
             docOrElmconst = :( aml = docOrElmInit($docOrElmType, $amlName) )
 
@@ -285,7 +292,7 @@ macro aml(expr)
             end
 
             nothingMethod = :( ($(esc(T)))(::Nothing) = nothing )
-            # convertNothingMethod = :(Base.convert(::Type{($(esc(T)))}, ::Nothing) = nothing)
+            # convertNothingMethod = :(Base.convert(::Type{($(esc(T)))}, ::Nothing) = nothing) # for passing nothing to function without using Union{Nothing, T} in the definition
             selfMethod = :( ($(esc(T)))(in::$(esc(T))) = $(esc(T))(in.aml) )
 
             out = quote
@@ -299,6 +306,7 @@ macro aml(expr)
 
         else
             error("Invalid usage of @aml")
+            # TODO: add curly braces support
         end
     else
         out = nothing
