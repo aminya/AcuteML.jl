@@ -15,20 +15,20 @@ export @xd_str, @hd_str, @sc_str, @a_str
 """
   @aml typedef
 
-Use @aml macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
 # Type defnition
+Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
 * Use `xd""` or `hd""` to define a XML or HTML document:
 ```julia
 @aml struct Doc xd""
-  # add fields(elements) here
+# add fields(elements) here
 end
 ```
 * Specify the element name in a string after the struct name
 ```julia
 @aml struct Person "person"
-  # add fields(elements) here
+# add fields(elements) here
 end
 ```
 * Sepecify the html/xml name for childs in a string in front of the field after `,`
@@ -45,20 +45,20 @@ university::University, "university"
 ```
 * If the value is going to be an attribute put `a` before its name
 ```julia
-id::Int64, a"id"
+id::Int64, a"~"
 ```
 * You can specify the default value for an argument by using `= defVal` syntax
 ```julia
-GPA::Float64 = 4.5, "GPA"
+GPA::Float64 = 4.5, "~"
 ```
 * To define any restrictions for the values of one field, put the function name that checks a criteria and returns Bool:
 ```julia
-GPA::Float64, "GPA", GPAcheck
+GPA::Float64, "~", GPAcheck
 ```
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
 ```julia
 @aml struct rest sc"rest"
-  # add fields(elements) here
+# add fields(elements) here
 end
 ```
 * If you don't specify the type of a variable, it is considered to be string:
