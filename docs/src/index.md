@@ -34,17 +34,17 @@ Use `@aml` macro to define a Julia type, and then the package automatically crea
   # add fields(elements) here
 end
 ```
-* Specify the element name in a string after the struct name
+* Specify the html/xml struct name as a string after the struct name after a space
 ```julia
 @aml struct Person "person"
   # add fields(elements) here
 end
 ```
-* Sepecify the html/xml name for childs in a string in front of the field after `,`
+* Sepecify the html/xml field name as a string in front of the field after `,`
 ```julia
 field, "study-field"
 ```
-* If the html/xml name is the same as variable's name, you can use `"~"` instead
+* If the html/xml name is the same as variable/type's name, you can use `"~"` instead
 ```julia
 age::UInt, "~"
 ```
@@ -66,7 +66,7 @@ GPA::Float64, "~", GPAcheck
 ```
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
 ```julia
-@aml struct rest sc"rest"
+@aml struct rest sc"~"
   # add fields(elements) here
 end
 ```
