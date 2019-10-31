@@ -127,21 +127,19 @@ end
 end
 
 # extract Doc
+D = Doc(xml) # StructName(xml) like Doc(xml) extracts the data and stores them in proper format
 
-D = Doc(xml)
-
+# Now you can access all of the data by calling the fieldnames
 
 # extract University
-
-U = University(D.university)
+U = D.university
 
 julia&gt;U.name
 &quot;Julia University&quot;
 
-
 # extract Person
 
-P1 = Person(U.people[1])
+P1 = U.people[1]
 
 julia&gt;P1.age
 24
@@ -157,8 +155,6 @@ julia&gt;P1.courses
 
 julia&gt;P1.id
 1
-
-P2 = Person(U.people[2])
 </code></pre><h1><a class="nav-anchor" id="Example-for-Common-Restriction-functions-1" href="#Example-for-Common-Restriction-functions-1">Example for Common Restriction functions</a></h1><p>Restrictions should be given as a function that returns Bool and the function checks for elements.</p><p>For example, for a vector of strings:</p><pre><code class="language-julia">@aml struct Person &quot;person&quot;
    member::Vector{String}, &quot;member&quot;, memberCheck
 end</code></pre><p>Value limit check:</p><pre><code class="language-julia">memberCheck(x) = any( x&gt;10 || x&lt;5 )  # in a compact form: x-&gt; any(x&gt;10 || x&lt;5)
