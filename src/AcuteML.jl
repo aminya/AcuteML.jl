@@ -289,9 +289,34 @@ macro aml(expr)
 
                 ##########################
                 # Non Vector
+                elseif isa(argTypesI, Symbol) || (isa(argTypesI, Expr) && argTypesI.args[1] == :Union ) || (isa(argTypesI, Expr) && argTypesI.args[1] == :UN) || !(argTypesI <: Array)
 
-                    amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
-                    amlext[i]=:($amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
+                    # Function missing
+                    if ismissing(amlFunsI)
+
+                        amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
+                        amlext[i]=:($amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
+
+                    # Function provided
+                    else
+                        amlconst[i]=quote
+                            if ($(esc(amlFunsI)))($amlVarsI)
+                                addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI)
+                            else
+                                error("$($amlNamesI) doesn't meet criteria function")
+                            end
+                        end
+
+                        amlext[i]=quote
+
+                            $amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI)
+
+                            if !(($(esc(amlFunsI)))($amlVarsI))
+                                error("$($amlNamesI) doesn't meet criteria function")
+                            end
+                        end
+
+                    end
 
                 end
 
