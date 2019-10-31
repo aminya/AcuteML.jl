@@ -31,7 +31,6 @@ using AcuteML
 Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
 # Type defnition
-
 * Use `xd""` or `hd""` to define a XML or HTML document:
 ```julia
 @aml struct Doc xd""
@@ -46,7 +45,11 @@ end
 ```
 * Sepecify the html/xml name for childs in a string in front of the field after `,`
 ```julia
-age::UInt, "age"
+field, "study-field"
+```
+* If the html/xml name is the same as variable's name, you can use `"~"` instead
+```julia
+age::UInt, "~"
 ```
 * For already `@aml` defined types, name should be the same as its html/xml name
 ```julia
@@ -79,11 +82,11 @@ using AcuteML
 GPAcheck(x) = x <= 4.5 && x >= 0
 
 @aml struct Person "person"
-    age::UInt, "age"
-    field::String, "study-field"
-    GPA::Float64 = 4.5, "GPA", GPAcheck
+    age::UInt, "~"
+    field, "study-field"
+    GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
-    ID::Int64, a"id"
+    id::Int64, a"~"
 end
 
 @aml struct University "university"

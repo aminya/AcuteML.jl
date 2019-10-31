@@ -22,11 +22,11 @@ xml = parsexml("""
 GPAcheck(x) = x <= 4.5 && x >= 0
 
 @aml struct Person "person"
-    age::UInt, "age"
-    field::String, "study-field"
-    GPA::Float64 = 4.5, "GPA", GPAcheck
+    age::UInt, "~"
+    field, "study-field"
+    GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
-    ID::Int64, a"id"
+    id::Int64, a"~"
 end
 
 @aml struct University "university"
@@ -35,7 +35,7 @@ end
 end
 
 @aml struct Doc xd""
-    university::University, "university"
+    university::University, "~"
 end
 
 # extract Doc
@@ -58,6 +58,6 @@ P1.age # 24
 P1.field # Mechanical Engineering
 P1.GPA # 4.5
 P1.courses # ["Artificial Intelligence", "Robotics"]
-P1.ID # 1
+P1.id # 1
 
 P2 = Person(U.people[2])
