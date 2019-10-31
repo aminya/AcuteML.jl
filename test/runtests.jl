@@ -115,14 +115,14 @@ end
 
     # extract University
 
-    U = University(D.university)
+    U = D.university
 
     @test U.name == "Julia University"
 
 
     # extract Person
 
-    P1 = Person(U.people[1])
+    P1 = U.people[1]
 
     @test P1.age == 24
     @test P1.field == "Mechanical Engineering"
@@ -130,7 +130,7 @@ end
     @test P1.courses == ["Artificial Intelligence", "Robotics"]
     @test P1.id == 1
 
-    P2 = Person(U.people[2])
+    P2 = U.people[2]
 
     @test print(P2.aml) == print(strip("""
     <person id="2">

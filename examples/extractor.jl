@@ -39,25 +39,22 @@ end
 end
 
 # extract Doc
+D = Doc(xml) # StructName(xml) like Doc(xml) extracts the data and stores them in proper format
 
-D = Doc(xml)
-
+# Now you can access all of the data by calling the fieldnames
 
 # extract University
-
-U = University(D.university)
+U = D.university
 
 U.name # Julia University
 
 
 # extract Person
 
-P1 = Person(U.people[1])
+P1 = U.people[1]
 
 P1.age # 24
 P1.field # Mechanical Engineering
 P1.GPA # 4.5
 P1.courses # ["Artificial Intelligence", "Robotics"]
 P1.id # 1
-
-P2 = Person(U.people[2])
