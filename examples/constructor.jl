@@ -1,9 +1,11 @@
 using AcuteML
 
+GPAcheck(x) = x <= 4.5 && x >= 0
+
 @aml struct Person "person"
     age::UInt, "age"
     field::String, "study-field"
-    GPA::Float64 = 4.5, "GPA"
+    GPA::Float64 = 4.5, "GPA", GPAcheck
     courses::Vector{String}, "taken-courses"
     ID::Int64, a"id"
 end
@@ -24,6 +26,10 @@ P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], ID =
 U = University(name="Julia University", people=[P1, P2])
 
 D = Doc(university = U)
+
+# An example that doesn't meet the critertia function for GPA because GPA is more than 4.5
+P3 = Person(age=99, field="Macro Wizard", GPA=10, courses=["Julia Magic"], ID = 3)
+#GPA doesn't meet criteria function
 
 print(P1.aml)
 #=
