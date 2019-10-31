@@ -22,12 +22,13 @@ Use @aml macro to define a Julia type, and then the package automatically create
 * Use `xd""` or `hd""` to define a XML or HTML document:
 ```julia
 @aml struct Doc xd""
+  # add fields(elements) here
 end
 ```
 * Specify the element name in a string after the struct name
 ```julia
 @aml struct Person "person"
-  ...
+  # add fields(elements) here
 end
 ```
 * Sepecify the html/xml name for childs in a string in front of the field after `,`
@@ -53,9 +54,9 @@ GPA::Float64, "GPA", GPAcheck
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
 ```julia
 @aml struct rest sc"rest"
-  ...
+  # add fields(elements) here
 end
-```
+````
 
 # Example 1 - constructor
 ```julia
