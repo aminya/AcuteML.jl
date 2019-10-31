@@ -69,7 +69,7 @@ GPA::Float64, "~", GPAcheck
 ```
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
 ```julia
-@aml struct rest sc"rest"
+@aml struct rest sc"~"
   # add fields(elements) here
 end
 ```

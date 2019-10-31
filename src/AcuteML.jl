@@ -246,7 +246,7 @@ macro aml(expr)
 
     # expr.args[3] # arguments
      # argParams.args # empty
-    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType = _aml(expr.args[3])
+    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType = _aml(expr)
 
 
     # defining outter constructors
@@ -399,7 +399,10 @@ end
 # var::T or anything more complex is an expression
 ################################################################
 # @aml helper function
-function _aml(argExpr)
+function _aml(expr)
+
+    argExpr = expr.args[3] # arguments of the type
+    T = expr.args[2] # Type name
 
     argParams = Union{Expr,Symbol}[] # Expr(:parameters)[]
     argVars = Union{Expr,Symbol}[]
@@ -426,7 +429,13 @@ function _aml(argExpr)
         # struct aml name chcker
         if isa(ei, String)  # struct name "aml name"
 
-            amlName = ei # Type aml name
+            # Self-name checker
+            if ei == "~"
+                amlName = string(T)
+            else
+                amlName = ei  # Type aml name
+            end
+
             argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
             docOrElmType = 0
 
@@ -665,7 +674,7 @@ function _aml(argExpr)
 
                 elseif vi.head == :block  # anything else should be evaluated again
                     # can arise with use of @static inside type decl
-                    argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType = _aml(argExpr)
+                    argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType = _aml(expr)
                 else
                     continue
                 end
