@@ -219,7 +219,7 @@ macro aml(expr)
 
     # expr.args[3] # arguments
      # argParams.args # empty
-    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType = _aml(expr.args[3])
+    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType = _aml(expr.args[3])
 
 
     # defining outter constructors
@@ -503,7 +503,7 @@ function _aml(argExpr)
 
                 elseif vi.head == :block  # anything else should be evaluated again
                     # can arise with use of @static inside type decl
-                    argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType = _aml(argExpr)
+                    argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType = _aml(argExpr)
                 else
                     continue
                 end
@@ -528,7 +528,7 @@ function _aml(argExpr)
     push!(argExpr.args,LineNumberNode(lineNumber+2))
     push!(argExpr.args,:(aml::Union{Document,Node}))
 
-    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType
+    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType
 end
 
 # html document
