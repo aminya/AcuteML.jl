@@ -77,6 +77,14 @@ end
 ```julia
 field, "study-field"
 ```
+* If a field is optional, don't forget to define its type as `UN{}` (Union with Nothing).
+```julia
+funds::UN{String}, "financial-funds"
+```
+* You can also set the default value of a field as `nothing`
+```julia
+residence::UN{String}=nothing, "residence-stay"
+```
 -------------------------------------------------------
 
 # Example 1 - Constructor
