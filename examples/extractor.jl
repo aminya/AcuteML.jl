@@ -19,10 +19,12 @@ xml = parsexml("""
 </university>
 """)
 
+GPAcheck(x) = x <= 4.5 && x >= 0
+
 @aml struct Person "person"
     age::UInt, "age"
     field::String, "study-field"
-    GPA::Float64 = 4.5, "GPA"
+    GPA::Float64 = 4.5, "GPA", GPAcheck
     courses::Vector{String}, "taken-courses"
     ID::Int64, a"id"
 end
