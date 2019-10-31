@@ -472,13 +472,25 @@ function _aml(argExpr)
                     push!(amlTypes, elmType) # literal type
 
                     ni = ei.args[2][2]
-                    push!(argNames,ni)
+
+                    # Self-name checker
+                    if ni == "~"
+                        push!(argNames,string(var))
+                    else
+                        push!(argNames,ni)
+                    end
 
                 else
                     push!(amlTypes, 0) # non-literal
 
                     ni = ei.args[2]
-                    push!(argNames,ni)
+
+                    # Self-name checker
+                    if ni == "~"
+                        push!(argNames,string(var))
+                    else
+                        push!(argNames,ni)
+                    end
                 end
 
                 # Function Checker
@@ -538,13 +550,26 @@ function _aml(argExpr)
                         push!(amlTypes, elmType) # literal type
 
                         ni = ei.args[2].args[2][2]
-                        push!(argNames,ni)
+
+                        # Self-name checker
+                        if ni == "~"
+                            push!(argNames,string(var))
+                        else
+                            push!(argNames,ni)
+                        end
 
                     else
                         push!(amlTypes, 0) # non-literal
 
                         ni = ei.args[2].args[2]
-                        push!(argNames,ni)
+
+                        # Self-name checker
+                        if ni == "~"
+                            push!(argNames,string(var))
+                        else
+                            push!(argNames,ni)
+                        end
+
                     end
 
                     # Function Checker
