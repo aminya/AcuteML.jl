@@ -230,9 +230,11 @@ macro aml(expr)
         # Type name is a single name (symbol)
         if T isa Symbol
 
-            idAmlArgs = (!).(ismissing.(argNames)) # non aml arguments
+            # Non-aml arguments are ignored
+            idAmlArgs = (!).(ismissing.(argNames)) # missing argName means not aml
 
             amlNames = argNames[idAmlArgs]
+            amlFuns = argFun[idAmlArgs]
             amlVars = argVars[idAmlArgs]
             amlParams = argParams[idAmlArgs]
             amlDefVal = argDefVal[idAmlArgs]
@@ -251,15 +253,40 @@ macro aml(expr)
                 amlVarsI = amlVars[i]
                 amlNamesI = amlNames[i]
                 amlTypesI = amlTypes[i]
-                if (isa(argTypesI, Expr) && argTypesI.args[1] == :Vector) || (!isa(argTypesI, Union{Symbol, Expr}) && argTypesI <: Array) # vector
+                amlFunsI=amlFuns[i]
                 ##########################
                 # Vector
+                if (isa(argTypesI, Expr) && argTypesI.args[1] == :Vector) || (!isa(argTypesI, Union{Symbol, Expr}) && argTypesI <: Array)
+
+
+                    # Function missing
+                    if ismissing(amlFunsI)
 
                         amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
 
                         amlext[i]=:($amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
-                elseif isa(argTypesI, Symbol) || (isa(argTypesI, Expr) && argTypesI.args[1] == :Union ) || (isa(argTypesI, Expr) && argTypesI.args[1] == :UN) || !(argTypesI <: Array)   # non vector
+                    # Function provided
+                    else
+                        amlconst[i]=quote
+                            if ($(esc(amlFunsI)))($amlVarsI)
+                                addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI)
+                            else
+                                error("$($amlNamesI) doesn't meet criteria function")
+                            end
+                        end
+
+
+                        amlext[i]=quote
+
+                            $amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI)
+
+                            if !(($(esc(amlFunsI)))($amlVarsI))
+                                error("$($amlNamesI) doesn't meet criteria function")
+                            end
+                        end
+                    end
+
                 ##########################
                 # Non Vector
 
