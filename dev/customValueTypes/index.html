@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Cutom Value Types · AcuteML.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>AcuteML.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../">Home</a></li><li><a class="toctext" href="../templating/">Templating</a></li><li><a class="toctext" href="../valueChecking/">Value Checking</a></li><li class="current"><a class="toctext" href>Cutom Value Types</a><ul class="internal"><li><a class="toctext" href="#@aml-defined-types-1"><code>@aml</code> defined types</a></li><li><a class="toctext" href="#Dates-and-Time:-1">Dates and Time:</a></li><li><a class="toctext" href="#Custom-Types-1">Custom Types</a></li></ul></li><li><a class="toctext" href="../customConstructors/">Custom Contructors</a></li><li><a class="toctext" href="../SyntaxReference/">Syntax Reference</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href>Cutom Value Types</a></li></ul><a class="edit-page" href="https://github.com/aminya/AcuteML.jl/blob/master/docs/src/customValueTypes.md#L"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Cutom Value Types</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="Cutom-Value-Types-1" href="#Cutom-Value-Types-1">Cutom Value Types</a></h1><p>Values can have custom types.</p><h2><a class="nav-anchor" id="@aml-defined-types-1" href="#@aml-defined-types-1"><code>@aml</code> defined types</a></h2><p>For already <code>@aml</code> defined types, name should be the same as the defined type root name</p><pre><code class="language-julia">university::University, &quot;university&quot;</code></pre><h2><a class="nav-anchor" id="Dates-and-Time:-1" href="#Dates-and-Time:-1">Dates and Time:</a></h2><ul><li><a href="https://docs.julialang.org/en/v1/stdlib/Dates/#Dates.Date-Tuple{Int64,Int64,Int64}">Date</a></li></ul><p>Is covered under defined types, and it automatically is coneverted to the correct format</p><pre><code class="language-julia"># Defining
+Date(2013,7,1)
+Date(&quot;2013-7-1&quot;)</code></pre><pre><code class="language-xml">&lt;some-date&gt;YYYY-MM-DD&lt;/some-date&gt;
+&lt;some-date&gt;2013-07-01&lt;/some-date&gt;</code></pre><ul><li><a href="https://docs.julialang.org/en/v1/stdlib/Dates/#Dates.Time-NTuple{5,Int64}">Time</a></li></ul><p>Is covered under defined types, and it automatically is coneverted to the correct format</p><pre><code class="language-julia"># Defining
+Time(12,53,40)
+Time(&quot;12:53:40&quot;)</code></pre><pre><code class="language-xml">&lt;some-time&gt;hh:mm:ss&lt;/some-time&gt;
+&lt;some-time&gt;12:53:40&lt;/some-time&gt;</code></pre><ul><li><a href="https://docs.julialang.org/en/v1/stdlib/Dates/#Dates.DateTime-NTuple{7,Int64}">DateTime</a></li></ul><p>Is covered under defined types, and it automatically is coneverted to the correct format</p><pre><code class="language-julia"># Defining
+DateTime(2013,5,1,12,53,40)
+DateTime(&quot;2013-05-01T12:53:40&quot;)</code></pre><pre><code class="language-xml">&lt;some-datatime&gt;YYYY-MM-DDThh:mm:ss&lt;/some-datatime&gt;
+&lt;some-datatime&gt;2013-05-01T12:53:40&lt;/some-datatime&gt;</code></pre><h2><a class="nav-anchor" id="Custom-Types-1" href="#Custom-Types-1">Custom Types</a></h2><p>In order to make a custom type work with <code>@aml</code>, you need to define two methods for your type:</p><pre><code class="language-julia"># string printing
+string(x::yourType) = some_string_as_your_type_content</code></pre><pre><code class="language-julia"># string parsing
+yourType(x::String) = a_type_made_from_a_string</code></pre><p>For example, in Julia, these types already have defined the methods required:</p><pre><code class="language-julia"># Defining
+Date(2013,7,1)
+
+# Methods Check
+string(Date(2013,7,1))
+Date(&quot;2013-7-1&quot;)
+############################
+# Defining
+Time(12,53,40)
+
+# Methods Check
+string(Time(12,53,40))
+Time(&quot;12:53:40&quot;)
+############################
+# Defining
+DateTime(2013,5,1,12,53,40)
+
+# Methods Check
+# check
+string(DateTime(2013,5,1,12,53,40))
+DateTime(&quot;2013-05-01T12:53:40&quot;)</code></pre><footer><hr/><a class="previous" href="../valueChecking/"><span class="direction">Previous</span><span class="title">Value Checking</span></a><a class="next" href="../customConstructors/"><span class="direction">Next</span><span class="title">Custom Contructors</span></a></footer></article></body></html>
