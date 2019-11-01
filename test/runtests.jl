@@ -2,12 +2,14 @@ using AcuteML
 using Test
 
 
+GPAcheck(x) = x <= 4.5 && x >= 0
+
 @aml struct Person "person"
-    age::UInt, "age"
-    field::String, "study-field"
-    GPA::Float64 = 4.5, "GPA"
+    age::UInt, "~"
+    field, "study-field"
+    GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
-    id::Int64, a"id"
+    id::Int64, a"~"
 end
 
 @aml struct University "university"
@@ -16,7 +18,7 @@ end
 end
 
 @aml struct Doc xd""
-    university::University, "university"
+    university::University, "~"
 end
 
 @testset "constructor" begin
