@@ -58,23 +58,19 @@ GPA::Float64, "~", GPAcheck
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
 ```julia
 @aml struct rest sc"~"
-  # add fields(elements) here
 end
 ```
 * If you don't specify the type of a variable, it is considered to be string:
 ```julia
 field, "study-field"
 ```
-* If a field is optional, don't forget to define its type as `UN{}` (Union with Nothing).
+* If a field is optional, don't forget to define its type as `UN{}` (Union with Nothing), and set the default value of as `nothing`.
 ```julia
-funds::UN{String}, "financial-funds"
-```
-* You can also set the default value of a field as `nothing`
-```julia
-residence::UN{String}=nothing, "residence-stay"
+funds::UN{String}, "financial-funds"   # optional, but you should pass nothing in construction
+residence::UN{String}=nothing, "residence-stay" # optional with nothing as default value
 ```
 
-# Example 1 - constructor
+# Example - constructor
 ```julia
 using AcuteML
 
@@ -167,7 +163,7 @@ julia> print(D.aml)
 
 ```
 
-# Example 2 - extractor
+# Example - extractor
 ```julia
 using AcuteML
 

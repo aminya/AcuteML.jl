@@ -3,7 +3,7 @@ AcuteML also provides a templating engine if you want to use templates instead o
 
 -------------------------------------------------------
 
-# Example 3 - Template Rendering using Functions
+# Template Rendering using Functions
 
 This method only uses functions that return string. You can build your desired string and call the function for rendering.
 
@@ -49,7 +49,7 @@ file = open(filePath, "r"); print(file, out); close(file)
 ```
 
 -------------------------------------------------------
-# Example 4 - Template Rendering using Files
+# Template Rendering using Files
 
 You can render variables into html/xml files. However, you can't have multiline control flow Julia code in this method.
 

@@ -67,24 +67,20 @@ GPA::Float64, "~", GPAcheck
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
 ```julia
 @aml struct rest sc"~"
-  # add fields(elements) here
 end
 ```
 * If you don't specify the type of a variable, it is considered to be string:
 ```julia
 field, "study-field"
 ```
-* If a field is optional, don't forget to define its type as `UN{}` (Union with Nothing).
+* If a field is optional, don't forget to define its type as `UN{}` (Union with Nothing), and set the default value of as `nothing`.
 ```julia
-funds::UN{String}, "financial-funds"
-```
-* You can also set the default value of a field as `nothing`
-```julia
-residence::UN{String}=nothing, "residence-stay"
+funds::UN{String}, "financial-funds"   # optional, but you should pass nothing in construction
+residence::UN{String}=nothing, "residence-stay" # optional with nothing as default value
 ```
 -------------------------------------------------------
 
-# Example 1 - Constructor
+# Example - Constructor
 ```julia
 using AcuteML
 
@@ -179,7 +175,7 @@ julia> print(D.aml)
 ```
 -------------------------------------------------------
 
-# Example 2 - Extractor
+# Example - Extractor
 ```julia
 using AcuteML
 
@@ -250,33 +246,4 @@ julia>P1.courses
 
 julia>P1.id
 1
-
-```
-
-# Example for Common Restriction functions
-
-Restrictions should be given as a function that returns Bool and the function checks for elements.
-
-For example, for a vector of strings:
-```julia
-@aml struct Person "person"
-   member::Vector{String}, "member", memberCheck
-end
-```
-Value limit check:
-```julia
-memberCheck(x) = any( x>10 || x<5 )  # in a compact form: x-> any(x>10 || x<5)
-# x is all the values as a vector in this case
-```
-
-Check of the length of the vector:
-```julia
-memberCheck(x) = 0 < length(x) && length(x) < 10
-```
-User should know if the vector is going to be 0-element, its type should be union with nothing, i.e., UN{}. This is because of the EzXML implementation of findfirst and findall.
-
-Set of valuse:
-```julia
-setOfValues = [2,4,10]
-memberCheck(x) = in.(x, setOfValues)
 ```

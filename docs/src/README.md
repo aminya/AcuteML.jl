@@ -70,20 +70,24 @@ GPA::Float64, "~", GPAcheck
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
 ```julia
 @aml struct rest sc"~"
+  # add fields(elements) here
 end
 ```
 * If you don't specify the type of a variable, it is considered to be string:
 ```julia
 field, "study-field"
 ```
-* If a field is optional, don't forget to define its type as `UN{}` (Union with Nothing), and set the default value of as `nothing`.
+* If a field is optional, don't forget to define its type as `UN{}` (Union with Nothing).
 ```julia
-funds::UN{String}, "financial-funds"   # optional, but you should pass nothing in construction
-residence::UN{String}=nothing, "residence-stay" # optional with nothing as default value
+funds::UN{String}, "financial-funds"
+```
+* You can also set the default value of a field as `nothing`
+```julia
+residence::UN{String}=nothing, "residence-stay"
 ```
 -------------------------------------------------------
 
-# Example - Constructor
+# Example 1 - Constructor
 ```julia
 using AcuteML
 
@@ -177,7 +181,7 @@ julia> print(D.aml)
 ```
 -------------------------------------------------------
 
-# Example - Extractor
+# Example 2 - Extractor
 ```julia
 using AcuteML
 
@@ -257,7 +261,7 @@ AcuteML also provides a templating engine if you want to use templates instead o
 
 -------------------------------------------------------
 
-# Example - Template Rendering using Functions
+# Example 3 - Template Rendering using Functions
 
 This method only uses functions that return string. You can build your desired string and call the function for rendering.
 
@@ -303,7 +307,7 @@ file = open(filePath, "r"); print(file, out); close(file)
 ```
 
 -------------------------------------------------------
-# Example - Template Rendering using Files
+# Example 4 - Template Rendering using Files
 
 You can render variables into html/xml files. However, you can't have multiline control flow Julia code in this method.
 
