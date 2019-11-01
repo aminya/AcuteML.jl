@@ -763,6 +763,7 @@ function _aml(expr)
         # add a field with nothing type
         push!(argNames, "content") # argument ignored for aml
         push!(argTypes, Nothing)
+        push!(argFun,missing)
         push!(amlTypes,10)
         push!(argParams, Expr(:kw, :content, nothing))
         push!(argVars, :content)
