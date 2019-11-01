@@ -427,6 +427,7 @@ macro aml(expr)
                  function ($(esc(S)))(aml::Union{Document, Node})
                      $(amlext...)
                      return ($(esc(S)))($(argVars...), aml)
+                  end
 
             end
 
@@ -471,7 +472,7 @@ end
 function _aml(expr)
 
     argExpr = expr.args[3] # arguments of the type
-    T = expr.args[2] # Type name
+    T = expr.args[2] # Type name +(curly braces)
 
     argParams = Union{Expr,Symbol}[] # Expr(:parameters)[]
     argVars = Union{Expr,Symbol}[]
@@ -500,7 +501,11 @@ function _aml(expr)
 
             # Self-name checker
             if ei == "~"
-                amlName = string(T)
+                if T isa Symbol
+                    amlName = string(T)
+                elseif T isa Expr && T.head == :curly
+                    amlName = string(T.args[1]) # S
+                end
             else
                 amlName = ei  # Type aml name
             end
@@ -795,7 +800,6 @@ macro sc_str(s)
     docOrElmType= 10
     return docOrElmType, s
 end
-
 
 # attribute
 macro a_str(s)
