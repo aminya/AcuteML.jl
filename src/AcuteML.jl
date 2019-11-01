@@ -243,10 +243,11 @@ julia>P1.id
 """
 macro aml(expr)
     expr = macroexpand(__module__, expr) # to expand @static
+
     #  check if aml is used before struct
     expr isa Expr && expr.head == :struct || error("Invalid usage of @aml")
-    T = expr.args[2] # Type name
-    # amlName = exprt.args[3].args[2] # Type aml name
+
+    T = expr.args[2] # Type name +(curly braces)
 
     aml = Symbol(:aml)
 
@@ -260,101 +261,104 @@ macro aml(expr)
     # overflow on construction
     if !isempty(argVars)
 
-        # Type name is a single name (symbol)
-        if T isa Symbol
+        ################################################################
+        # Arguments methods
 
-            # Non-aml arguments are ignored
-            idAmlArgs = (!).(ismissing.(argNames)) # missing argName means not aml
+        # Non-aml arguments are ignored
+        idAmlArgs = (!).(ismissing.(argNames)) # missing argName means not aml
 
-            amlNames = argNames[idAmlArgs]
-            amlFuns = argFun[idAmlArgs]
-            amlVars = argVars[idAmlArgs]
-            amlParams = argParams[idAmlArgs]
-            amlDefVal = argDefVal[idAmlArgs]
-            amlTypes = amlTypes[idAmlArgs]
-            argTypes  = argTypes[idAmlArgs]
+        amlNames = argNames[idAmlArgs]
+        amlFuns = argFun[idAmlArgs]
+        amlVars = argVars[idAmlArgs]
+        amlParams = argParams[idAmlArgs]
+        amlDefVal = argDefVal[idAmlArgs]
+        amlTypes = amlTypes[idAmlArgs]
+        argTypes  = argTypes[idAmlArgs]
 
-            numAml = length(amlVars)
+        numAml = length(amlVars)
 
-            amlconst=Vector{Expr}(undef,numAml)
-            amlext=Vector{Expr}(undef,numAml)
+        amlconst=Vector{Expr}(undef,numAml)
+        amlext=Vector{Expr}(undef,numAml)
 
+        ##########################
+        # Each argument of the struct
+        for i=1:numAml
+            argTypesI = argTypes[i]
+            amlVarsI = amlVars[i]
+            amlNamesI = amlNames[i]
+            amlTypesI = amlTypes[i]
+            amlFunsI=amlFuns[i]
             ##########################
-            # Each argument of the struct
-            for i=1:numAml
-                argTypesI = argTypes[i]
-                amlVarsI = amlVars[i]
-                amlNamesI = amlNames[i]
-                amlTypesI = amlTypes[i]
-                amlFunsI=amlFuns[i]
-                ##########################
-                # Vector
-                if (isa(argTypesI, Expr) && argTypesI.args[1] == :Vector) || (!isa(argTypesI, Union{Symbol, Expr}) && argTypesI <: Array)
+            # Vector
+            if (isa(argTypesI, Expr) && argTypesI.args[1] == :Vector) || (!isa(argTypesI, Union{Symbol, Expr}) && argTypesI <: Array)
 
 
-                    # Function missing
-                    if ismissing(amlFunsI)
+                # Function missing
+                if ismissing(amlFunsI)
 
-                        amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
+                    amlconst[i]=:(addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
 
-                        amlext[i]=:($amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
+                    amlext[i]=:($amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
-                    # Function provided
-                    else
-                        amlconst[i]=quote
-                            if ($(esc(amlFunsI)))($amlVarsI)
-                                addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI)
-                            else
-                                error("$($amlNamesI) doesn't meet criteria function")
-                            end
-                        end
-
-
-                        amlext[i]=quote
-
-                            $amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI)
-
-                            if !(($(esc(amlFunsI)))($amlVarsI))
-                                error("$($amlNamesI) doesn't meet criteria function")
-                            end
+                # Function provided
+                else
+                    amlconst[i]=quote
+                        if ($(esc(amlFunsI)))($amlVarsI)
+                            addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI)
+                        else
+                            error("$($amlNamesI) doesn't meet criteria function")
                         end
                     end
 
-                ##########################
-                # Non Vector
-                elseif isa(argTypesI, Symbol) || (isa(argTypesI, Expr) && argTypesI.args[1] == :Union ) || (isa(argTypesI, Expr) && argTypesI.args[1] == :UN) || !(argTypesI <: Array)
 
-                    # Function missing
-                    if ismissing(amlFunsI)
+                    amlext[i]=quote
 
-                        amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
-                        amlext[i]=:($amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
+                        $amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI)
 
-                    # Function provided
-                    else
-                        amlconst[i]=quote
-                            if ($(esc(amlFunsI)))($amlVarsI)
-                                addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI)
-                            else
-                                error("$($amlNamesI) doesn't meet criteria function")
-                            end
+                        if !(($(esc(amlFunsI)))($amlVarsI))
+                            error("$($amlNamesI) doesn't meet criteria function")
                         end
+                    end
+                end
 
-                        amlext[i]=quote
+            ##########################
+            # Non Vector
+            elseif isa(argTypesI, Symbol) || (isa(argTypesI, Expr) && argTypesI.args[1] == :Union ) || (isa(argTypesI, Expr) && argTypesI.args[1] == :UN) || !(argTypesI <: Array)
 
-                            $amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI)
+                # Function missing
+                if ismissing(amlFunsI)
 
-                            if !(($(esc(amlFunsI)))($amlVarsI))
-                                error("$($amlNamesI) doesn't meet criteria function")
-                            end
+                    amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
+                    amlext[i]=:($amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
+
+                # Function provided
+                else
+                    amlconst[i]=quote
+                        if ($(esc(amlFunsI)))($amlVarsI)
+                            addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI)
+                        else
+                            error("$($amlNamesI) doesn't meet criteria function")
                         end
+                    end
 
+                    amlext[i]=quote
+
+                        $amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI)
+
+                        if !(($(esc(amlFunsI)))($amlVarsI))
+                            error("$($amlNamesI) doesn't meet criteria function")
+                        end
                     end
 
                 end
 
-            end # endfor
-            ##########################
+            end
+
+        end # endfor
+
+        ################################################################
+        # Type name is a single name (symbol)
+        if T isa Symbol
 
             docOrElmconst = :( aml = docOrElmInit($docOrElmType, $amlName) )
 
