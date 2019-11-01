@@ -2,7 +2,9 @@
 
 You can use AcuteML utilities to define custom type constructors or to override `@aml` constructors.
 
+
 Functions to use for custom html/xml constructor:
+- [docOrElmInit](@ref): Function to initialize the aml
 - [addelementOne!](@ref) : to add single elements
 - [addelementVect!](@ref) : to add multiple elements (vector)
 Use these functions, to make a method that calculates the `aml` inside the function and returns all of the fields.
@@ -29,6 +31,9 @@ end
 function Identity(;pitch = nothing, rest = nothing, unpitched = nothing)
 
     # This constructor only allows one the fields to exist - similar to choice element in XS
+
+    aml = docOrElmInit("identity")
+
     if pitch != nothing
         addelementOne!(aml, "pitch", pitch)
     elseif rest != nothing

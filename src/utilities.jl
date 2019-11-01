@@ -406,7 +406,19 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int
 end
 
 # doc or element initialize
-function docOrElmInit(type::Int64, name::String = nothing)
+"""
+    docOrElmInit(name)
+    docOrElmInit(type, name)
+
+Function to initialize the aml
+
+type:
+0 : element node # default
+10: empty element node
+-1: xml
+-2: html
+"""
+function docOrElmInit(type::Int64 = 0, name::String = nothing)
 
     if type == 0 # element node
 
@@ -416,11 +428,11 @@ function docOrElmInit(type::Int64, name::String = nothing)
 
         out = ElementNode(name)
 
-    elseif type == -1 # html
+    elseif type == -1 # xml
 
         out = XMLDocument() # version 1
 
-    elseif type == -2 # xml
+    elseif type == -2 # html
 
         out = HTMLDocument() # no URI and external id
     end
