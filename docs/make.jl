@@ -13,6 +13,8 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
+        "Value Checking" => "valueChecking.md"
+        "Cutom Value Types" => "customValueTypes.md"
         "Templating" => "templating.md",
         "Syntax Reference" => "SyntaxReference.md"
     ],
