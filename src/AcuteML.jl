@@ -392,10 +392,69 @@ macro aml(expr)
                # $convertNothingMethod
                $selfMethod
             end
+        ################################################################
+        # Parametric type structs
+        elseif T isa Expr && T.head == :curly
+            # if T == S{A<:AA,B<:BB}, define two methods
+            #   S(...) = ...
+            #   S{A,B}(...) where {A<:AA,B<:BB} = ...
+            S = T.args[1]
+            P = T.args[2:end]
+            Q = [U isa Expr && U.head == :<: ? U.args[1] : U for U in P]
+            SQ = :($S{$(Q...)})
 
+            docOrElmconst = :( aml = docOrElmInit($docOrElmType, $amlName) )
+
+            typeDefinition =:($expr)
+
+            amlConstructor = quote
+                function ($(esc(S)))(; $(argParams...))
+                    $docOrElmconst
+                    $(amlconst...)
+                    return ($(esc(S)))($(argVars...), aml)
+                end
+            end
+
+            amlConstructorCurly = quote
+                function ($(esc(SQ)))(; $(argParams...)) where {$(esc.(P)...)}
+                    $docOrElmconst
+                    $(amlconst...)
+                    return ($(esc(SQ)))($(argVars...), aml)
+                end
+            end
+
+            amlExtractor = quote
+                 function ($(esc(S)))(aml::Union{Document, Node})
+                     $(amlext...)
+                     return ($(esc(S)))($(argVars...), aml)
+
+            end
+
+            amlExtractorCurly = quote
+                 function ($(esc(SQ)))(aml::Union{Document, Node}) where {$(esc.(P)...)}
+                     $(amlext...)
+                     return ($(esc(SQ)))($(argVars...), aml)
+                  end
+
+            end
+
+            nothingMethod = :( ($(esc(S)))(::Nothing) = nothing )
+            # convertNothingMethod = :(Base.convert(::Type{($(esc(S)))}, ::Nothing) = nothing) # for passing nothing to function without using Union{Nothing, ...} in the definition
+            selfMethod = :( ($(esc(S)))(in::$(esc(S))) = $(esc(S))(in.aml) )
+
+            out = quote
+               Base.@__doc__($(esc(typeDefinition)))
+               $amlConstructor
+               $amlConstructorCurly
+               $amlExtractor
+               $amlExtractorCurly
+               $nothingMethod
+               # $convertNothingMethod
+               $selfMethod
+            end
+        ################################################################
         else
             error("Invalid usage of @aml")
-            # TODO: add curly braces support
         end
     else
         out = nothing
