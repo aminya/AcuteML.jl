@@ -577,6 +577,46 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int
     end
 end
 
+################################################################
+# Updaters
+################################################################
+# Single Updater
+"""
+    updatefirstcontent(value, string, node, amlType)
+
+Updates first element content. It also converts any type to string. element is given as string.
+"""
+function updatefirstcontent!(value::T, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Number, Bool}} # for strings, number and bool
+
+    if amlType == 0 # normal elements
+
+        if typeof(node) == Document || hasdocument(node)
+            elm = findfirst(s,node)
+        else
+            elm = findfirstlocal(s,node)
+        end
+
+        if isnothing(elm) # error if nothing is found
+            return error("field not found in aml")
+        else
+            elm.content = value
+        end
+
+    elseif amlType == 2 # Attributes
+
+        if haskey(node, s)
+            node[s] = value
+
+        else # error if nothing is found
+            return error("field not found in aml")
+        end
+
+    end
+
+
+
+end
+
 # doc or element initialize
 """
     docOrElmInit(name)
