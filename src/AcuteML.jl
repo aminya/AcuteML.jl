@@ -530,14 +530,32 @@ function _aml(expr)
             argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
             docOrElmType = 0
 
-        ########################
-        # struct document/element type checker
-        elseif isa(ei, Tuple) # literal# struct name xd/hd"aml name"
+        ################################################################
+        # Literal Struct name - xd/hd"aml name"
+        elseif isa(ei, Tuple)
+            ################################################################
+            # Struct aml
+            ########################
+            # Literal only  xd/hd"aml name"
+            if isa(ei, Tuple{Int64,String})
 
-            amlName = ei[2]
-            docOrElmType = ei[1]
+                amlFun[1]=missing # function
 
-            argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
+                # Self-name checker
+                if ei[2] == "~"
+                    if T isa Symbol
+                        amlName = string(T)
+                    elseif T isa Expr && T.head == :curly
+                        amlName = string(T.args[1]) # S
+                    end
+                else
+                    amlName = ei[2] # Type aml name
+                end
+
+                docOrElmType = ei[1]
+
+                argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
+            end
 
         else
             ################################################################
