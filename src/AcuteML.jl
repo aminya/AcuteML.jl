@@ -282,6 +282,7 @@ macro aml(expr)
     #  check if aml is used before struct
     expr isa Expr && expr.head == :struct || error("Invalid usage of @aml")
 
+    mutability = expr.args[1]
     T = expr.args[2] # Type name +(curly braces)
 
     aml = Symbol(:aml)
@@ -314,6 +315,9 @@ macro aml(expr)
 
         amlconst=Vector{Expr}(undef,numAml)
         amlext=Vector{Expr}(undef,numAml)
+        amlmutability=Vector{Expr}(undef,numAml)
+
+        amlVarsCall = Vector{Expr}(undef,numAml)
 
         ##########################
         # Each argument of the struct
@@ -323,7 +327,11 @@ macro aml(expr)
             amlNamesI = amlNames[i]
             amlTypesI = amlTypes[i]
             amlFunsI=amlFuns[i]
+            amlSymI=QuoteNode(amlVarsI)
             ##########################
+            # call Expr - For mutability
+            amlVarsCall[i] = :(str.$amlVarsI)
+
             # Vector
             if (isa(argTypesI, Expr) && argTypesI.args[1] == :Vector) || (!isa(argTypesI, Union{Symbol, Expr}) && argTypesI <: Array)
 
