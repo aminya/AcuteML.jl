@@ -1,7 +1,7 @@
 using EzXML
 import EzXML: Document, Node
 
-export findalllocal, findfirstlocal, findfirstcontent, findallcontent, addelementOne!, addelementVect!, docOrElmInit, UN
+export findalllocal, findfirstlocal, findfirstcontent, findallcontent, addelementOne!, addelementVect!, updateallcontent!, updatefirstcontent!, docOrElmInit, UN
 ################################################################
 UN{T}= Union{T, Nothing}
 ################################################################
@@ -728,6 +728,51 @@ function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Docume
         end
     end
 end
+
+# for defined types and nothing
+function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T}
+
+    if amlType == 0 # normal elements
+
+        if typeof(node) == Document || hasdocument(node)
+            elmsNode = findall(s, node) # a vector of Node elements
+        else
+            elmsNode = findalllocal(s, node) # a vector of Node elements
+        end
+
+    elseif amlType == 2 # Attributes
+
+        if haskey(node, s)
+            elmsNode = node[s]
+        else # error if nothing is found
+            return error("field not found in aml")
+        end
+    end
+
+
+    if isnothing(elmsNode) # error if nothing is found
+        return error("field not found in aml")
+    else
+        i = 1
+        for elm in elmsNode
+            if isnothing(value[i])
+                unlink!(elm)
+            else
+                if hasmethod(string, Tuple{T})
+                    elm.content = string(value[i])
+                else
+                    unlink!(elm)
+                    link!(node, value[i].aml)
+                end
+            end
+            i+=1
+        end
+        return elmsType
+    end
+
+end
+
+################################################################
 # doc or element initialize
 """
     docOrElmInit(name)
