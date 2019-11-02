@@ -119,13 +119,14 @@ end
 ```
 -------------------------------------------------------
 
-# Example - Constructor
+# Example - Type Definition
 ```julia
 using AcuteML
 
-GPAcheck(x) = x <= 4.5 && x >= 0
+# Types definition
 
-@aml struct Person "person"
+# Person Type
+@aml struct Person "person", courseCheck
     age::UInt, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
@@ -141,6 +142,26 @@ end
 @aml struct Doc xd""
     university::University, "~"
 end
+```
+
+```julia
+# Value Checking Functions
+GPAcheck(x) = x <= 4.5 && x >= 0
+
+function courseCheck(age, field, GPA, courses, id)
+
+    if field == "Mechanical Engineering"
+        relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
+    elseif field == "Computer Engineering"
+        relevant = ["Julia", "Algorithms"]
+    else
+        error("study field is not known")
+    end
+
+    return any(in.(courses, Ref(relevant)))
+end
+```
+-------------------------------------------------------
 
 
 P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
