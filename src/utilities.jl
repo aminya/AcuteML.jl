@@ -497,9 +497,20 @@ function addelementOne!(aml::Node, name::String, value::T, amlType::Int64) where
 end
 
 #  defined or nothing
-function addelementOne!(aml::Node, name::String, value, amlType::Int64)
+function addelementOne!(aml::Node, name::String, value::T, amlType::Int64) where {T}
     if !isnothing(value)
-        link!(aml,value.aml)
+        if hasmethod(string, Tuple{T})
+            if amlType == 0 # normal elements
+
+                addelement!(aml, name, string(value))
+            elseif amlType == 2 # Attributes
+
+                link!(aml, AttributeNode(name, string(value)))
+
+            end
+        else
+            link!(aml,value.aml)
+        end
     end
 end
 
