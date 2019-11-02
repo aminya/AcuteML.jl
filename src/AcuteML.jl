@@ -385,8 +385,8 @@ macro aml(expr)
 
                 end
 
-                ##########################
-                # Non Vector
+            ##########################
+            # Non Vector
             elseif isa(argTypesI, Symbol) || (isa(argTypesI, Expr) && argTypesI.args[1] == :Union ) || (isa(argTypesI, Expr) && argTypesI.args[1] == :UN) || !(argTypesI <: Array)
 
                 # Function missing
@@ -395,7 +395,16 @@ macro aml(expr)
                     amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
                     amlext[i]=:($amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
-                    # Function provided
+                    if mutability
+
+                        amlmutability[i] = quote
+                            if name == $amlSymI
+                                updatefirstcontent!(value, $amlNamesI, str.aml, $amlTypesI)
+                            end
+                        end
+                    end
+
+                # Function provided
                 else
                     amlconst[i]=quote
                         if ($(esc(amlFunsI)))($amlVarsI)
