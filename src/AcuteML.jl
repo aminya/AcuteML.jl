@@ -498,6 +498,7 @@ function _aml(expr)
     amlTypes = Int64[]
     amlName = "my type"
     docOrElmType = 0
+    amlFun = Array{Union{Missing, Symbol, Function},0}(undef)
     lineNumber=1
 
     for i in eachindex(argExpr.args) # iterating over arguments of each type argument
@@ -557,8 +558,28 @@ function _aml(expr)
                 argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
             end
 
-        else
-            ################################################################
+        elseif ei.head == :tuple
+                ########################
+                # Struct Function - "aml name", F
+            if isa(ei.args[1], String) && isa(ei.args[2], Union{Symbol,Function}) # "aml name", F
+
+                amlFun[1]=ei.args[2] # function
+
+                # Self-name checker
+                if ei.args[1] == "~"
+                    if T isa Symbol
+                        amlName = string(T)
+                    elseif T isa Expr && T.head == :curly
+                        amlName = string(T.args[1]) # S
+                    end
+                else
+                    amlName = ei.args[1] # Type aml name
+                end
+
+                docOrElmType = 0
+                argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
+
+                ########################
             # No Def Value
             if ei.head == :tuple # var/var::T, "name"
 
