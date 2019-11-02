@@ -370,6 +370,19 @@ macro aml(expr)
                             error("$($amlNamesI) doesn't meet criteria function")
                         end
                     end
+
+                    if mutability
+                        amlmutability[i] = quote
+                            if name == $amlSymI
+                                if ($(esc(amlFunsI)))($(amlVarsCall[i]))
+                                    updateallcontent!(value, $amlNamesI, str.aml, $amlTypesI)
+                                else
+                                    error("$($amlNamesI) doesn't meet criteria function")
+                                end
+                            end
+                        end
+                    end
+
                 end
 
                 ##########################
