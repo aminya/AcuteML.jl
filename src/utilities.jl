@@ -362,6 +362,35 @@ function addelementOne!(aml::Document, name::String, value::T, amlType::Int64) w
     end
 end
 
+# vector of strings
+function addelementVect!(aml::Document, name::String, value::Vector{String}, amlType::Int64)
+
+
+    if hasroot(aml)
+        amlNode = root(aml)
+
+        if amlType == 0 # normal elements
+
+            for ii = 1:length(value)
+                if !isnothing(value[ii]) # do nothing if value is nothing
+                    addelement!(amlNode, name, value[ii])
+                end
+            end
+
+        elseif amlType == 2 # Attributes
+
+            for ii = 1:length(value)
+                if !isnothing(value[ii]) # do nothing if value is nothing
+                    link!(amlNode, AttributeNode(name, value[ii]))
+                end
+            end
+        end
+
+    else
+        error("You cannot insert a vector in the document directly. Define a @aml defined field for xd/hd struct")
+    end
+
+end
 # strings
 function addelementOne!(aml::Node, name::String, value::String, amlType::Int64)
 
