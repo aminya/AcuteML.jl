@@ -686,6 +686,48 @@ function updatefirstcontent!(value::Nothing, s::String,node::Union{Node, Documen
 
 
 end
+################################################################
+# Vector update
+"""
+    updateallcontent!(value, string, node, amlType)
+
+Finds all the elements with the address of string in the node, and updates the content
+"""
+function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
+
+
+    if amlType == 0 # normal elements
+
+        if typeof(node) == Document || hasdocument(node)
+            elmsNode = findall(s, node) # a vector of Node elements
+        else
+            elmsNode = findalllocal(s, node) # a vector of Node elements
+        end
+
+        if isnothing(elmsNode) # error if nothing is found
+            return error("field not found in aml")
+        else
+            i = 1
+            for elm in elmsNode
+                elm = value[i]
+                i+=1
+            end
+        end
+
+    elseif amlType == 2 # Attributes
+
+        if haskey(node, s)
+            elmsNode = node[s]
+            i = 1
+            for elm in elmsNode
+                elm = value[i]
+                i+=1
+            end
+        else # error if nothing is found
+            return error("field not found in aml")
+        end
+    end
+end
 # doc or element initialize
 """
     docOrElmInit(name)
