@@ -511,8 +511,10 @@ function _aml(expr)
         end
 
         ########################
-        # struct aml name chcker
-        if isa(ei, String)  # struct name "aml name"
+        # Single struct name - "aml name"
+        if isa(ei, String)
+
+            amlFun[1]=missing # function
 
             # Self-name checker
             if ei == "~"
