@@ -1,10 +1,8 @@
 using AcuteML
 using Test
 
-
-GPAcheck(x) = x <= 4.5 && x >= 0
-
-@aml struct Person "person"
+# Type Definition
+@aml struct Person "person", courseCheck
     age::UInt, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
@@ -19,6 +17,22 @@ end
 
 @aml struct Doc xd""
     university::University, "~"
+end
+
+# Value Checking Functions
+GPAcheck(x) = x <= 4.5 && x >= 0
+
+function courseCheck(age, field, GPA, courses, id)
+
+    if field == "Mechanical Engineering"
+        relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
+    elseif field == "Computer Engineering"
+        relevant = ["Julia", "Algorithms"]
+    else
+        error("study field is not known")
+    end
+
+    return any(in.(courses, Ref(relevant)))
 end
 
 @testset "constructor" begin
