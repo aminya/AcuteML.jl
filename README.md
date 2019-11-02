@@ -34,7 +34,7 @@ Use `@aml` macro to define a Julia type, and then the package automatically crea
 ### Document Defnition
 * Use `xd""` or `hd""` to define a XML or HTML document:
 ```julia
-@aml struct Doc xd""
+@aml mutable struct Doc xd""
   # add fields (elements) here
 end
 ```
@@ -42,13 +42,13 @@ end
 ### Nodes (Elements) Defnition
 * Specify the html/xml struct name as a string after the struct name after a space
 ```julia
-@aml struct Person "person"
+@aml mutable struct Person "person"
   # add fields (elements) here
 end
 ```
 * If the html/xml name is the same as struct name, you can use `"~"` instead
 ```julia
-@aml struct person "~"
+@aml mutable struct person "~"
   # add fields (elements) here
 end
 ```
@@ -98,7 +98,7 @@ GPA::Float64, "~", GPAcheck
 
 * To define any restrictions for multiple values of a struct, define a function that gets all the variables and checks a criteria and returns Bool, and put its name after a `,` after the struct name:
 ```julia
-@aml struct Person "person", courseCheck
+@aml mutable struct Person "person", courseCheck
 # ...
 end
 ```
@@ -129,22 +129,23 @@ using AcuteML
 # Types definition
 
 # Person Type
-@aml struct Person "person", courseCheck
-    age::UInt, "~"
+@aml mutable struct Person "person", courseCheck
+    age::UInt64, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
     id::Int64, a"~"
 end
 
-@aml struct University "university"
+@aml mutable struct University "university"
     name, a"university-name"
     people::Vector{Person}, "person"
 end
 
-@aml struct Doc xd""
+@aml mutable struct Doc xd""
     university::University, "~"
 end
+
 ```
 
 ```julia
@@ -172,6 +173,8 @@ end
 
 P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
+
+P2.GPA=4.2 # mutability support
 
 U = University(name="Julia University", people=[P1, P2])
 
@@ -207,7 +210,7 @@ julia> print(U.aml)
   <person id="2">
     <age>18</age>
     <study-field>Computer Engineering</study-field>
-    <GPA>4</GPA>
+    <GPA>4.2</GPA>
     <taken-courses>Julia</taken-courses>
   </person>
 </university>
@@ -225,12 +228,11 @@ julia> print(D.aml)
   <person id="2">
     <age>18</age>
     <study-field>Computer Engineering</study-field>
-    <GPA>4</GPA>
+    <GPA>4.2</GPA>
     <taken-courses>Julia</taken-courses>
   </person>
 </university>
 ```
-
 -------------------------------------------------------
 
 # Example - Extractor

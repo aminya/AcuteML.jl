@@ -1,20 +1,21 @@
 using AcuteML
 
 # Type Definition
-@aml struct Person "person", courseCheck
-    age::UInt, "~"
+
+@aml mutable struct Person "person", courseCheck
+    age::UInt64, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
     id::Int64, a"~"
 end
 
-@aml struct University "university"
+@aml mutable struct University "university"
     name, a"university-name"
     people::Vector{Person}, "person"
 end
 
-@aml struct Doc xd""
+@aml mutable struct Doc xd""
     university::University, "~"
 end
 
@@ -38,17 +39,24 @@ end
 # Constructor
 
 P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
+
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
+
+P2.GPA=4.2 # mutability support
+
+# Two examples that doesn't meet the critertia function for GPA because GPA is more than 4.5
+#=
+P3 = Person(age=99, field="Macro Wizard", GPA=10, courses=["Julia Magic"], id = 3)
+# GPA doesn't meet criteria function
+
+P1.GPA=5.0
+# GPA doesn't meet criteria function
+=#
 
 U = University(name="Julia University", people=[P1, P2])
 
 D = Doc(university = U)
 
-# An example that doesn't meet the critertia function for GPA because GPA is more than 4.5
-#=
-P3 = Person(age=99, field="Macro Wizard", GPA=10, courses=["Julia Magic"], id = 3)
-#GPA doesn't meet criteria function
-=#
 
 print(P1.aml)
 #=
@@ -66,7 +74,7 @@ print(P2.aml)
 <person id="2">
   <age>18</age>
   <study-field>Computer Engineering</study-field>
-  <GPA>4</GPA>
+  <GPA>4.2</GPA>
   <taken-courses>Julia</taken-courses>
 </person>
 =#
@@ -84,7 +92,7 @@ print(U.aml)
   <person id="2">
     <age>18</age>
     <study-field>Computer Engineering</study-field>
-    <GPA>4</GPA>
+    <GPA>4.2</GPA>
     <taken-courses>Julia</taken-courses>
   </person>
 </university>
@@ -104,7 +112,7 @@ print(D.aml)
   <person id="2">
     <age>18</age>
     <study-field>Computer Engineering</study-field>
-    <GPA>4</GPA>
+    <GPA>4.2</GPA>
     <taken-courses>Julia</taken-courses>
   </person>
 </university>

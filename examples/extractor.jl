@@ -1,22 +1,23 @@
 using AcuteML
 
 # Type Definition
-@aml struct Person "person", courseCheck
-    age::UInt, "~"
+@aml mutable struct Person "person", courseCheck
+    age::UInt64, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
     id::Int64, a"~"
 end
 
-@aml struct University "university"
+@aml mutable struct University "university"
     name, a"university-name"
     people::Vector{Person}, "person"
 end
 
-@aml struct Doc xd""
+@aml mutable struct Doc xd""
     university::University, "~"
 end
+
 
 # Value Checking Functions
 GPAcheck(x) = x <= 4.5 && x >= 0

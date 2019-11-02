@@ -31,7 +31,7 @@ Use `@aml` macro to define a Julia type, and then the package automatically crea
 ### Document Defnition
 * Use `xd""` or `hd""` to define a XML or HTML document:
 ```julia
-@aml struct Doc xd""
+@aml mutable struct Doc xd""
   # add fields (elements) here
 end
 ```
@@ -39,13 +39,13 @@ end
 ### Nodes (Elements) Defnition
 * Specify the html/xml struct name as a string after the struct name after a space
 ```julia
-@aml struct Person "person"
+@aml mutable struct Person "person"
   # add fields (elements) here
 end
 ```
 * If the html/xml name is the same as struct name, you can use `"~"` instead
 ```julia
-@aml struct person "~"
+@aml mutable struct person "~"
   # add fields (elements) here
 end
 ```
@@ -95,7 +95,7 @@ GPA::Float64, "~", GPAcheck
 
 * To define any restrictions for multiple values of a struct, define a function that gets all the variables and checks a criteria and returns Bool, and put its name after a `,` after the struct name:
 ```julia
-@aml struct Person "person", courseCheck
+@aml mutable struct Person "person", courseCheck
 # ...
 end
 ```
