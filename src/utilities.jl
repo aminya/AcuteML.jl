@@ -561,7 +561,18 @@ end
 function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int64) where {T}
     for ii = 1:length(value)
         if !isnothing(value[ii]) # do nothing if value is nothing
-            link!(aml,value[ii].aml)
+            if hasmethod(string, Tuple{T})
+                if amlType == 0 # normal elements
+
+                    addelement!(aml, name, string(value[ii]))
+                elseif amlType == 2 # Attributes
+
+                    link!(aml, AttributeNode(name, string(value[ii])))
+
+                end
+            else
+                link!(aml,value[ii].aml)
+            end
         end
     end
 end
