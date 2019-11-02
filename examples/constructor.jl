@@ -1,8 +1,7 @@
 using AcuteML
 
-GPAcheck(x) = x <= 4.5 && x >= 0
-
-@aml struct Person "person"
+# Type Definition
+@aml struct Person "person", courseCheck
     age::UInt, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
@@ -19,6 +18,24 @@ end
     university::University, "~"
 end
 
+# Value Checking Functions
+GPAcheck(x) = x <= 4.5 && x >= 0
+
+function courseCheck(age, field, GPA, courses, id)
+
+    if field == "Mechanical Engineering"
+        relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
+    elseif field == "Computer Engineering"
+        relevant = ["Julia", "Algorithms"]
+    else
+        error("study field is not known")
+    end
+
+    return any(in.(courses, Ref(relevant)))
+end
+
+
+# Constructor
 
 P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
@@ -28,8 +45,10 @@ U = University(name="Julia University", people=[P1, P2])
 D = Doc(university = U)
 
 # An example that doesn't meet the critertia function for GPA because GPA is more than 4.5
+#=
 P3 = Person(age=99, field="Macro Wizard", GPA=10, courses=["Julia Magic"], id = 3)
 #GPA doesn't meet criteria function
+=#
 
 print(P1.aml)
 #=
