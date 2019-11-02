@@ -420,6 +420,26 @@ function addelementVect!(aml::Document, name::String, value::Vector{T}, amlType:
     end
 
 end
+
+#  vector of defined or nothing
+function addelementVect!(aml::Document, name::String, value::Vector{T}, amlType::Int64) where {T}
+    if hasroot(aml)
+        amlNode = root(aml)
+
+        for ii = 1:length(value)
+            if !isnothing(value[ii]) # do nothing if value is nothing
+                link!(amlNode,value[ii].aml)
+            end
+        end
+
+    else
+        error("You cannot put string in the document directly. Define a @aml defined field for xd/hd struct")
+    end
+
+end
+
+################################################################
+# Nodes
 # strings
 function addelementOne!(aml::Node, name::String, value::String, amlType::Int64)
 
