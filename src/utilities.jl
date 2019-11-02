@@ -307,10 +307,22 @@ function addelementOne!(aml::Document, name::String, value, amlType::Int64)
 
         if hasroot(aml)
             amlNode = root(aml)
-            link!(amlNode,value.aml)
+            if hasmethod(string, Tuple{T})
+                if amlType == 0 # normal elements
+
+                    addelement!(aml, name, string(value))
+                elseif amlType == 2 # Attributes
+
+                    link!(aml, AttributeNode(name, string(value)))
+
+                end
+            else
+                link!(amlNode,value.aml)
+            end
         else
             setroot!(aml, value.aml)
         end
+
     end
 
 end
