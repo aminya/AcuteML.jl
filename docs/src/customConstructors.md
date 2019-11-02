@@ -40,6 +40,11 @@ end
 
 ```
 
+# Making a Type and constructor from scratch
+
+You can use AcuteML utilities to define custom type constructors from scratch or to override `@aml` defined constructors.
+
+Notice that if you don't use `@aml`, you should include `aml::Node` as one of your fields.
 
 Functions to use for custom html/xml constructor:
 - [docOrElmInit](@ref): Function to initialize the aml
@@ -51,8 +56,6 @@ Functions to use for custom html/xml extractor:
 - [findfirstcontent](@ref) : to extract single elements
 - [findallcontent](@ref) : to extract multiple elements (vector)
 Use these functions, to make a method that gets the `aml::Node` and calculates and returns all of the fields.
-
-Notice that if you don't use `@aml`, you should include `aml::Node` as one of your fields.
 
 # Example:
 In this example we define `Identity` with custom constructors:
