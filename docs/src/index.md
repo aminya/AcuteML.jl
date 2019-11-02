@@ -163,6 +163,9 @@ end
 ```
 -------------------------------------------------------
 
+# Example - Constructor
+
+```julia
 
 P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
@@ -187,14 +190,6 @@ julia> print(P1.aml)
   <GPA>4.5</GPA>
   <taken-courses>Artificial Intelligence</taken-courses>
   <taken-courses>Robotics</taken-courses>
-</person>
-
-julia> print(P2.aml)
-<person id="2">
-  <age>18</age>
-  <study-field>Computer Engineering</study-field>
-  <GPA>4</GPA>
-  <taken-courses>Julia</taken-courses>
 </person>
 
 julia> print(U.aml)
@@ -231,8 +226,8 @@ julia> print(D.aml)
     <taken-courses>Julia</taken-courses>
   </person>
 </university>
-
 ```
+
 -------------------------------------------------------
 
 # Example - Extractor
