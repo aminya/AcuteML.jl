@@ -496,6 +496,18 @@ macro aml(expr)
             # convertNothingMethod = :(Base.convert(::Type{($(esc(T)))}, ::Nothing) = nothing) # for passing nothing to function without using Union{Nothing, T} in the definition
             selfMethod = :( ($(esc(T)))(in::$(esc(T))) = $(esc(T))(in.aml) )
 
+            if mutability
+                mutabilityExp = quote
+                     function Base.setproperty!(str::($(esc(T))),name::Symbol, value)
+                         setfield!(str,name,value)
+                         $amlFunCheckerMutability
+                         $(amlmutability...)
+                     end
+                 end
+            else
+                mutabilityExp = nothing
+            end
+
             out = quote
                 Base.@__doc__($(esc(typeDefinition)))
                 $amlConstructor
@@ -503,6 +515,7 @@ macro aml(expr)
                 $nothingMethod
                 # $convertNothingMethod
                 $selfMethod
+                $mutabilityExp
             end
             ################################################################
             # Parametric type structs
