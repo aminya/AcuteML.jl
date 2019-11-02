@@ -517,8 +517,9 @@ macro aml(expr)
                 $selfMethod
                 $mutabilityExp
             end
-            ################################################################
-            # Parametric type structs
+
+        ################################################################
+        # Parametric type structs
         elseif T isa Expr && T.head == :curly
             # if T == S{A<:AA,B<:BB}, define two methods
             #   S(...) = ...
@@ -572,17 +573,30 @@ macro aml(expr)
             # convertNothingMethod = :(Base.convert(::Type{($(esc(S)))}, ::Nothing) = nothing) # for passing nothing to function without using Union{Nothing, ...} in the definition
             selfMethod = :( ($(esc(S)))(in::$(esc(S))) = $(esc(S))(in.aml) )
 
-            out = quote
-                Base.@__doc__($(esc(typeDefinition)))
-                $amlConstructor
-                $amlConstructorCurly
-                $amlExtractor
-                $amlExtractorCurly
-                $nothingMethod
-                # $convertNothingMethod
-                $selfMethod
+            if mutability
+                mutabilityExp = quote
+                     function Base.setproperty!(str::($(esc(T))),name::Symbol, value)
+                         setfield!(str,name,value)
+                         $amlFunCheckerMutability
+                         $(amlmutability...)
+                     end
+                 end
+             else
+                 mutabilityExp = nothing
             end
-            ################################################################
+
+             out = quote
+                 Base.@__doc__($(esc(typeDefinition)))
+                 $amlConstructor
+                 $amlConstructorCurly
+                 $amlExtractor
+                 $amlExtractorCurly
+                 $nothingMethod
+                 # $convertNothingMethod
+                 $selfMethod
+                 $mutabilityExp
+             end
+        ################################################################
         else
             error("Invalid usage of @aml")
         end
