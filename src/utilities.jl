@@ -316,6 +316,30 @@ function addelementOne!(aml::Document, name::String, value, amlType::Int64)
 end
 
 # strings
+function addelementOne!(aml::Document, name::String, value::String, amlType::Int64)
+
+    if !isnothing(value) # do nothing if value is nothing
+
+        if hasroot(aml)
+            amlNode = root(aml)
+
+            if amlType == 0 # normal elements
+
+                addelement!(amlNode, name, value)
+
+            elseif amlType == 2 # Attributes
+
+                link!(amlNode, AttributeNode(name, value))
+
+            end
+        else
+            error("You cannot insert a string in the document directly. Define a @aml defined field for xd/hd struct")
+        end
+
+    end
+end
+
+# strings
 function addelementOne!(aml::Node, name::String, value::String, amlType::Int64)
 
     if !isnothing(value) # do nothing if value is nothing
