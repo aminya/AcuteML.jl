@@ -598,8 +598,11 @@ function _aml(expr)
 
                 docOrElmType = ei.args[1][1]
                 argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
+        ################################################################
+        # Arguments
+            ########################
             # No Def Value
-            if ei.head == :tuple # var/var::T, "name"
+            elseif ei.args[1] isa Union{Symbol,Expr} # var/var::T, "name"
 
                 # Def Value
                 push!(argDefVal, missing)
@@ -667,168 +670,172 @@ function _aml(expr)
                     push!(argFun, missing)
                 end
 
-            ################################################################
-            # Def Value
-            elseif ei.head == :(=) # def value provided
 
-                # aml name Checker
-                if ei.args[2].head == :tuple # var/var::T = defVal, "name"
 
-                    # Def Value
-                    defVal = ei.args[2].args[1]
+            end  # end Tuple sub possibilities
+        ################################################################
+        # Def Value
+        elseif ei.head == :(=) # def value provided
 
-                    push!(argDefVal, defVal)
+            # aml name Checker
+            if ei.args[2].head == :tuple # var/var::T = defVal, "name"
 
-                    lhs = ei.args[1]
+                # Def Value
+                defVal = ei.args[2].args[1]
 
-                    argExpr.args[i]=lhs # remove =defVal for type definition
+                push!(argDefVal, defVal)
 
-                    # Type Checker
-                    if lhs isa Symbol #  var = defVal, "name"
+                lhs = ei.args[1]
 
-                        var = ei.args[1]
+                argExpr.args[i]=lhs # remove =defVal for type definition
 
-                        push!(argTypes, String) # consider String as the type
-                        push!(argParams, Expr(:kw, var, defVal))
-                        push!(argVars, var)
+                # Type Checker
+                if lhs isa Symbol #  var = defVal, "name"
 
-                        argExpr.args[i]=var  # removing "name",...
+                    var = ei.args[1]
 
-                    elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal, "name"
+                    push!(argTypes, String) # consider String as the type
+                    push!(argParams, Expr(:kw, var, defVal))
+                    push!(argVars, var)
 
-                        var = lhs.args[1]
-                        varType = lhs.args[2] # Type
+                    argExpr.args[i]=var  # removing "name",...
 
-                        push!(argTypes, varType)
-                        push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
-                        push!(argVars, var)
+                elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal, "name"
 
-                        argExpr.args[i]=lhs  # removing "name",...
+                    var = lhs.args[1]
+                    varType = lhs.args[2] # Type
 
-                    end
+                    push!(argTypes, varType)
+                    push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
+                    push!(argVars, var)
 
-                    # Literal Checker
-                    if length(ei.args[2].args[2]) == 2 # literal
+                    argExpr.args[i]=lhs  # removing "name",...
 
-                        elmType = ei.args[2].args[2][1]
-                        push!(amlTypes, elmType) # literal type
+                end
 
-                        ni = ei.args[2].args[2][2]
+                # Literal Checker
+                if length(ei.args[2].args[2]) == 2 # literal
 
-                        # Self-name checker
-                        if ni == "~"
-                            push!(argNames,string(var))
-                        else
-                            push!(argNames,ni)
-                        end
+                    elmType = ei.args[2].args[2][1]
+                    push!(amlTypes, elmType) # literal type
 
+                    ni = ei.args[2].args[2][2]
+
+                    # Self-name checker
+                    if ni == "~"
+                        push!(argNames,string(var))
                     else
-                        push!(amlTypes, 0) # non-literal
-
-                        ni = ei.args[2].args[2]
-
-                        # Self-name checker
-                        if ni == "~"
-                            push!(argNames,string(var))
-                        else
-                            push!(argNames,ni)
-                        end
-
+                        push!(argNames,ni)
                     end
 
-                    # Function Checker
-                    if length(ei.args[2].args) == 3 && isa(ei.args[2].args[3], Union{Function, Symbol}) #  var/var::T  = defVal, "name", f
+                else
+                    push!(amlTypes, 0) # non-literal
 
-                        fun = ei.args[2].args[3]  # function
-                        push!(argFun, fun)
+                    ni = ei.args[2].args[2]
 
-                    else # function name isn't given
-                        push!(argFun, missing)
-                    end
-
-                ########################
-                #  No aml Name
-                else # var/var::T = defVal # ignored for creating aml
-
-                    # Type Checker
-                    lhs = ei.args[1]
-                    if lhs isa Symbol #  var = defVal
-
-                        defVal = ei.args[2]
-
-                        push!(argDefVal, defVal)
-                        push!(argNames,missing) # ignored for creating aml
-                        push!(argFun, missing) # ignored for creating aml
-
-                        var = ei.args[1]
-
-                        push!(argTypes, Any)
-                        push!(argParams, Expr(:kw, var, defVal))
-                        push!(argVars, var)
-
-                        argExpr.args[i]=var # remove =defVal for type definition
-
-                    elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal
-
-                        defVal = ei.args[2]
-
-                        push!(argDefVal, defVal)
-                        push!(argNames,missing) # ignored for creating aml
-                        push!(argFun, missing) # ignored for creating aml
-
-                        var = lhs.args[1]
-                        varType = lhs.args[2] # Type
-
-                        push!(argTypes, varType)
-                        push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
-                        push!(argVars, var)
-
-                        argExpr.args[i]=lhs # remove =defVal for type definition
-
+                    # Self-name checker
+                    if ni == "~"
+                        push!(argNames,string(var))
                     else
-                        # something else, e.g. inline inner constructor
-                        #   F(...) = ...
-                        continue
+                        push!(argNames,ni)
                     end
 
                 end
 
-            ################################################################
-            # No aml name
-            else  # var/var::T  # ignored for creating aml
+                # Function Checker
+                if length(ei.args[2].args) == 3 && isa(ei.args[2].args[3], Union{Function, Symbol}) #  var/var::T  = defVal, "name", f
+
+                    fun = ei.args[2].args[3]  # function
+                    push!(argFun, fun)
+
+                else # function name isn't given
+                    push!(argFun, missing)
+                end
+
+            ########################
+            #  No aml Name - But defVal
+            else # var/var::T = defVal # ignored for creating aml
 
                 # Type Checker
-                if ei isa Symbol #  var
-                    push!(argNames, missing) # argument ignored for aml
-                    push!(argFun, missing) # ignored for creating aml
+                lhs = ei.args[1]
+                if lhs isa Symbol #  var = defVal
 
-                    push!(argTypes, String)
+                    defVal = ei.args[2]
 
-                    var = ei
-
-                    push!(argParams, var)
-                    push!(argVars, var)
-
-                elseif ei.head == :(::) && ei.args[1] isa Symbol # var::T
-                    push!(argNames, missing) # argument ignored for aml
+                    push!(argDefVal, defVal)
+                    push!(argNames,missing) # ignored for creating aml
                     push!(argFun, missing) # ignored for creating aml
 
                     var = ei.args[1]
-                    varType = ei.args[2] # Type
 
-                    push!(argTypes, varType)
-                    push!(argParams, var)
+                    push!(argTypes, Any)
+                    push!(argParams, Expr(:kw, var, defVal))
                     push!(argVars, var)
 
-                elseif vi.head == :block  # anything else should be evaluated again
-                    # can arise with use of @static inside type decl
-                    argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType = _aml(expr)
+                    argExpr.args[i]=var # remove =defVal for type definition
+
+                elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal
+
+                    defVal = ei.args[2]
+
+                    push!(argDefVal, defVal)
+                    push!(argNames,missing) # ignored for creating aml
+                    push!(argFun, missing) # ignored for creating aml
+
+                    var = lhs.args[1]
+                    varType = lhs.args[2] # Type
+
+                    push!(argTypes, varType)
+                    push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
+                    push!(argVars, var)
+
+                    argExpr.args[i]=lhs # remove =defVal for type definition
+
                 else
+                    # something else, e.g. inline inner constructor
+                    #   F(...) = ...
                     continue
                 end
+
             end
 
-        end
+        ################################################################
+        # No aml name - No defVal
+        else  # var/var::T  # ignored for creating aml
+
+            # Type Checker
+            if ei isa Symbol #  var
+                push!(argNames, missing) # argument ignored for aml
+                push!(argFun, missing) # ignored for creating aml
+
+                push!(argTypes, String)
+
+                var = ei
+
+                push!(argParams, var)
+                push!(argVars, var)
+
+            elseif ei.head == :(::) && ei.args[1] isa Symbol # var::T
+                push!(argNames, missing) # argument ignored for aml
+                push!(argFun, missing) # ignored for creating aml
+
+                var = ei.args[1]
+                varType = ei.args[2] # Type
+
+                push!(argTypes, varType)
+                push!(argParams, var)
+                push!(argVars, var)
+
+            elseif ei.head == :block  # anything else should be evaluated again
+                # can arise with use of @static inside type decl
+                argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun = _aml(expr)
+            else
+                continue
+            end
+
+
+
+        end # end ifs
     end # endfor
 
     ########################
@@ -852,7 +859,7 @@ function _aml(expr)
     push!(argExpr.args,LineNumberNode(lineNumber+2))
     push!(argExpr.args,:(aml::Union{Document,Node}))
 
-    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType
+    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun
 end
 
 ################################################################
