@@ -617,6 +617,44 @@ function updatefirstcontent!(value::T, s::String, node::Union{Node, Document}, a
 
 end
 
+# for defined types
+function updatefirstcontent!(value::T, s::String,node::Union{Node, Document}, amlType::Int64) where {T}
+
+    if amlType == 0 # normal elements
+
+        if typeof(node) == Document || hasdocument(node)
+            elm = findfirst(s,node)
+        else
+            elm = findfirstlocal(s,node)
+        end
+
+        if isnothing(elm) # error if nothing is found
+            return error("field not found in aml")
+        else
+            if hasmethod(string, Tuple{T})
+                elm.content = string(value)
+            else
+                unlink!(elm)
+                link!(node, value.aml)
+            end
+        end
+
+    elseif amlType == 2 # Attributes
+
+        if haskey(node, s)
+            elm = node[s]
+            unlink!(elm)
+            link!(node, value.aml)
+
+        else # error if nothing is found
+            return error("field not found in aml")
+        end
+
+    end
+
+
+end
+
 # doc or element initialize
 """
     docOrElmInit(name)
