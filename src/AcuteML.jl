@@ -450,7 +450,20 @@ macro aml(expr)
                 end
             end
         else
-            amlFunChecker = LineNumberNode(1)
+            amlFunChecker = nothing
+        end
+
+        if mutability
+            if !ismissing(amlFun[1])
+                F=amlFun[1]
+                amlFunCheckerMutability = quote
+                    if !( ($(esc(F)))($(amlVarsCall...)) )
+                        error("struct criteria function ($($(esc(F)))) isn't meet")
+                    end
+                end
+            else
+                amlFunCheckerMutability = nothing
+            end
         end
 
         ################################################################
