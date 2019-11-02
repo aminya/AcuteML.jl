@@ -298,7 +298,9 @@ findallcontent(::Type{Vector{Nothing}},s::String,node::Union{Node, Document}, am
 ################################################################
 # Constructors
 
-#  defined or nothing for Documents
+################################################################
+# Document
+#  defined or nothing for Documents # add strings and others for documents
 function addelementOne!(aml::Document, name::String, value, amlType::Int64)
 
     if !isnothing(value) # do nothing if value is nothing
