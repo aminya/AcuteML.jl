@@ -343,7 +343,15 @@ macro aml(expr)
 
                     amlext[i]=:($amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
-                    # Function provided
+                    if mutability
+                        amlmutability[i] = quote
+                            if name == $amlSymI
+                                updateallcontent!(value, $amlNamesI, str.aml, $amlTypesI)
+                            end
+                        end
+                    end
+
+                # Function provided
                 else
                     amlconst[i]=quote
                         if ($(esc(amlFunsI)))($amlVarsI)
