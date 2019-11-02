@@ -1,6 +1,6 @@
 # Cutom Value Types
 
-Values can have custom types.
+You can use Julia types or defined types for values.
 
 ## `@aml` defined types
 
