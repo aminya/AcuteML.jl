@@ -248,8 +248,8 @@ macro aml(expr)
     aml = Symbol(:aml)
 
     # expr.args[3] # arguments
-     # argParams.args # empty
-    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType = _aml(expr)
+    # argParams.args # empty
+    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun = _aml(expr)
 
 
     # defining outter constructors
@@ -296,7 +296,7 @@ macro aml(expr)
 
                     amlext[i]=:($amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
-                # Function provided
+                    # Function provided
                 else
                     amlconst[i]=quote
                         if ($(esc(amlFunsI)))($amlVarsI)
@@ -317,8 +317,8 @@ macro aml(expr)
                     end
                 end
 
-            ##########################
-            # Non Vector
+                ##########################
+                # Non Vector
             elseif isa(argTypesI, Symbol) || (isa(argTypesI, Expr) && argTypesI.args[1] == :Union ) || (isa(argTypesI, Expr) && argTypesI.args[1] == :UN) || !(argTypesI <: Array)
 
                 # Function missing
@@ -327,7 +327,7 @@ macro aml(expr)
                     amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
                     amlext[i]=:($amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
-                # Function provided
+                    # Function provided
                 else
                     amlconst[i]=quote
                         if ($(esc(amlFunsI)))($amlVarsI)
@@ -353,6 +353,19 @@ macro aml(expr)
         end # endfor
 
         ################################################################
+        # aml Function
+        if !ismissing(amlFun[1])
+            F=amlFun[1]
+            amlFunChecker = quote
+                if !( ($(esc(F)))($(argVars...)) )
+                    error("struct criteria function ($($(esc(F)))) isn't meet")
+                end
+            end
+        else
+            amlFunChecker = LineNumberNode(1)
+        end
+
+        ################################################################
         # Type name is a single name (symbol)
         if T isa Symbol
 
@@ -362,6 +375,7 @@ macro aml(expr)
 
             amlConstructor = quote
                 function ($(esc(T)))(; $(argParams...))
+                    $amlFunChecker
                     $docOrElmconst
                     $(amlconst...)
                     return ($(esc(T)))($(argVars...), aml)
@@ -369,10 +383,11 @@ macro aml(expr)
             end
 
             amlExtractor = quote
-                 function ($(esc(T)))(aml::Union{Document, Node})
-                     $(amlext...)
-                     return ($(esc(T)))($(argVars...), aml)
-                  end
+                function ($(esc(T)))(aml::Union{Document, Node})
+                    $(amlext...)
+                    $amlFunChecker
+                    return ($(esc(T)))($(argVars...), aml)
+                end
 
             end
 
@@ -381,15 +396,15 @@ macro aml(expr)
             selfMethod = :( ($(esc(T)))(in::$(esc(T))) = $(esc(T))(in.aml) )
 
             out = quote
-               Base.@__doc__($(esc(typeDefinition)))
-               $amlConstructor
-               $amlExtractor
-               $nothingMethod
-               # $convertNothingMethod
-               $selfMethod
+                Base.@__doc__($(esc(typeDefinition)))
+                $amlConstructor
+                $amlExtractor
+                $nothingMethod
+                # $convertNothingMethod
+                $selfMethod
             end
-        ################################################################
-        # Parametric type structs
+            ################################################################
+            # Parametric type structs
         elseif T isa Expr && T.head == :curly
             # if T == S{A<:AA,B<:BB}, define two methods
             #   S(...) = ...
@@ -405,6 +420,7 @@ macro aml(expr)
 
             amlConstructor = quote
                 function ($(esc(S)))(; $(argParams...))
+                    $amlFunChecker
                     $docOrElmconst
                     $(amlconst...)
                     return ($(esc(S)))($(argVars...), aml)
@@ -413,6 +429,7 @@ macro aml(expr)
 
             amlConstructorCurly = quote
                 function ($(esc(SQ)))(; $(argParams...)) where {$(esc.(P)...)}
+                    $amlFunChecker
                     $docOrElmconst
                     $(amlconst...)
                     return ($(esc(SQ)))($(argVars...), aml)
@@ -420,18 +437,20 @@ macro aml(expr)
             end
 
             amlExtractor = quote
-                 function ($(esc(S)))(aml::Union{Document, Node})
-                     $(amlext...)
-                     return ($(esc(S)))($(argVars...), aml)
-                  end
+                function ($(esc(S)))(aml::Union{Document, Node})
+                    $(amlext...)
+                    $amlFunChecker
+                    return ($(esc(S)))($(argVars...), aml)
+                end
 
             end
 
             amlExtractorCurly = quote
-                 function ($(esc(SQ)))(aml::Union{Document, Node}) where {$(esc.(P)...)}
-                     $(amlext...)
-                     return ($(esc(SQ)))($(argVars...), aml)
-                  end
+                function ($(esc(SQ)))(aml::Union{Document, Node}) where {$(esc.(P)...)}
+                    $(amlext...)
+                    $amlFunChecker
+                    return ($(esc(SQ)))($(argVars...), aml)
+                end
 
             end
 
@@ -440,16 +459,16 @@ macro aml(expr)
             selfMethod = :( ($(esc(S)))(in::$(esc(S))) = $(esc(S))(in.aml) )
 
             out = quote
-               Base.@__doc__($(esc(typeDefinition)))
-               $amlConstructor
-               $amlConstructorCurly
-               $amlExtractor
-               $amlExtractorCurly
-               $nothingMethod
-               # $convertNothingMethod
-               $selfMethod
+                Base.@__doc__($(esc(typeDefinition)))
+                $amlConstructor
+                $amlConstructorCurly
+                $amlExtractor
+                $amlExtractorCurly
+                $nothingMethod
+                # $convertNothingMethod
+                $selfMethod
             end
-        ################################################################
+            ################################################################
         else
             error("Invalid usage of @aml")
         end
