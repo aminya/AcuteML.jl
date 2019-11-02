@@ -256,26 +256,6 @@ xml = parsexml("""
 </university>
 """)
 
-GPAcheck(x) = x <= 4.5 && x >= 0
-
-@aml struct Person "person"
-    age::UInt, "age"
-    field::String, "study-field"
-    GPA::Float64 = 4.5, "GPA", GPAcheck
-    courses::Vector{String}, "taken-courses"
-    id::Int64, a"id"
-end
-
-@aml struct University "university"
-    name, a"university-name"
-    people::Vector{Person}, "person"
-end
-
-@aml struct Doc xd""
-    university::University, "university"
-end
-
-
 # extract Doc
 D = Doc(xml) # StructName(xml) like Doc(xml) extracts the data and stores them in proper format
 
