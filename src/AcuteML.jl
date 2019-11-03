@@ -22,7 +22,7 @@ Use `@aml` macro to define a Julia type, and then the package automatically crea
 ### Document Defnition
 * Use `xd""` or `hd""` to define a XML or HTML document:
 ```julia
-@aml struct Doc xd""
+@aml mutable struct Doc xd""
 # add fields (elements) here
 end
 ```
@@ -30,13 +30,13 @@ end
 ### Nodes (Elements) Defnition
 * Specify the html/xml struct name as a string after the struct name after a space
 ```julia
-@aml struct Person "person"
+@aml mutable struct Person "person"
 # add fields (elements) here
 end
 ```
 * If the html/xml name is the same as struct name, you can use `"~"` instead
 ```julia
-@aml struct person "~"
+@aml mutable struct person "~"
 # add fields (elements) here
 end
 ```
@@ -86,7 +86,7 @@ GPA::Float64, "~", GPAcheck
 
 * To define any restrictions for multiple values of a struct, define a function that gets all the variables and checks a criteria and returns Bool, and put its name after a `,` after the struct name:
 ```julia
-@aml struct Person "person", courseCheck
+@aml mutable struct Person "person", courseCheck
 # ...
 end
 ```
@@ -118,22 +118,23 @@ using AcuteML
 # Types definition
 
 # Person Type
-@aml struct Person "person", courseCheck
-    age::UInt, "~"
+@aml mutable struct Person "person", courseCheck
+    age::UInt64, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
     id::Int64, a"~"
 end
 
-@aml struct University "university"
+@aml mutable struct University "university"
     name, a"university-name"
     people::Vector{Person}, "person"
 end
 
-@aml struct Doc xd""
+@aml mutable struct Doc xd""
     university::University, "~"
 end
+
 ```
 
 ```julia
@@ -161,6 +162,8 @@ end
 
 P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
+
+P2.GPA=4.2 # mutability support
 
 U = University(name="Julia University", people=[P1, P2])
 
@@ -196,7 +199,7 @@ julia> print(U.aml)
   <person id="2">
     <age>18</age>
     <study-field>Computer Engineering</study-field>
-    <GPA>4</GPA>
+    <GPA>4.2</GPA>
     <taken-courses>Julia</taken-courses>
   </person>
 </university>
@@ -214,7 +217,7 @@ julia> print(D.aml)
   <person id="2">
     <age>18</age>
     <study-field>Computer Engineering</study-field>
-    <GPA>4</GPA>
+    <GPA>4.2</GPA>
     <taken-courses>Julia</taken-courses>
   </person>
 </university>
@@ -282,6 +285,7 @@ macro aml(expr)
     #  check if aml is used before struct
     expr isa Expr && expr.head == :struct || error("Invalid usage of @aml")
 
+    mutability = expr.args[1]
     T = expr.args[2] # Type name +(curly braces)
 
     aml = Symbol(:aml)
@@ -314,6 +318,9 @@ macro aml(expr)
 
         amlconst=Vector{Expr}(undef,numAml)
         amlext=Vector{Expr}(undef,numAml)
+        amlmutability=Vector{Expr}(undef,numAml)
+
+        amlVarsCall = Vector{Expr}(undef,numAml)
 
         ##########################
         # Each argument of the struct
@@ -323,7 +330,11 @@ macro aml(expr)
             amlNamesI = amlNames[i]
             amlTypesI = amlTypes[i]
             amlFunsI=amlFuns[i]
+            amlSymI=QuoteNode(amlVarsI)
             ##########################
+            # call Expr - For mutability
+            amlVarsCall[i] = :(str.$amlVarsI)
+
             # Vector
             if (isa(argTypesI, Expr) && argTypesI.args[1] == :Vector) || (!isa(argTypesI, Union{Symbol, Expr}) && argTypesI <: Array)
 
@@ -335,7 +346,15 @@ macro aml(expr)
 
                     amlext[i]=:($amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
-                    # Function provided
+                    if mutability
+                        amlmutability[i] = quote
+                            if name == $amlSymI
+                                updateallcontent!(value, $amlNamesI, str.aml, $amlTypesI)
+                            end
+                        end
+                    end
+
+                # Function provided
                 else
                     amlconst[i]=quote
                         if ($(esc(amlFunsI)))($amlVarsI)
@@ -354,10 +373,23 @@ macro aml(expr)
                             error("$($amlNamesI) doesn't meet criteria function")
                         end
                     end
+
+                    if mutability
+                        amlmutability[i] = quote
+                            if name == $amlSymI
+                                if ($(esc(amlFunsI)))($(amlVarsCall[i]))
+                                    updateallcontent!(value, $amlNamesI, str.aml, $amlTypesI)
+                                else
+                                    error("$($amlNamesI) doesn't meet criteria function")
+                                end
+                            end
+                        end
+                    end
+
                 end
 
-                ##########################
-                # Non Vector
+            ##########################
+            # Non Vector
             elseif isa(argTypesI, Symbol) || (isa(argTypesI, Expr) && argTypesI.args[1] == :Union ) || (isa(argTypesI, Expr) && argTypesI.args[1] == :UN) || !(argTypesI <: Array)
 
                 # Function missing
@@ -366,7 +398,16 @@ macro aml(expr)
                     amlconst[i]=:(addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI))
                     amlext[i]=:($amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI))
 
-                    # Function provided
+                    if mutability
+
+                        amlmutability[i] = quote
+                            if name == $amlSymI
+                                updatefirstcontent!(value, $amlNamesI, str.aml, $amlTypesI)
+                            end
+                        end
+                    end
+
+                # Function provided
                 else
                     amlconst[i]=quote
                         if ($(esc(amlFunsI)))($amlVarsI)
@@ -382,6 +423,17 @@ macro aml(expr)
 
                         if !(($(esc(amlFunsI)))($amlVarsI))
                             error("$($amlNamesI) doesn't meet criteria function")
+                        end
+                    end
+                    if mutability
+                        amlmutability[i] = quote
+                            if name == $amlSymI
+                                if ($(esc(amlFunsI)))($(amlVarsCall[i]))
+                                    updatefirstcontent!(value, $amlNamesI, str.aml, $amlTypesI)
+                                else
+                                    error("$($amlNamesI) doesn't meet criteria function")
+                                end
+                            end
                         end
                     end
 
@@ -401,7 +453,20 @@ macro aml(expr)
                 end
             end
         else
-            amlFunChecker = LineNumberNode(1)
+            amlFunChecker = nothing
+        end
+
+        if mutability
+            if !ismissing(amlFun[1])
+                F=amlFun[1]
+                amlFunCheckerMutability = quote
+                    if !( ($(esc(F)))($(amlVarsCall...)) )
+                        error("struct criteria function ($($(esc(F)))) isn't meet")
+                    end
+                end
+            else
+                amlFunCheckerMutability = nothing
+            end
         end
 
         ################################################################
@@ -434,6 +499,18 @@ macro aml(expr)
             # convertNothingMethod = :(Base.convert(::Type{($(esc(T)))}, ::Nothing) = nothing) # for passing nothing to function without using Union{Nothing, T} in the definition
             selfMethod = :( ($(esc(T)))(in::$(esc(T))) = $(esc(T))(in.aml) )
 
+            if mutability
+                mutabilityExp = quote
+                     function Base.setproperty!(str::($(esc(T))),name::Symbol, value)
+                         setfield!(str,name,value)
+                         $amlFunCheckerMutability
+                         $(amlmutability...)
+                     end
+                 end
+            else
+                mutabilityExp = nothing
+            end
+
             out = quote
                 Base.@__doc__($(esc(typeDefinition)))
                 $amlConstructor
@@ -441,9 +518,11 @@ macro aml(expr)
                 $nothingMethod
                 # $convertNothingMethod
                 $selfMethod
+                $mutabilityExp
             end
-            ################################################################
-            # Parametric type structs
+
+        ################################################################
+        # Parametric type structs
         elseif T isa Expr && T.head == :curly
             # if T == S{A<:AA,B<:BB}, define two methods
             #   S(...) = ...
@@ -497,17 +576,30 @@ macro aml(expr)
             # convertNothingMethod = :(Base.convert(::Type{($(esc(S)))}, ::Nothing) = nothing) # for passing nothing to function without using Union{Nothing, ...} in the definition
             selfMethod = :( ($(esc(S)))(in::$(esc(S))) = $(esc(S))(in.aml) )
 
-            out = quote
-                Base.@__doc__($(esc(typeDefinition)))
-                $amlConstructor
-                $amlConstructorCurly
-                $amlExtractor
-                $amlExtractorCurly
-                $nothingMethod
-                # $convertNothingMethod
-                $selfMethod
+            if mutability
+                mutabilityExp = quote
+                     function Base.setproperty!(str::($(esc(T))),name::Symbol, value)
+                         setfield!(str,name,value)
+                         $amlFunCheckerMutability
+                         $(amlmutability...)
+                     end
+                 end
+             else
+                 mutabilityExp = nothing
             end
-            ################################################################
+
+             out = quote
+                 Base.@__doc__($(esc(typeDefinition)))
+                 $amlConstructor
+                 $amlConstructorCurly
+                 $amlExtractor
+                 $amlExtractorCurly
+                 $nothingMethod
+                 # $convertNothingMethod
+                 $selfMethod
+                 $mutabilityExp
+             end
+        ################################################################
         else
             error("Invalid usage of @aml")
         end
@@ -538,7 +630,6 @@ function _aml(expr)
     amlName = "my type"
     docOrElmType = 0
     amlFun = Array{Union{Missing, Symbol, Function},0}(undef)
-    lineNumber=1
 
     for i in eachindex(argExpr.args) # iterating over arguments of each type argument
         ei = argExpr.args[i] # type argument element i
@@ -546,7 +637,6 @@ function _aml(expr)
         ########################
         # Line number skipper
         if typeof(ei) == LineNumberNode
-            lineNumber +=2
             continue
         end
 
@@ -567,7 +657,7 @@ function _aml(expr)
                 amlName = ei  # Type aml name
             end
 
-            argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
+            argExpr.args[i]= nothing # removing "aml name" from expr args
             docOrElmType = 0
 
         ################################################################
@@ -594,7 +684,7 @@ function _aml(expr)
 
                 docOrElmType = ei[1]
 
-                argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
+                argExpr.args[i]= nothing # removing "aml name" from expr args
             end
 
         elseif ei.head == :tuple
@@ -616,7 +706,7 @@ function _aml(expr)
                 end
 
                 docOrElmType = 0
-                argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
+                argExpr.args[i]= nothing # removing "aml name" from expr args
 
                 ########################
                 # Literal and Struct Function - xd/hd"aml name", F
@@ -636,7 +726,7 @@ function _aml(expr)
                 end
 
                 docOrElmType = ei.args[1][1]
-                argExpr.args[i]= LineNumberNode(lineNumber+1)  # removing "aml name" from expr args
+                argExpr.args[i]= nothing # removing "aml name" from expr args
         ################################################################
         # Arguments
             ########################
@@ -888,14 +978,12 @@ function _aml(expr)
         push!(argParams, Expr(:kw, :content, nothing))
         push!(argVars, :content)
         push!(argDefVal, nothing)
-        push!(argExpr.args,LineNumberNode(lineNumber+1))
         push!(argExpr.args,:(content::Nothing))
         # argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType = _aml(argExpr)
     end
 
     ########################
     # aml::Node adder
-    push!(argExpr.args,LineNumberNode(lineNumber+2))
     push!(argExpr.args,:(aml::Union{Document,Node}))
 
     return argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun
