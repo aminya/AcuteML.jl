@@ -8,7 +8,7 @@ UN{T}= Union{T, Nothing}
 # Extractors
 
 """
-    findfirstlocal(s, node)
+    findfirstlocal(string, node)
 
 findfirst with ignoring namespaces. It considers element.name for returning the elements
 """
@@ -24,7 +24,7 @@ function findfirstlocal(s::String, node::Union{Node, Document})
 end
 
 """
-    findalllocal(s,node)
+    findfirstlocal(string, node)
 
 findalllocal with ignoring namespaces. It considers element.name for returning the elements
 """
@@ -44,14 +44,13 @@ end
 ################################################################
 # Single extraction
 """
-    findfirstcontent(element,node)
-    findfirstcontent(type,element,node)
-
+    findfirstcontent(element,node, amlType)
+    findfirstcontent(type,element,node, amlType)
 
 Returns first element content. It also convert to the desired format by passing type. element is given as string.
 ```julia
-findfirstcontent("/instrument-name",node)
-findfirstcontent(UInt8,"/midi-channel",node)
+findfirstcontent("/instrument-name",node, 0)
+findfirstcontent(UInt8,"/midi-channel",node, 0)
 ```
 """
 function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:String} # for strings
@@ -165,9 +164,12 @@ findfirstcontent(::Type{Nothing},s::String,node::Union{Node, Document}, amlType:
 ################################################################
 # Vector extraction
 """
-    findallcontent(type, string, node)
+    findallcontent(type, string, node, amlType)
 
 Finds all the elements with the address of string in the node, and converts the elements to Type object.
+```julia
+findallcontent(UInt8,"/midi-channel",node, 0)
+```
 """
 function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:String} # for strings
 
@@ -301,6 +303,12 @@ findallcontent(::Type{Vector{Nothing}},s::String,node::Union{Node, Document}, am
 ################################################################
 # Document
 #  defined or nothing for Documents # add strings and others for documents
+"""
+    addelementOne!(node, name, value, amlType)
+
+Add one element to a node/document
+```
+"""
 function addelementOne!(aml::Document, name::String, value, amlType::Int64)
 
     if !isnothing(value) # do nothing if value is nothing
@@ -373,8 +381,14 @@ function addelementOne!(aml::Document, name::String, value::T, amlType::Int64) w
 
     end
 end
-
+################################################################
 # vector of strings
+"""
+    addelementVect!(node, name, value, amlType)
+
+Add a vector to a node/document
+```
+"""
 function addelementVect!(aml::Document, name::String, value::Vector{String}, amlType::Int64)
 
 
