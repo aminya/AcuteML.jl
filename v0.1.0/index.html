@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · AcuteML.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link href="assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>AcuteML.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li class="current"><a class="toctext" href>Home</a><ul class="internal"><li><a class="toctext" href="#Acute-Markup-Language-1">Acute Markup Language</a></li><li class="toplevel"><a class="toctext" href="#Installation-1">Installation</a></li><li class="toplevel"><a class="toctext" href="#Usage-1">Usage</a></li><li class="toplevel"><a class="toctext" href="#Main-macro-and-I/O-1">Main macro and I/O</a></li><li class="toplevel"><a class="toctext" href="#Type-defnition-1">Type defnition</a></li><li class="toplevel"><a class="toctext" href="#Example-Type-Definition-1">Example - Type Definition</a></li><li class="toplevel"><a class="toctext" href="#Example-Constructor-1">Example - Constructor</a></li><li class="toplevel"><a class="toctext" href="#Example-Extractor-1">Example - Extractor</a></li></ul></li><li><a class="toctext" href="templating/">Templating</a></li><li><a class="toctext" href="valueChecking/">Value Checking</a></li><li><a class="toctext" href="customValueTypes/">Cutom Value Types</a></li><li><a class="toctext" href="customConstructors/">Custom Contructors</a></li><li><a class="toctext" href="SyntaxReference/">Syntax Reference</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href>Home</a></li></ul><a class="edit-page" href="https://github.com/aminya/AcuteML.jl/blob/master/docs/src/index.md#L"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Home</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="AcuteML-1" href="#AcuteML-1">AcuteML</a></h1><h2><a class="nav-anchor" id="Acute-Markup-Language-1" href="#Acute-Markup-Language-1">Acute Markup Language</a></h2><p>AcuteML is an Acute Markup Language (AML) for Web/XML development in Julia.</p><ul><li><p>It automatically creates or extracts HTML/XML files from Julia types!</p></li><li><p>It also has a general templating engine, which can be used for any type of documents.</p></li></ul><h1><a class="nav-anchor" id="Installation-1" href="#Installation-1">Installation</a></h1><p>Add the package</p><pre><code class="language-julia">]add https://github.com/aminya/AcuteML.jl</code></pre><h1><a class="nav-anchor" id="Usage-1" href="#Usage-1">Usage</a></h1><p>Use the package:</p><pre><code class="language-julia">using AcuteML</code></pre><h1><a class="nav-anchor" id="Main-macro-and-I/O-1" href="#Main-macro-and-I/O-1">Main macro and I/O</a></h1><h1><a class="nav-anchor" id="Type-defnition-1" href="#Type-defnition-1">Type defnition</a></h1><p>Use <code>@aml</code> macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.</p><h3><a class="nav-anchor" id="Document-Defnition-1" href="#Document-Defnition-1">Document Defnition</a></h3><ul><li>Use <code>xd&quot;&quot;</code> or <code>hd&quot;&quot;</code> to define a XML or HTML document:</li></ul><pre><code class="language-julia">@aml mutable struct Doc xd&quot;&quot;
+  # add fields (elements) here
+end</code></pre><h3><a class="nav-anchor" id="Nodes-(Elements)-Defnition-1" href="#Nodes-(Elements)-Defnition-1">Nodes (Elements) Defnition</a></h3><ul><li>Specify the html/xml struct name as a string after the struct name after a space</li></ul><pre><code class="language-julia">@aml mutable struct Person &quot;person&quot;
+  # add fields (elements) here
+end</code></pre><ul><li>If the html/xml name is the same as struct name, you can use <code>&quot;~&quot;</code> instead</li></ul><pre><code class="language-julia">@aml mutable struct person &quot;~&quot;
+  # add fields (elements) here
+end</code></pre><h3><a class="nav-anchor" id="Fields-Names-1" href="#Fields-Names-1">Fields Names</a></h3><ul><li>Sepecify the html/xml field name as a string in front of the field after <code>,</code></li></ul><pre><code class="language-julia">field, &quot;study-field&quot;</code></pre><ul><li>If the html/xml name is the same as variable name, you can use <code>&quot;~&quot;</code> instead</li></ul><pre><code class="language-julia">age::UInt, &quot;~&quot;</code></pre><h3><a class="nav-anchor" id="Attributes-1" href="#Attributes-1">Attributes</a></h3><ul><li>If the value is going to be an attribute put <code>a</code> before its name</li></ul><pre><code class="language-julia">id::Int64, a&quot;~&quot;</code></pre><h3><a class="nav-anchor" id="Default-Value-1" href="#Default-Value-1">Default Value</a></h3><ul><li>You can specify the default value for an argument by using <code>= defVal</code> syntax</li></ul><pre><code class="language-julia">GPA::Float64 = 4.5, &quot;~&quot;</code></pre><h3><a class="nav-anchor" id="Value-Types-1" href="#Value-Types-1">Value Types</a></h3><p>You can use Julia types or  defined types for values.</p><ul><li>If you don&#39;t specify the type of a variable, it is considered to be string:</li></ul><pre><code class="language-julia">field, &quot;study-field&quot;</code></pre><ul><li>For already <code>@aml</code> defined types, name should be the same as the defined type root name</li></ul><pre><code class="language-julia">university::University, &quot;university&quot;</code></pre><h3><a class="nav-anchor" id="Value-Checking-1" href="#Value-Checking-1">Value Checking</a></h3><p>You can define any restriction for values using functions.</p><ul><li>To define any restrictions for the values of one field, define a function that checks a criteria for the field value and returns Bool, and put its name after a <code>,</code> after the field name:</li></ul><pre><code class="language-julia">GPA::Float64, &quot;~&quot;, GPAcheck</code></pre><ul><li>To define any restrictions for multiple values of a struct, define a function that gets all the variables and checks a criteria and returns Bool, and put its name after a <code>,</code> after the struct name:</li></ul><pre><code class="language-julia">@aml mutable struct Person &quot;person&quot;, courseCheck
+# ...
+end</code></pre><p>Refer to https://aminya.github.io/AcuteML.jl/dev/valueChecking/ for some of these functions examples.</p><h3><a class="nav-anchor" id="Optional-Fields-1" href="#Optional-Fields-1">Optional Fields</a></h3><ul><li>If a field is optional, don&#39;t forget to define its type as <code>UN{}</code> (Union with Nothing), and set the default value as <code>nothing</code>.</li></ul><pre><code class="language-julia">residence::UN{String}=nothing, &quot;residence-stay&quot; # optional with nothing as default value</code></pre><pre><code class="language-julia">funds::UN{String}, &quot;financial-funds&quot;   # optional, but you should pass nothing manually in construction</code></pre><h3><a class="nav-anchor" id="Empty-Elements-(Self-Closing)-Defnition-1" href="#Empty-Elements-(Self-Closing)-Defnition-1">Empty Elements (Self-Closing) Defnition</a></h3><ul><li>Use <code>sc&quot;name&quot;</code> to define a self-closing (empty) element (e.g. <code>&lt;rest /&gt;</code>)</li></ul><pre><code class="language-julia">@aml struct rest sc&quot;~&quot;
+end</code></pre><hr/><h1><a class="nav-anchor" id="Example-Type-Definition-1" href="#Example-Type-Definition-1">Example - Type Definition</a></h1><pre><code class="language-julia">using AcuteML
+
+# Types definition
+
+# Person Type
+@aml struct Person &quot;person&quot;, courseCheck
+    age::UInt, &quot;~&quot;
+    field, &quot;study-field&quot;
+    GPA::Float64 = 4.5, &quot;~&quot;, GPAcheck
+    courses::Vector{String}, &quot;taken-courses&quot;
+    id::Int64, a&quot;~&quot;
+end
+
+@aml struct University &quot;university&quot;
+    name, a&quot;university-name&quot;
+    people::Vector{Person}, &quot;person&quot;
+end
+
+@aml struct Doc xd&quot;&quot;
+    university::University, &quot;~&quot;
+end</code></pre><pre><code class="language-julia"># Value Checking Functions
+GPAcheck(x) = x &lt;= 4.5 &amp;&amp; x &gt;= 0
+
+function courseCheck(age, field, GPA, courses, id)
+
+    if field == &quot;Mechanical Engineering&quot;
+        relevant = [&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;, &quot;Machine Design&quot;]
+    elseif field == &quot;Computer Engineering&quot;
+        relevant = [&quot;Julia&quot;, &quot;Algorithms&quot;]
+    else
+        error(&quot;study field is not known&quot;)
+    end
+
+    return any(in.(courses, Ref(relevant)))
+end</code></pre><hr/><h1><a class="nav-anchor" id="Example-Constructor-1" href="#Example-Constructor-1">Example - Constructor</a></h1><pre><code class="language-julia">
+P1 = Person(age=24, field=&quot;Mechanical Engineering&quot;, courses=[&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;], id = 1)
+P2 = Person(age=18, field=&quot;Computer Engineering&quot;, GPA=4, courses=[&quot;Julia&quot;], id = 2)
+
+U = University(name=&quot;Julia University&quot;, people=[P1, P2])
+
+D = Doc(university = U)</code></pre><pre><code class="language-julia"># An example that doesn&#39;t meet the critertia function for GPA because GPA is more than 4.5
+P3 = Person(age=99, field=&quot;Macro Wizard&quot;, GPA=10, courses=[&quot;Julia Magic&quot;], id = 3)
+julia&gt;
+GPA doesn&#39;t meet criteria function</code></pre><pre><code class="language-html">julia&gt; print(P1.aml)
+&lt;person id=&quot;1&quot;&gt;
+  &lt;age&gt;24&lt;/age&gt;
+  &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+  &lt;GPA&gt;4.5&lt;/GPA&gt;
+  &lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
+  &lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
+&lt;/person&gt;
+
+julia&gt; print(U.aml)
+&lt;university university-name=&quot;Julia University&quot;&gt;
+  &lt;person id=&quot;1&quot;&gt;
+    &lt;age&gt;24&lt;/age&gt;
+    &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4.5&lt;/GPA&gt;
+    &lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
+    &lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
+  &lt;/person&gt;
+  &lt;person id=&quot;2&quot;&gt;
+    &lt;age&gt;18&lt;/age&gt;
+    &lt;study-field&gt;Computer Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4&lt;/GPA&gt;
+    &lt;taken-courses&gt;Julia&lt;/taken-courses&gt;
+  &lt;/person&gt;
+&lt;/university&gt;
+
+julia&gt; print(D.aml)
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/REC-html40/loose.dtd&quot;&gt;
+&lt;university university-name=&quot;Julia University&quot;&gt;
+  &lt;person id=&quot;1&quot;&gt;
+    &lt;age&gt;24&lt;/age&gt;
+    &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4.5&lt;/GPA&gt;
+    &lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
+    &lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
+  &lt;/person&gt;
+  &lt;person id=&quot;2&quot;&gt;
+    &lt;age&gt;18&lt;/age&gt;
+    &lt;study-field&gt;Computer Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4&lt;/GPA&gt;
+    &lt;taken-courses&gt;Julia&lt;/taken-courses&gt;
+  &lt;/person&gt;
+&lt;/university&gt;</code></pre><hr/><h1><a class="nav-anchor" id="Example-Extractor-1" href="#Example-Extractor-1">Example - Extractor</a></h1><pre><code class="language-julia">using AcuteML
+
+xml = parsexml(&quot;&quot;&quot;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/REC-html40/loose.dtd&quot;&gt;
+&lt;university university-name=&quot;Julia University&quot;&gt;
+  &lt;person id=&quot;1&quot;&gt;
+    &lt;age&gt;24&lt;/age&gt;
+    &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4.5&lt;/GPA&gt;
+    &lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
+    &lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
+  &lt;/person&gt;
+  &lt;person id=&quot;2&quot;&gt;
+    &lt;age&gt;18&lt;/age&gt;
+    &lt;study-field&gt;Computer Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4&lt;/GPA&gt;
+    &lt;taken-courses&gt;Julia&lt;/taken-courses&gt;
+  &lt;/person&gt;
+&lt;/university&gt;
+&quot;&quot;&quot;)
+
+# extract Doc
+D = Doc(xml) # StructName(xml) like Doc(xml) extracts the data and stores them in proper format
+
+# Now you can access all of the data by calling the fieldnames
+
+# extract University
+U = D.university
+
+julia&gt;U.name
+&quot;Julia University&quot;
+
+# extract Person
+
+P1 = U.people[1]
+
+julia&gt;P1.age
+24
+
+julia&gt;P1.field
+Mechanical Engineering
+
+julia&gt;P1.GPA
+4.5
+
+julia&gt;P1.courses
+[&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;]
+
+julia&gt;P1.id
+1</code></pre><footer><hr/><a class="next" href="templating/"><span class="direction">Next</span><span class="title">Templating</span></a></footer></article></body></html>
