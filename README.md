@@ -15,7 +15,8 @@ AcuteML is an Acute Markup Language (AML) for Web/XML development in Julia.
 # Installation
 Add the package
 ```julia
-]add https://github.com/aminya/AcuteML.jl
+using Pkg
+Pkg.add("AcuteML")
 ```
 # Usage
 Use the package:
