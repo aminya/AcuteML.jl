@@ -619,11 +619,12 @@ macro aml(expr)
 end
 
 ################################################################
-# var is a symbol
-# var::T or anything more complex is an expression
-################################################################
-# @aml helper function
+# @aml Parser Function
 function _aml(expr)
+
+    # reminder:
+    # var is a symbol
+    # var::T or anything more complex is an expression
 
     argExpr = expr.args[3] # arguments of the type
     T = expr.args[2] # Type name +(curly braces)
