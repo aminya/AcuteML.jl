@@ -120,29 +120,33 @@ end
 ```
 -------------------------------------------------------
 
-# Example - Type Definition
+# Example - Struct Definition
+
+First, we define the structs using `@aml` to store the data in:
+
 ```julia
 using AcuteML
 
 # Types definition
 
 # Person Type
-@aml struct Person "person", courseCheck
-    age::UInt, "~"
+@aml mutable struct Person "person", courseCheck
+    age::UInt64, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
     id::Int64, a"~"
 end
 
-@aml struct University "university"
+@aml mutable struct University "university"
     name, a"university-name"
     people::Vector{Person}, "person"
 end
 
-@aml struct Doc xd""
+@aml mutable struct Doc xd""
     university::University, "~"
 end
+
 ```
 
 ```julia
@@ -166,10 +170,14 @@ end
 
 # Example - Constructor
 
+After we defined the structs, we can create instances of them by passing our data to the fields:
+
 ```julia
 
 P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
+
+P2.GPA=4.2 # mutability support
 
 U = University(name="Julia University", people=[P1, P2])
 
@@ -205,7 +213,7 @@ julia> print(U.aml)
   <person id="2">
     <age>18</age>
     <study-field>Computer Engineering</study-field>
-    <GPA>4</GPA>
+    <GPA>4.2</GPA>
     <taken-courses>Julia</taken-courses>
   </person>
 </university>
@@ -223,15 +231,18 @@ julia> print(D.aml)
   <person id="2">
     <age>18</age>
     <study-field>Computer Engineering</study-field>
-    <GPA>4</GPA>
+    <GPA>4.2</GPA>
     <taken-courses>Julia</taken-courses>
   </person>
 </university>
 ```
-
 -------------------------------------------------------
 
 # Example - Extractor
+
+After we defined the structs, we can automatically extract and store the data in their fields:
+
+
 ```julia
 using AcuteML
 

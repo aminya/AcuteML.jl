@@ -111,7 +111,10 @@ end
 
 -------------------------------------------------------
 
-# Example - Type Definition
+# Example - Struct Definition
+
+First, we define the structs using `@aml` to store the data in:
+
 ```julia
 using AcuteML
 
@@ -157,6 +160,8 @@ end
 -------------------------------------------------------
 
 # Example - Constructor
+
+After we defined the structs, we can create instances of them by passing our data to the fields:
 
 ```julia
 
@@ -222,10 +227,13 @@ julia> print(D.aml)
   </person>
 </university>
 ```
-
 -------------------------------------------------------
 
 # Example - Extractor
+
+After we defined the structs, we can automatically extract and store the data in their fields:
+
+
 ```julia
 using AcuteML
 
