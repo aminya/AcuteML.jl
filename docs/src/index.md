@@ -76,10 +76,11 @@ GPA::Float64 = 4.5, "~"
 ### Value Types
 You can use Julia types or  defined types for values.
 
-* If you don't specify the type of a variable, it is considered to be string:
+* If you don't specify the type of a variable, it is considered to be string for aml manipulations:
 ```julia
 field, "study-field"
 ```
+However, for a high performance code specify String type (`field::String, "study-field"`)
 
 * For already `@aml` defined types, name should be the same as the defined type root name
 ```julia
