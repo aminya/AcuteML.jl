@@ -75,5 +75,5 @@ pc = SnoopCompile.parcel(reverse!(data[2]))
 SnoopCompile.write("$(pwd())/precompile", pc)
 
 ################################################################
-precompileActivator(packageName)
 cd(rootPath)
+precompileActivator(packageName)
