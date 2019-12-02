@@ -8,7 +8,7 @@ function person(;id, age, field, GPA, courses)
   # Build the taken courses section
   loopOut=&quot;&quot;
   for course in courses
-    loopOut = loopout * &quot;&quot;&quot; &lt;taken-courses&gt;$(course)&lt;/taken-courses&gt;   &quot;&quot;&quot;
+    loopOut = loopOut * &quot;&quot;&quot; &lt;taken-courses&gt;$(course)&lt;/taken-courses&gt;   &quot;&quot;&quot;
   end
 
   # Append all the sections and variables together
@@ -17,7 +17,7 @@ function person(;id, age, field, GPA, courses)
     &lt;age&gt;$(age)&lt;/age&gt;
     &lt;study-field&gt;$(field)&lt;/study-field&gt;
     &lt;GPA&gt;$(GPA)&lt;/GPA&gt;
-    $loopout
+    $loopOut
   &lt;/person&gt;
   &quot;&quot;&quot;
 
