@@ -13,7 +13,7 @@ function person(;id, age, field, GPA, courses)
   # Build the taken courses section
   loopOut=""
   for course in courses
-    loopOut = loopout * """ <taken-courses>$(course)</taken-courses>   """
+    loopOut = loopOut * """ <taken-courses>$(course)</taken-courses>   """
   end
 
   # Append all the sections and variables together
@@ -22,7 +22,7 @@ function person(;id, age, field, GPA, courses)
     <age>$(age)</age>
     <study-field>$(field)</study-field>
     <GPA>$(GPA)</GPA>
-    $loopout
+    $loopOut
   </person>
   """
 
