@@ -1,11 +1,11 @@
 using SnoopCompile
 
 ################################################################
-packageName = "AcuteML"
+const packageName = "AcuteML"
+const filePath = joinpath(pwd(),"src","$packageName.jl")
 
-function precompileDeactivator(packageName)
+function precompileDeactivator(packageName, filePath)
 
-    filePath = joinpath(pwd(),"src","$packageName.jl")
     file = open(filePath,"r")
     packageText = read(file, String)
     close(file)
@@ -22,9 +22,8 @@ function precompileDeactivator(packageName)
      close(file)
 end
 
-function precompileActivator(packageName)
+function precompileActivator(packageName, filePath)
 
-    filePath = joinpath(pwd(),"src","$packageName.jl")
     file = open(filePath,"r")
     packageText = read(file, String)
     close(file)
@@ -42,10 +41,12 @@ function precompileActivator(packageName)
 end
 
 ################################################################
-precompileDeactivator(packageName);
+const rootPath = pwd()
 
-rootPath = pwd()
+precompileDeactivator(packageName, filePath)
+
 cd(@__DIR__)
+################################################################
 
 ### Log the compiles
 # This only needs to be run once (to generate log file)
@@ -76,4 +77,4 @@ SnoopCompile.write("$(pwd())/precompile", pc)
 
 ################################################################
 cd(rootPath)
-precompileActivator(packageName)
+precompileActivator(packageName, filePath)
