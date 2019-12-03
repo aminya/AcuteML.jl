@@ -366,7 +366,7 @@ macro aml(expr)
                 # Function provided
                 else
                     amlconst[i]=quote
-                        if ($(esc(amlFunsI)))($amlVarsI)
+                        if !isnothing($amlVarsI) && ($(esc(amlFunsI)))($amlVarsI)
                             addelementVect!(aml, $amlNamesI, $amlVarsI, $amlTypesI)
                         else
                             error("$($amlNamesI) doesn't meet criteria function")
@@ -378,7 +378,7 @@ macro aml(expr)
 
                         $amlVarsI = findallcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI)
 
-                        if !(($(esc(amlFunsI)))($amlVarsI))
+                        if !isnothing($amlVarsI) && !(($(esc(amlFunsI)))($amlVarsI))
                             error("$($amlNamesI) doesn't meet criteria function")
                         end
                     end
@@ -386,7 +386,7 @@ macro aml(expr)
                     if mutability
                         amlmutability[i] = quote
                             if name == $amlSymI
-                                if ($(esc(amlFunsI)))($(amlVarsCall[i]))
+                                if !isnothing($(amlVarsCall[i])) && ($(esc(amlFunsI)))($(amlVarsCall[i]))
                                     updateallcontent!(value, $amlNamesI, str.aml, $amlTypesI)
                                 else
                                     error("$($amlNamesI) doesn't meet criteria function")
@@ -419,7 +419,7 @@ macro aml(expr)
                 # Function provided
                 else
                     amlconst[i]=quote
-                        if ($(esc(amlFunsI)))($amlVarsI)
+                        if !isnothing($amlVarsI) && ($(esc(amlFunsI)))($amlVarsI)
                             addelementOne!(aml, $amlNamesI, $amlVarsI, $amlTypesI)
                         else
                             error("$($amlNamesI) doesn't meet criteria function")
@@ -430,14 +430,14 @@ macro aml(expr)
 
                         $amlVarsI = findfirstcontent($(esc(argTypesI)), $amlNamesI, aml, $amlTypesI)
 
-                        if !(($(esc(amlFunsI)))($amlVarsI))
+                        if !isnothing($amlVarsI) && !(($(esc(amlFunsI)))($amlVarsI))
                             error("$($amlNamesI) doesn't meet criteria function")
                         end
                     end
                     if mutability
                         amlmutability[i] = quote
                             if name == $amlSymI
-                                if ($(esc(amlFunsI)))($(amlVarsCall[i]))
+                                if !isnothing($(amlVarsCall[i])) && ($(esc(amlFunsI)))($(amlVarsCall[i]))
                                     updatefirstcontent!(value, $amlNamesI, str.aml, $amlTypesI)
                                 else
                                     error("$($amlNamesI) doesn't meet criteria function")
