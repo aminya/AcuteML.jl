@@ -10,25 +10,29 @@ function amlParse(expr)
     argExpr = expr.args[3] # arguments of the type
     T = expr.args[2] # Type name +(curly braces)
 
-    argParams = Union{Expr,Symbol}[] # Expr(:parameters)[]
-    argVars = Union{Expr,Symbol}[]
-    argDefVal = Any[]
-    argTypes = Union{Missing,Type, Symbol, Expr}[]
-    argNames = Union{Missing,String}[]
-    argFun = Union{Missing, Symbol, Function}[]
+    idxData = (!).(isa.(argExpr.args, LineNumberNode))
+    idxArgs = findall(idxData)
+    data = argExpr.args[idxData]
+    numData = length(data)
+    numArgs = numData - 1
+
+    argParams = Vector{Union{Expr,Symbol}}(undef, numArgs) # Expr(:parameters)[]
+    argVars = Vector{Union{Expr,Symbol}}(undef, numArgs)
+    argDefVal = Vector{Any}(undef, numArgs)
+    argTypes = Vector{Union{Missing,Type, Symbol, Expr}}(undef, numArgs)
+    argNames =Vector{Union{Missing,String}}(undef, numArgs)
+    argFun = Vector{Union{Missing, Symbol, Function}}(undef, numArgs)
     amlTypes = Int64[]
     amlName = "my type"
     docOrElmType = 0
     amlFun = Array{Union{Missing, Symbol, Function},0}(undef)
 
-    for i in eachindex(argExpr.args) # iterating over arguments of each type argument
-        ei = argExpr.args[i] # type argument element i
+    for iData = 1:numData # iterating over arguments of each type argument
 
-        ########################
-        # Line number skipper
-        if typeof(ei) == LineNumberNode
-            continue
-        end
+        iArg = iData-1
+        i = idxArgs[iData] # used for argExpr.args[i]
+        
+        ei = data[iData] # type argument element i
 
         ########################
         # Single struct name - "aml name"
@@ -47,7 +51,7 @@ function amlParse(expr)
                 amlName = ei  # Type aml name
             end
 
-            argExpr.args[i]= nothing # removing "aml name" from expr args
+            argExpr.args[i] =  nothing # removing "aml name" from expr args
             docOrElmType = 0
 
         ################################################################
@@ -74,7 +78,7 @@ function amlParse(expr)
 
                 docOrElmType = ei[1]
 
-                argExpr.args[i]= nothing # removing "aml name" from expr args
+                argExpr.args[i] =  nothing # removing "aml name" from expr args
             end
 
         elseif ei.head == :tuple
@@ -96,7 +100,7 @@ function amlParse(expr)
                 end
 
                 docOrElmType = 0
-                argExpr.args[i]= nothing # removing "aml name" from expr args
+                argExpr.args[i] =  nothing # removing "aml name" from expr args
 
                 ########################
                 # Literal and Struct Function - xd/hd"aml name", F
@@ -116,7 +120,7 @@ function amlParse(expr)
                 end
 
                 docOrElmType = ei.args[1][1]
-                argExpr.args[i]= nothing # removing "aml name" from expr args
+                argExpr.args[i] =  nothing # removing "aml name" from expr args
         ################################################################
         # Arguments
             ########################
@@ -124,7 +128,7 @@ function amlParse(expr)
             elseif ei.args[1] isa Union{Symbol,Expr} # var/var::T, "name"
 
                 # Def Value
-                push!(argDefVal, missing)
+                argDefVal[iArg] = missing
 
                 # Type Checker
                 lhs = ei.args[1]
@@ -132,22 +136,22 @@ function amlParse(expr)
 
                     var = ei.args[1]
 
-                    push!(argTypes, String) # consider String as the type
-                    push!(argParams, var)
-                    push!(argVars, var)
+                    argTypes[iArg] = String # consider String as the type
+                    argParams[iArg] = var
+                    argVars[iArg] = var
 
-                    argExpr.args[i]=var  # removing "name",...
+                    argExpr.args[i] = var  # removing "name",...
 
                 elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T, "name"
 
                     var = lhs.args[1]
                     varType = lhs.args[2] # Type
 
-                    push!(argTypes, varType)
-                    push!(argParams, var)
-                    push!(argVars, var)
+                    argTypes[iArg] = varType
+                    argParams[iArg] =  var
+                    argVars[iArg] =  var
 
-                    argExpr.args[i]=lhs  # removing "name",...
+                    argExpr.args[i] = lhs  # removing "name",...
 
                 end
 
@@ -161,9 +165,9 @@ function amlParse(expr)
 
                     # Self-name checker
                     if ni == "~"
-                        push!(argNames,string(var))
+                        argNames[iArg] = string(var)
                     else
-                        push!(argNames,ni)
+                        argNames[iArg] = ni
                     end
 
                 else
@@ -173,9 +177,9 @@ function amlParse(expr)
 
                     # Self-name checker
                     if ni == "~"
-                        push!(argNames,string(var))
+                        argNames[iArg] = string(var)
                     else
-                        push!(argNames,ni)
+                        argNames[iArg] = ni
                     end
                 end
 
@@ -183,10 +187,10 @@ function amlParse(expr)
                 if length(ei.args) == 3 && isa(ei.args[3], Union{Function, Symbol}) #  var/var::T, "name", f
 
                     fun = ei.args[3]   # function
-                    push!(argFun, fun)
+                    argFun[iArg] = fun
 
                 else # function name isn't given
-                    push!(argFun, missing)
+                    argFun[iArg] =  missing
                 end
 
 
@@ -202,33 +206,33 @@ function amlParse(expr)
                 # Def Value
                 defVal = ei.args[2].args[1]
 
-                push!(argDefVal, defVal)
+                argDefVal[iArg] = defVal
 
                 lhs = ei.args[1]
 
-                argExpr.args[i]=lhs # remove =defVal for type definition
+                argExpr.args[i] = lhs # remove =defVal for type definition
 
                 # Type Checker
                 if lhs isa Symbol #  var = defVal, "name"
 
                     var = ei.args[1]
 
-                    push!(argTypes, String) # consider String as the type
-                    push!(argParams, Expr(:kw, var, defVal))
-                    push!(argVars, var)
+                    argTypes[iArg] = String # consider String as the type
+                    argParams[iArg] = Expr(:kw, var, defVal)
+                    argVars[iArg] =  var
 
-                    argExpr.args[i]=var  # removing "name",...
+                    argExpr.args[i] = var  # removing "name",...
 
                 elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal, "name"
 
                     var = lhs.args[1]
                     varType = lhs.args[2] # Type
 
-                    push!(argTypes, varType)
-                    push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
-                    push!(argVars, var)
+                    argTypes[iArg] = varType
+                    argParams[iArg] = Expr(:kw, var, defVal) # TODO also put type expression
+                    argVars[iArg] =  var
 
-                    argExpr.args[i]=lhs  # removing "name",...
+                    argExpr.args[i] = lhs  # removing "name",...
 
                 end
 
@@ -242,9 +246,9 @@ function amlParse(expr)
 
                     # Self-name checker
                     if ni == "~"
-                        push!(argNames,string(var))
+                        argNames[iArg] = string(var)
                     else
-                        push!(argNames,ni)
+                        argNames[iArg] = ni
                     end
 
                 else
@@ -254,9 +258,9 @@ function amlParse(expr)
 
                     # Self-name checker
                     if ni == "~"
-                        push!(argNames,string(var))
+                        argNames[iArg] = string(var)
                     else
-                        push!(argNames,ni)
+                        argNames[iArg] = ni
                     end
 
                 end
@@ -265,10 +269,10 @@ function amlParse(expr)
                 if length(ei.args[2].args) == 3 && isa(ei.args[2].args[3], Union{Function, Symbol}) #  var/var::T  = defVal, "name", f
 
                     fun = ei.args[2].args[3]  # function
-                    push!(argFun, fun)
+                    argFun[iArg] = fun
 
                 else # function name isn't given
-                    push!(argFun, missing)
+                    argFun[iArg] = missing
                 end
 
             ########################
@@ -281,34 +285,34 @@ function amlParse(expr)
 
                     defVal = ei.args[2]
 
-                    push!(argDefVal, defVal)
-                    push!(argNames,missing) # ignored for creating aml
-                    push!(argFun, missing) # ignored for creating aml
+                    argDefVal[iArg] = defVal
+                    argNames[iArg] = missing # ignored for creating aml
+                    argFun[iArg] =  missing # ignored for creating aml
 
                     var = ei.args[1]
 
-                    push!(argTypes, Any)
-                    push!(argParams, Expr(:kw, var, defVal))
-                    push!(argVars, var)
+                    argTypes[iArg] = Any
+                    argParams[iArg] = Expr(:kw, var, defVal)
+                    argVars[iArg] =  var
 
-                    argExpr.args[i]=var # remove =defVal for type definition
+                    argExpr.args[i] = var # remove =defVal for type definition
 
                 elseif lhs isa Expr && lhs.head == :(::) && lhs.args[1] isa Symbol # var::T = defVal
 
                     defVal = ei.args[2]
 
-                    push!(argDefVal, defVal)
-                    push!(argNames,missing) # ignored for creating aml
-                    push!(argFun, missing) # ignored for creating aml
+                    argDefVal[iArg] = defVal
+                    argNames[iArg] = missing # ignored for creating aml
+                    argFun[iArg] = missing # ignored for creating aml
 
                     var = lhs.args[1]
                     varType = lhs.args[2] # Type
 
-                    push!(argTypes, varType)
-                    push!(argParams, Expr(:kw, var, defVal)) # TODO also put type expression
-                    push!(argVars, var)
+                    argTypes[iArg] = varType
+                    argParams[iArg] =  Expr(:kw, var, defVal) # TODO also put type expression
+                    argVars[iArg] =  var
 
-                    argExpr.args[i]=lhs # remove =defVal for type definition
+                    argExpr.args[i] = lhs # remove =defVal for type definition
 
                 else
                     # something else, e.g. inline inner constructor
@@ -324,30 +328,30 @@ function amlParse(expr)
 
             # Type Checker
             if ei isa Symbol #  var
-                push!(argNames, missing) # argument ignored for aml
-                push!(argFun, missing) # ignored for creating aml
+                argNames[iArg] = missing # argument ignored for aml
+                argFun[iArg] =  missing # ignored for creating aml
 
-                push!(argTypes, String)
+                argTypes[iArg] = String
 
                 var = ei
 
-                push!(argParams, var)
-                push!(argVars, var)
+                argParams[iArg] = var
+                argVars[iArg] =  var
 
             elseif ei.head == :(::) && ei.args[1] isa Symbol # var::T
-                push!(argNames, missing) # argument ignored for aml
-                push!(argFun, missing) # ignored for creating aml
+                argNames[iArg] = missing # argument ignored for aml
+                argFun[iArg] =  missing # ignored for creating aml
 
                 var = ei.args[1]
                 varType = ei.args[2] # Type
 
-                push!(argTypes, varType)
-                push!(argParams, var)
-                push!(argVars, var)
+                argTypes[iArg] = varType
+                argParams[iArg] = var
+                argVars[iArg] = var
 
             elseif ei.head == :block  # anything else should be evaluated again
                 # can arise with use of @static inside type decl
-                argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun = amlParse(expr)
+                data, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun = amlParse(expr)
             else
                 continue
             end
