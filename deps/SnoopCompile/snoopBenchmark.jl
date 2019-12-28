@@ -9,26 +9,13 @@
 # restart Julia
 
 # now compare the result
-
-################################################################
-function timesum(snoop)
-
-    timeSum = 0
-    for x in snoop
-        timeSum+=x[1]
-    end
-
-    println(timeSum)
-
-    return timeSum
-end
 ################################################################
 using SnoopCompile
 
 println("Package load time:")
-loadSnoop = @snoopi using MatLang
+loadSnoop = @snoopi using AcuteML
 
-timesum(loadSnoop)
+println(timesum(loadSnoop))
 
 ################################################################
 println("Running Examples/Tests:")
@@ -36,12 +23,15 @@ runSnoop = @snoopi begin
 
     using AcuteML
 
+    # Use runtests.jl
+    # include(joinpath(dirname(dirname(pathof(AcuteML))), "test","runtests.jl"))
+
+    # Ues examples
     include(joinpath(dirname(dirname(pathof(AcuteML))), "test","runtests.jl"))
     include(joinpath(dirname(dirname(pathof(AcuteML))), "examples","extractor.jl"))
     include(joinpath(dirname(dirname(pathof(AcuteML))), "examples","constructor.jl"))
-    include(joinpath(dirname(dirname(pathof(AcuteML))), "examples","templating","templating.jl"))
-
+    # include(joinpath(dirname(dirname(pathof(AcuteML))), "examples","templating","templating.jl"))
 
 end
 
-timesum(runSnoop)
+println(timesum(runSnoop))
