@@ -302,7 +302,15 @@ macro aml(expr)
     # argParams.args # empty
     expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun = amlParse(expr)
 
+    out = amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun, mutability, T)
 
+    return out
+end
+################################################################
+"""
+@aml creator function
+"""
+function amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun, mutability, T)
     # defining outter constructors
     # Only define a constructor if the type has fields, otherwise we'll get a stack
     # overflow on construction
