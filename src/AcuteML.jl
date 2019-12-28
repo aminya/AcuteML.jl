@@ -305,9 +305,9 @@ macro aml(expr)
 
     # expr.args[3] # arguments
     # argParams.args # empty
-    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
+    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
 
-    out = amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun, mutability, T)
+    out = amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T)
 
     return out
 end

@@ -23,8 +23,8 @@ function amlParse(expr)
     argDefVal = Vector{Any}(undef, numArgs)
     argTypes = Vector{Union{Missing,Type, Symbol, Expr}}(undef, numArgs)
     argNames =Vector{Union{Missing,String}}(undef, numArgs)
-    argFun = Vector{Union{Missing, Symbol, Function}}(undef, numArgs)
-    amlTypes = Int64[]
+    argFuns = Vector{Union{Missing, Symbol, Function}}(undef, numArgs)
+    argAmlTypes = Int64[]
     amlName = "my type"
     docOrElmType = 0
     amlFun = Array{Union{Missing, Symbol, Function},0}(undef)
@@ -161,7 +161,7 @@ function amlParse(expr)
                 if length(ei.args[2]) == 2 # literal
 
                     elmType = ei.args[2][1]
-                    push!(amlTypes, elmType) # literal type
+                    push!(argAmlTypes, elmType) # literal type
 
                     ni = ei.args[2][2]
 
@@ -173,7 +173,7 @@ function amlParse(expr)
                     end
 
                 else
-                    push!(amlTypes, 0) # non-literal
+                    push!(argAmlTypes, 0) # non-literal
 
                     ni = ei.args[2]
 
@@ -189,10 +189,10 @@ function amlParse(expr)
                 if length(ei.args) == 3 && isa(ei.args[3], Union{Function, Symbol}) #  var/var::T, "name", f
 
                     fun = ei.args[3]   # function
-                    argFun[iArg] = fun
+                    argFuns[iArg] = fun
 
                 else # function name isn't given
-                    argFun[iArg] =  missing
+                    argFuns[iArg] =  missing
                 end
 
 
@@ -242,7 +242,7 @@ function amlParse(expr)
                 if length(ei.args[2].args[2]) == 2 # literal
 
                     elmType = ei.args[2].args[2][1]
-                    push!(amlTypes, elmType) # literal type
+                    push!(argAmlTypes, elmType) # literal type
 
                     ni = ei.args[2].args[2][2]
 
@@ -254,7 +254,7 @@ function amlParse(expr)
                     end
 
                 else
-                    push!(amlTypes, 0) # non-literal
+                    push!(argAmlTypes, 0) # non-literal
 
                     ni = ei.args[2].args[2]
 
@@ -271,10 +271,10 @@ function amlParse(expr)
                 if length(ei.args[2].args) == 3 && isa(ei.args[2].args[3], Union{Function, Symbol}) #  var/var::T  = defVal, "name", f
 
                     fun = ei.args[2].args[3]  # function
-                    argFun[iArg] = fun
+                    argFuns[iArg] = fun
 
                 else # function name isn't given
-                    argFun[iArg] = missing
+                    argFuns[iArg] = missing
                 end
 
             ########################
@@ -289,7 +289,7 @@ function amlParse(expr)
 
                     argDefVal[iArg] = defVal
                     argNames[iArg] = missing # ignored for creating aml
-                    argFun[iArg] =  missing # ignored for creating aml
+                    argFuns[iArg] =  missing # ignored for creating aml
 
                     var = ei.args[1]
 
@@ -305,7 +305,7 @@ function amlParse(expr)
 
                     argDefVal[iArg] = defVal
                     argNames[iArg] = missing # ignored for creating aml
-                    argFun[iArg] = missing # ignored for creating aml
+                    argFuns[iArg] = missing # ignored for creating aml
 
                     var = lhs.args[1]
                     varType = lhs.args[2] # Type
@@ -331,7 +331,7 @@ function amlParse(expr)
             # Type Checker
             if ei isa Symbol #  var
                 argNames[iArg] = missing # argument ignored for aml
-                argFun[iArg] =  missing # ignored for creating aml
+                argFuns[iArg] =  missing # ignored for creating aml
 
                 argTypes[iArg] = String
 
@@ -342,7 +342,7 @@ function amlParse(expr)
 
             elseif ei.head == :(::) && ei.args[1] isa Symbol # var::T
                 argNames[iArg] = missing # argument ignored for aml
-                argFun[iArg] =  missing # ignored for creating aml
+                argFuns[iArg] =  missing # ignored for creating aml
 
                 var = ei.args[1]
                 varType = ei.args[2] # Type
@@ -353,7 +353,7 @@ function amlParse(expr)
 
             elseif ei.head == :block  # anything else should be evaluated again
                 # can arise with use of @static inside type decl
-                argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
+                argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
             else
                 continue
             end
@@ -369,18 +369,18 @@ function amlParse(expr)
         # add a field with nothing type
         push!(argNames, "content") # argument ignored for aml
         push!(argTypes, Nothing)
-        push!(argFun,missing)
-        push!(amlTypes,10)
+        push!(argFuns,missing)
+        push!(argAmlTypes,10)
         push!(argParams, Expr(:kw, :content, nothing))
         push!(argVars, :content)
         push!(argDefVal, nothing)
         push!(argExpr.args,:(content::Nothing))
-        # argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
+        # argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
     end
 
     ########################
     # aml::Node adder
     push!(argExpr.args,:(aml::Union{Document,Node}))
 
-    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun, mutability, T
+    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T
 end
