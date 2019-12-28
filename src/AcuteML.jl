@@ -347,6 +347,6 @@ end
 ################################################################
 
 include("../deps/SnoopCompile/precompile/precompile_AcuteML.jl")
-_precompile_()()
+_precompile_()
 
 end
