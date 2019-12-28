@@ -298,11 +298,9 @@ macro aml(expr)
     mutability = expr.args[1]
     T = expr.args[2] # Type name +(curly braces)
 
-    aml = Symbol(:aml)
-
     # expr.args[3] # arguments
     # argParams.args # empty
-    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun = _aml(expr)
+    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun = amlParse(expr)
 
 
     # defining outter constructors
@@ -616,13 +614,13 @@ macro aml(expr)
     else
         out = nothing
     end
-
     return out
 end
-
 ################################################################
-# @aml Parser Function
-function _aml(expr)
+"""
+@aml parser function
+"""
+function amlParse(expr)
 
     # reminder:
     # var is a symbol
@@ -968,7 +966,7 @@ function _aml(expr)
 
             elseif ei.head == :block  # anything else should be evaluated again
                 # can arise with use of @static inside type decl
-                argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun = _aml(expr)
+                argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun = amlParse(expr)
             else
                 continue
             end
@@ -990,7 +988,7 @@ function _aml(expr)
         push!(argVars, :content)
         push!(argDefVal, nothing)
         push!(argExpr.args,:(content::Nothing))
-        # argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType = _aml(argExpr)
+        # argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType = amlParse(argExpr)
     end
 
     ########################
