@@ -5,6 +5,7 @@ import EzXML.Node
 # aml macro
 include("utilities.jl")
 include("amlParse.jl")
+include("amlParseDynamic.jl") # kept for the record
 include("amlCreate.jl")
 
 # io
@@ -302,12 +303,12 @@ macro aml(expr)
     #  check if aml is used before struct
     expr isa Expr && expr.head == :struct || error("Invalid usage of @aml")
 
-    mutability = expr.args[1]
-    T = expr.args[2] # Type name +(curly braces)
-
     # expr.args[3] # arguments
     # argParams.args # empty
     expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun = amlParse(expr)
+
+    mutability = expr.args[1]
+    T = expr.args[2] # Type name +(curly braces)
 
     out = amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun, mutability, T)
 
