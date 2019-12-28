@@ -1040,7 +1040,7 @@ macro ns_str(s)
 end
 ################################################################
 
-include("../deps/SnoopCompile/precompile/precompile_AcuteML.jl")
-_precompile_()
+# include("../deps/SnoopCompile/precompile/precompile_AcuteML.jl")
+# _precompile_()
 
 end
