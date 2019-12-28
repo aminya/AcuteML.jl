@@ -4,6 +4,7 @@ import EzXML.Node
 
 include("utilities.jl")
 include("templating.jl")
+include("io.jl")
 
 # main macro
 export @aml
@@ -1032,21 +1033,6 @@ macro ns_str(s)
     return elmType, s
 end
 ################################################################
-# I/O
-import EzXML: parsexml, parsehtml, readxml, readhtml
-# from EzXML
-funs = [:parsexml, :parsehtml, :readxml, :readhtml]
-for fun in funs
-
-    @eval begin
-
-        # doc
-        @doc (@doc $(fun)) $(fun)
-
-        # exporting
-        export $(fun)
-    end
-end
 
 include("../deps/SnoopCompile/precompile/precompile_AcuteML.jl")
 _precompile_()
