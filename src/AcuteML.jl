@@ -5,7 +5,7 @@ import EzXML.Node
 # aml macro
 include("utilities.jl")
 include("amlParse.jl")
-include("amlParseDynamic.jl") # kept for the record
+# include("amlParseDynamic.jl") # kept for the record
 include("amlCreate.jl")
 
 # io
