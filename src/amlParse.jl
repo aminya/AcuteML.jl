@@ -10,10 +10,10 @@ function amlParse(expr)
     argExpr = expr.args[3] # arguments of the type
     T = expr.args[2] # Type name +(curly braces)
 
-    idxData = (!).(isa.(argExpr.args, LineNumberNode))
-    idxArgs = findall(idxData)
-    data = argExpr.args[idxData]
-    numData = length(data)
+    idxArgs = findall(x->!(isa(x, LineNumberNode)), argExpr.args)
+
+    data = argExpr.args[idxArgs]
+    numData = length(idxArgs)
     numArgs = numData - 1
 
     argParams = Vector{Union{Expr,Symbol}}(undef, numArgs) # Expr(:parameters)[]
@@ -31,7 +31,7 @@ function amlParse(expr)
 
         iArg = iData-1
         i = idxArgs[iData] # used for argExpr.args[i]
-        
+
         ei = data[iData] # type argument element i
 
         ########################
