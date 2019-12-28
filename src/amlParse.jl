@@ -7,8 +7,10 @@ function amlParse(expr)
     # var is a symbol
     # var::T or anything more complex is an expression
 
-    argExpr = expr.args[3] # arguments of the type
+    mutability = expr.args[1]
     T = expr.args[2] # Type name +(curly braces)
+
+    argExpr = expr.args[3] # arguments of the type
 
     idxArgs = findall(x->!(isa(x, LineNumberNode)), argExpr.args)
 
@@ -351,7 +353,7 @@ function amlParse(expr)
 
             elseif ei.head == :block  # anything else should be evaluated again
                 # can arise with use of @static inside type decl
-                data, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun = amlParse(expr)
+                argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
             else
                 continue
             end
@@ -373,12 +375,12 @@ function amlParse(expr)
         push!(argVars, :content)
         push!(argDefVal, nothing)
         push!(argExpr.args,:(content::Nothing))
-        # argParams, argDefVal, argTypes, argVars, argNames, amlTypes, amlName, docOrElmType = amlParse(argExpr)
+        # argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
     end
 
     ########################
     # aml::Node adder
     push!(argExpr.args,:(aml::Union{Document,Node}))
 
-    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun
+    return argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFun, amlTypes, amlName, docOrElmType, amlFun, mutability, T
 end
