@@ -41,7 +41,7 @@ out = person(
 print(out)
 
 # you can also write the output to a file:
-file = open(filePath, "r"); print(file, out); close(file)
+# file = open(filePath, "r"); print(file, out); close(file)
 
 #################################################################
 # Example 4 - Template Rendering using Files
