@@ -1,7 +1,7 @@
 using SnoopCompile
 
 @snoopiBot "AcuteML" begin
-    using AcuteML, Pkg
+    using AcuteML
 
     # Use runtests.jl
     # include(joinpath(dirname(dirname(pathof(AcuteML))), "test","runtests.jl"))
