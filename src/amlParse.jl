@@ -34,7 +34,9 @@ end
 """
 @aml parser function
 """
-function amlParse(expr)
+function amlParse(expr::Expr)
+
+    expr.head == :struct || error("Invalid usage of amlParse")
 
     # reminder:
     # var is a symbol
