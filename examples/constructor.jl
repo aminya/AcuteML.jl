@@ -58,7 +58,7 @@ U = University(name="Julia University", people=[P1, P2])
 D = Doc(university = U)
 
 
-print(P1.aml)
+pprint(P1) # or print(P1.aml)
 #=
 <person id="1">
   <age>24</age>
@@ -69,7 +69,7 @@ print(P1.aml)
 </person>
 =#
 
-print(P2.aml)
+pprint(P2) # or print(P2.aml)
 #=
 <person id="2">
   <age>18</age>
@@ -79,7 +79,7 @@ print(P2.aml)
 </person>
 =#
 
-print(U.aml)
+pprint(U) # or print(U.aml)
 #=
 <university university-name="Julia University">
   <person id="1">
@@ -98,7 +98,7 @@ print(U.aml)
 </university>
 =#
 
-print(D.aml)
+pprint(D) # or print(D.aml)
 #=
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <university university-name="Julia University">

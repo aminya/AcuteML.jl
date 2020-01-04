@@ -196,7 +196,7 @@ GPA doesn't meet criteria function
 ```
 
 ```html
-julia> print(P1.aml)
+julia> pprint(P1) # or print(P1.aml)
 <person id="1">
   <age>24</age>
   <study-field>Mechanical Engineering</study-field>
@@ -205,7 +205,7 @@ julia> print(P1.aml)
   <taken-courses>Robotics</taken-courses>
 </person>
 
-julia> print(U.aml)
+julia> pprint(U) # or print(U.aml)
 <university university-name="Julia University">
   <person id="1">
     <age>24</age>
@@ -222,7 +222,7 @@ julia> print(U.aml)
   </person>
 </university>
 
-julia> print(D.aml)
+julia> pprint(D) # or print(D.aml)
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <university university-name="Julia University">
   <person id="1">

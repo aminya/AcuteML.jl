@@ -205,6 +205,8 @@ function amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argF
             nothingMethod = :( ($(esc(T)))(::Nothing) = nothing )
             # convertNothingMethod = :(Base.convert(::Type{($(esc(T)))}, ::Nothing) = nothing) # for passing nothing to function without using Union{Nothing, T} in the definition
             selfMethod = :( ($(esc(T)))(in::$(esc(T))) = $(esc(T))(in.aml) )
+            pprintMethod = :( AcuteML.pprint(in::$(esc(T))) = pprint(in.aml) )
+
 
             if mutability
                 mutabilityExp = quote
@@ -225,6 +227,7 @@ function amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argF
                 $nothingMethod
                 # $convertNothingMethod
                 $selfMethod
+                $pprintMethod
                 $mutabilityExp
             end
 
@@ -282,6 +285,7 @@ function amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argF
             nothingMethod = :( ($(esc(S)))(::Nothing) = nothing )
             # convertNothingMethod = :(Base.convert(::Type{($(esc(S)))}, ::Nothing) = nothing) # for passing nothing to function without using Union{Nothing, ...} in the definition
             selfMethod = :( ($(esc(S)))(in::$(esc(S))) = $(esc(S))(in.aml) )
+            pprintMethod = :( AcuteML.pprint(in::$(esc(T))) = pprint(in.aml) )
 
             if mutability
                 mutabilityExp = quote
@@ -304,6 +308,7 @@ function amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argF
                  $nothingMethod
                  # $convertNothingMethod
                  $selfMethod
+                 $pprintMethod
                  $mutabilityExp
              end
         ################################################################
