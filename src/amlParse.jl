@@ -21,14 +21,14 @@ end
 
 # attribute
 macro a_str(s)
-    elmType = 2
-    return elmType, s
+    argAmlType = 2
+    return argAmlType, s
 end
 
 # namespace
 macro ns_str(s)
-    elmType = 18
-    return elmType, s
+    argAmlType = 18
+    return argAmlType, s
 end
 ################################################################
 """
@@ -193,8 +193,8 @@ function amlParse(expr)
                 # Literal Checker
                 if length(ei.args[2]) == 2 # literal
 
-                    elmType = ei.args[2][1]
-                    push!(argAmlTypes, elmType) # literal type
+                    argAmlType = ei.args[2][1]
+                    push!(argAmlTypes, argAmlType) # literal type
 
                     ni = ei.args[2][2]
 
@@ -274,8 +274,8 @@ function amlParse(expr)
                 # Literal Checker
                 if length(ei.args[2].args[2]) == 2 # literal
 
-                    elmType = ei.args[2].args[2][1]
-                    push!(argAmlTypes, elmType) # literal type
+                    argAmlType = ei.args[2].args[2][1]
+                    push!(argAmlTypes, argAmlType) # literal type
 
                     ni = ei.args[2].args[2][2]
 

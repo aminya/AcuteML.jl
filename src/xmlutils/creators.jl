@@ -44,22 +44,22 @@ end
 # Document
 #  defined or nothing for Documents # add strings and others for documents
 """
-    addelementOne!(node, name, value, amlType)
+    addelementOne!(node, name, value, argAmlType)
 
 Add one element to a node/document
 ```
 """
-function addelementOne!(aml::Document, name::String, value, amlType::Int64)
+function addelementOne!(aml::Document, name::String, value, argAmlType::Int64)
 
     if !isnothing(value) # do nothing if value is nothing
 
         if hasroot(aml)
             amlNode = root(aml)
             if hasmethod(string, Tuple{T})
-                if amlType == 0 # normal elements
+                if argAmlType == 0 # normal elements
 
                     addelement!(aml, name, string(value))
-                elseif amlType == 2 # Attributes
+                elseif argAmlType == 2 # Attributes
 
                     link!(aml, AttributeNode(name, string(value)))
 
@@ -76,16 +76,16 @@ function addelementOne!(aml::Document, name::String, value, amlType::Int64)
 end
 
 # strings
-function addelementOne!(aml::Document, name::String, value::String, amlType::Int64)
+function addelementOne!(aml::Document, name::String, value::String, argAmlType::Int64)
 
     if hasroot(aml)
         amlNode = root(aml)
 
-        if amlType == 0 # normal elements
+        if argAmlType == 0 # normal elements
 
             addelement!(amlNode, name, value)
 
-        elseif amlType == 2 # Attributes
+        elseif argAmlType == 2 # Attributes
 
             link!(amlNode, AttributeNode(name, value))
 
@@ -97,15 +97,15 @@ function addelementOne!(aml::Document, name::String, value::String, amlType::Int
 end
 
 # number
-function addelementOne!(aml::Document, name::String, value::T, amlType::Int64) where {T<:Union{Number, Bool}}
+function addelementOne!(aml::Document, name::String, value::T, argAmlType::Int64) where {T<:Union{Number, Bool}}
 
     if hasroot(aml)
         amlNode = root(aml)
 
-        if amlType == 0 # normal elements
+        if argAmlType == 0 # normal elements
 
             addelement!(amlNode, name, string(value))
-        elseif amlType == 2 # Attributes
+        elseif argAmlType == 2 # Attributes
 
             link!(amlNode, AttributeNode(name, string(value)))
 
@@ -118,18 +118,18 @@ end
 ################################################################
 # vector of strings
 """
-    addelementVect!(node, name, value, amlType)
+    addelementVect!(node, name, value, argAmlType)
 
 Add a vector to a node/document
 ```
 """
-function addelementVect!(aml::Document, name::String, value::Vector{String}, amlType::Int64)
+function addelementVect!(aml::Document, name::String, value::Vector{String}, argAmlType::Int64)
 
 
     if hasroot(aml)
         amlNode = root(aml)
 
-        if amlType == 0 # normal elements
+        if argAmlType == 0 # normal elements
 
             for ii = 1:length(value)
                 if !isnothing(value[ii]) # do nothing if value is nothing
@@ -137,7 +137,7 @@ function addelementVect!(aml::Document, name::String, value::Vector{String}, aml
                 end
             end
 
-        elseif amlType == 2 # Attributes
+        elseif argAmlType == 2 # Attributes
 
             for ii = 1:length(value)
                 if !isnothing(value[ii]) # do nothing if value is nothing
@@ -153,12 +153,12 @@ function addelementVect!(aml::Document, name::String, value::Vector{String}, aml
 end
 
 # vector of numbers
-function addelementVect!(aml::Document, name::String, value::Vector{T}, amlType::Int64) where {T<:Union{Number, Bool}}
+function addelementVect!(aml::Document, name::String, value::Vector{T}, argAmlType::Int64) where {T<:Union{Number, Bool}}
 
     if hasroot(aml)
         amlNode = root(aml)
 
-        if amlType == 0 # normal elements
+        if argAmlType == 0 # normal elements
 
             for ii = 1:length(value)
                 if !isnothing(value[ii]) # do nothing if value is nothing
@@ -166,7 +166,7 @@ function addelementVect!(aml::Document, name::String, value::Vector{T}, amlType:
                 end
             end
 
-        elseif amlType == 2 # Attributes
+        elseif argAmlType == 2 # Attributes
 
             for ii = 1:length(value)
                 if !isnothing(value[ii]) # do nothing if value is nothing
@@ -182,17 +182,17 @@ function addelementVect!(aml::Document, name::String, value::Vector{T}, amlType:
 end
 
 #  vector of defined or nothing
-function addelementVect!(aml::Document, name::String, value::Vector{T}, amlType::Int64) where {T}
+function addelementVect!(aml::Document, name::String, value::Vector{T}, argAmlType::Int64) where {T}
     if hasroot(aml)
         amlNode = root(aml)
 
         for ii = 1:length(value)
             if !isnothing(value[ii]) # do nothing if value is nothing
                 if hasmethod(string, Tuple{T})
-                    if amlType == 0 # normal elements
+                    if argAmlType == 0 # normal elements
 
                         addelement!(amlNode, name, string(value[ii]))
-                    elseif amlType == 2 # Attributes
+                    elseif argAmlType == 2 # Attributes
 
                         link!(amlNode, AttributeNode(name, string(value[ii])))
 
@@ -212,15 +212,15 @@ end
 ################################################################
 # Nodes
 # strings
-function addelementOne!(aml::Node, name::String, value::String, amlType::Int64)
+function addelementOne!(aml::Node, name::String, value::String, argAmlType::Int64)
 
     if !isnothing(value) # do nothing if value is nothing
 
-        if amlType == 0 # normal elements
+        if argAmlType == 0 # normal elements
 
             addelement!(aml, name, value)
 
-        elseif amlType == 2 # Attributes
+        elseif argAmlType == 2 # Attributes
 
             link!(aml, AttributeNode(name, value))
 
@@ -229,14 +229,14 @@ function addelementOne!(aml::Node, name::String, value::String, amlType::Int64)
 end
 
 # number
-function addelementOne!(aml::Node, name::String, value::T, amlType::Int64) where {T<:Union{Number, Bool}}
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) where {T<:Union{Number, Bool}}
 
     if !isnothing(value) # do nothing if value is nothing
 
-        if amlType == 0 # normal elements
+        if argAmlType == 0 # normal elements
 
             addelement!(aml, name, string(value))
-        elseif amlType == 2 # Attributes
+        elseif argAmlType == 2 # Attributes
 
             link!(aml, AttributeNode(name, string(value)))
 
@@ -245,13 +245,13 @@ function addelementOne!(aml::Node, name::String, value::T, amlType::Int64) where
 end
 
 #  defined or nothing
-function addelementOne!(aml::Node, name::String, value::T, amlType::Int64) where {T}
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) where {T}
     if !isnothing(value)
         if hasmethod(string, Tuple{T})
-            if amlType == 0 # normal elements
+            if argAmlType == 0 # normal elements
 
                 addelement!(aml, name, string(value))
-            elseif amlType == 2 # Attributes
+            elseif argAmlType == 2 # Attributes
 
                 link!(aml, AttributeNode(name, string(value)))
 
@@ -263,10 +263,10 @@ function addelementOne!(aml::Node, name::String, value::T, amlType::Int64) where
 end
 
 # vector of strings
-function addelementVect!(aml::Node, name::String, value::Vector{String}, amlType::Int64)
+function addelementVect!(aml::Node, name::String, value::Vector{String}, argAmlType::Int64)
 
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         for ii = 1:length(value)
             if !isnothing(value[ii]) # do nothing if value is nothing
@@ -274,7 +274,7 @@ function addelementVect!(aml::Node, name::String, value::Vector{String}, amlType
             end
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         for ii = 1:length(value)
             if !isnothing(value[ii]) # do nothing if value is nothing
@@ -285,9 +285,9 @@ function addelementVect!(aml::Node, name::String, value::Vector{String}, amlType
 end
 
 # vector of numbers
-function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int64) where {T<:Union{Number, Bool}}
+function addelementVect!(aml::Node, name::String, value::Vector{T}, argAmlType::Int64) where {T<:Union{Number, Bool}}
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         for ii = 1:length(value)
             if !isnothing(value[ii]) # do nothing if value is nothing
@@ -295,7 +295,7 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int
             end
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         for ii = 1:length(value)
             if !isnothing(value[ii]) # do nothing if value is nothing
@@ -306,14 +306,14 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int
 end
 
 #  vector of defined or nothing
-function addelementVect!(aml::Node, name::String, value::Vector{T}, amlType::Int64) where {T}
+function addelementVect!(aml::Node, name::String, value::Vector{T}, argAmlType::Int64) where {T}
     for ii = 1:length(value)
         if !isnothing(value[ii]) # do nothing if value is nothing
             if hasmethod(string, Tuple{T})
-                if amlType == 0 # normal elements
+                if argAmlType == 0 # normal elements
 
                     addelement!(aml, name, string(value[ii]))
-                elseif amlType == 2 # Attributes
+                elseif argAmlType == 2 # Attributes
 
                     link!(aml, AttributeNode(name, string(value[ii])))
 

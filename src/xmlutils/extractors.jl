@@ -40,8 +40,8 @@ end
 ################################################################
 # Single extraction
 """
-    findfirstcontent(element,node, amlType)
-    findfirstcontent(type,element,node, amlType)
+    findfirstcontent(element,node, argAmlType)
+    findfirstcontent(type,element,node, argAmlType)
 
 Returns first element content. It also convert to the desired format by passing type. element is given as string.
 ```julia
@@ -49,9 +49,9 @@ findfirstcontent("/instrument-name",node, 0)
 findfirstcontent(UInt8,"/midi-channel",node, 0)
 ```
 """
-function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:String} # for strings
+function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T<:String} # for strings
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -65,7 +65,7 @@ function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, aml
             return elm.content
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         if haskey(node, s)
             elm = node[s]
@@ -84,12 +84,12 @@ end
 
 
 # if no type is provided consider it to be string
-findfirstcontent(s::String,node::Union{Node, Document}, amlType::Int64) = findfirstcontent(Union{String, Nothing}, s, node, amlType)
+findfirstcontent(s::String,node::Union{Node, Document}, argAmlType::Int64) = findfirstcontent(Union{String, Nothing}, s, node, argAmlType)
 
 # for numbers
-function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlType::Int64) where {T<:Union{Number,Bool}}
+function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, argAmlType::Int64) where {T<:Union{Number,Bool}}
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -103,7 +103,7 @@ function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlTy
             return parse(T, elm.content)
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         if haskey(node, s)
             elm = parse(T, node[s])
@@ -120,9 +120,9 @@ function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlTy
 end
 
 # for defined types
-function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlType::Int64) where {T}
+function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, argAmlType::Int64) where {T}
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -136,7 +136,7 @@ function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlTy
             return T(elm)
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         if haskey(node, s)
             elm = node[s]
@@ -153,24 +153,24 @@ function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, amlTy
 end
 
 # Union with Nothing
-findfirstcontent(::Type{UN{T}},s::String,node::Union{Node, Document}, amlType::Int64) where {T} = findfirstcontent(T,s,node, amlType)
+findfirstcontent(::Type{UN{T}},s::String,node::Union{Node, Document}, argAmlType::Int64) where {T} = findfirstcontent(T,s,node, argAmlType)
 
 # Nothing Alone
-findfirstcontent(::Type{Nothing},s::String,node::Union{Node, Document}, amlType::Int64) = nothing
+findfirstcontent(::Type{Nothing},s::String,node::Union{Node, Document}, argAmlType::Int64) = nothing
 ################################################################
 # Vector extraction
 """
-    findallcontent(type, string, node, amlType)
+    findallcontent(type, string, node, argAmlType)
 
 Finds all the elements with the address of string in the node, and converts the elements to Type object.
 ```julia
 findallcontent(UInt8,"/midi-channel",node, 0)
 ```
 """
-function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:String} # for strings
+function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T<:String} # for strings
 
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
@@ -190,7 +190,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
             return elmsType
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         if haskey(node, s)
             elmsNode = node[s]
@@ -207,12 +207,12 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
     end
 end
 # if no type is provided consider it to be string
-findallcontent(s::String, node::Union{Node, Document}, amlType::Int64) = findallcontent(Vector{Union{String, Nothing}},s, node, amlType)
+findallcontent(s::String, node::Union{Node, Document}, argAmlType::Int64) = findallcontent(Vector{Union{String, Nothing}},s, node, argAmlType)
 
 # for numbers
-function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{Number,Bool}}
+function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T<:Union{Number,Bool}}
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
@@ -232,7 +232,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
             return elmsType
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         if haskey(node, s)
             elmsNode = parse(T, node[s])
@@ -254,9 +254,9 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
 end
 
 # for defined types
-function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, amlType::Int64) where{T}
+function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T}
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
@@ -264,7 +264,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
             elmsNode = findalllocal(s, node) # a vector of Node elements
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         if haskey(node, s)
             elmsNode = node[s]
@@ -289,7 +289,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
 end
 
 # Union with Nothing
-findallcontent(::Type{Vector{UN{T}}},s::String,node::Union{Node, Document}, amlType::Int64) where {T} = findallcontent(Vecotr{T},s,node, amlType)
+findallcontent(::Type{Vector{UN{T}}},s::String,node::Union{Node, Document}, argAmlType::Int64) where {T} = findallcontent(Vecotr{T},s,node, argAmlType)
 
 # Nothing Alone
-findallcontent(::Type{Vector{Nothing}},s::String,node::Union{Node, Document}, amlType::Int64) = nothing
+findallcontent(::Type{Vector{Nothing}},s::String,node::Union{Node, Document}, argAmlType::Int64) = nothing

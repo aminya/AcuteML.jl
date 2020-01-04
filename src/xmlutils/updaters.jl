@@ -4,13 +4,13 @@ export updateallcontent!, updatefirstcontent!
 ################################################################
 # Single Updater
 """
-    updatefirstcontent(value, string, node, amlType)
+    updatefirstcontent(value, string, node, argAmlType)
 
 Updates first element content. It also converts any type to string. element is given as string.
 """
-function updatefirstcontent!(value::T, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Number, Bool}} # for strings, number and bool
+function updatefirstcontent!(value::T, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T<:Union{String, Number, Bool}} # for strings, number and bool
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -24,7 +24,7 @@ function updatefirstcontent!(value::T, s::String, node::Union{Node, Document}, a
             elm.content = value
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         if haskey(node, s)
             node[s] = value
@@ -40,9 +40,9 @@ function updatefirstcontent!(value::T, s::String, node::Union{Node, Document}, a
 end
 
 # for defined types
-function updatefirstcontent!(value::T, s::String,node::Union{Node, Document}, amlType::Int64) where {T}
+function updatefirstcontent!(value::T, s::String,node::Union{Node, Document}, argAmlType::Int64) where {T}
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -61,7 +61,7 @@ function updatefirstcontent!(value::T, s::String,node::Union{Node, Document}, am
             end
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         if haskey(node, s)
             elm = node[s]
@@ -78,9 +78,9 @@ function updatefirstcontent!(value::T, s::String,node::Union{Node, Document}, am
 end
 
 # Nothing Alone
-function updatefirstcontent!(value::Nothing, s::String,node::Union{Node, Document}, amlType::Int64)
+function updatefirstcontent!(value::Nothing, s::String,node::Union{Node, Document}, argAmlType::Int64)
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -94,7 +94,7 @@ function updatefirstcontent!(value::Nothing, s::String,node::Union{Node, Documen
             unlink!(elm)
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         if haskey(node, s)
             elm = node[s]
@@ -111,14 +111,14 @@ end
 ################################################################
 # Vector update
 """
-    updateallcontent!(value, string, node, amlType)
+    updateallcontent!(value, string, node, argAmlType)
 
 Finds all the elements with the address of string in the node, and updates the content
 """
-function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
+function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
 
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
@@ -136,7 +136,7 @@ function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Docume
             end
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         if haskey(node, s)
             elmsNode = node[s]
@@ -152,9 +152,9 @@ function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Docume
 end
 
 # for defined types and nothing
-function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Document}, amlType::Int64) where{T}
+function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T}
 
-    if amlType == 0 # normal elements
+    if argAmlType == 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
@@ -162,7 +162,7 @@ function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Docume
             elmsNode = findalllocal(s, node) # a vector of Node elements
         end
 
-    elseif amlType == 2 # Attributes
+    elseif argAmlType == 2 # Attributes
 
         if haskey(node, s)
             elmsNode = node[s]
