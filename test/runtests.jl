@@ -36,6 +36,8 @@ function courseCheck(age, field, GPA, courses, id)
     return any(in.(courses, Ref(relevant)))
 end
 
+stripall(x::String) = replace(x, r"\s|\n"=>"")
+
 @testset "constructor" begin
 
     P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
@@ -47,7 +49,7 @@ end
 
     D = Doc(university = U)
 
-    @test @capture_out(print(P1.aml)) == @capture_out(print(strip("""
+    @test stripall(@capture_out(pprint(P1))) == stripall("""
     <person id="1">
       <age>24</age>
       <study-field>Mechanical Engineering</study-field>
@@ -55,18 +57,18 @@ end
       <taken-courses>Artificial Intelligence</taken-courses>
       <taken-courses>Robotics</taken-courses>
     </person>
-    """)))
+    """)
 
-    @test @capture_out(print(P2.aml)) == print(strip("""
+    @test stripall(@capture_out(pprint(P2))) == stripall("""
     <person id="2">
       <age>18</age>
       <study-field>Computer Engineering</study-field>
       <GPA>4.2</GPA>
       <taken-courses>Julia</taken-courses>
     </person>
-    """))
+    """)
 
-    @test @capture_out(print(U.aml)) == print(strip("""
+    @test stripall(@capture_out(pprint(U.aml))) == stripall("""
     <university university-name="Julia University">
       <person id="1">
         <age>24</age>
@@ -82,9 +84,9 @@ end
         <taken-courses>Julia</taken-courses>
       </person>
     </university>
-    """))
+    """)
 
-    @test @capture_out(print(D.aml)) == print(strip("""
+    @test stripall(@capture_out(pprint(D))) == stripall("""
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
     <university university-name="Julia University">
       <person id="1">
@@ -101,7 +103,7 @@ end
         <taken-courses>Julia</taken-courses>
       </person>
     </university>
-    """))
+    """)
 
 
 end
@@ -150,13 +152,13 @@ end
 
     P2 = U.people[2]
 
-    @test @capture_out(print(P2.aml)) == print(strip("""
+    @test stripall(@capture_out(pprint(P2))) == stripall("""
     <person id="2">
         <age>18</age>
         <study-field>Computer Engineering</study-field>
         <GPA>4</GPA>
         <taken-courses>Julia</taken-courses>
       </person>
-    """))
+    """)
 
 end
