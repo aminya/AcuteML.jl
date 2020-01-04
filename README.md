@@ -29,10 +29,10 @@ using AcuteML
 
 -------------------------------------------------------
 
-# Type defnition
+# Type Definition
 Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
-### Document Defnition
+### Document Definition
 * Use `xd""` or `hd""` to define a XML or HTML document:
 ```julia
 @aml mutable struct Doc xd""
@@ -40,7 +40,7 @@ Use `@aml` macro to define a Julia type, and then the package automatically crea
 end
 ```
 
-### Nodes (Elements) Defnition
+### Nodes (Elements) Definition
 * Specify the html/xml struct name as a string after the struct name after a space
 ```julia
 @aml mutable struct Person "person"
@@ -116,7 +116,7 @@ residence::UN{String}=nothing, "residence-stay" # optional with nothing as defau
 funds::UN{String}, "financial-funds"   # optional, but you should pass nothing manually in construction
 ```
 
-### Empty Elements (Self-Closing) Defnition
+### Empty Elements (Self-Closing) Definition
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
 ```julia
 @aml struct rest sc"~"
@@ -181,15 +181,16 @@ After we defined the structs, we can create instances of them by passing our dat
 P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
 
-P2.GPA=4.2 # mutability support
-
 U = University(name="Julia University", people=[P1, P2])
 
 D = Doc(university = U)
+
+D.university.people[2].GPA=4.2 # mutability support after Doc creation
+
 ```
 
 ```julia
-# An example that doesn't meet the critertia function for GPA because GPA is more than 4.5
+# An example that doesn't meet the criteria function for GPA because GPA is more than 4.5
 P3 = Person(age=99, field="Macro Wizard", GPA=10, courses=["Julia Magic"], id = 3)
 julia>
 GPA doesn't meet criteria function
@@ -384,5 +385,5 @@ out =render2file("person", false,
   GPA = 4.5,
   courses = ["Artificial Intelligence", "Robotics"])
 
-# you pass `true` as the 2nd argument to owerwrite person.html statically.
+# you pass `true` as the 2nd argument to overwrite person.html statically.
 ```
