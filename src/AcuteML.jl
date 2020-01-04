@@ -25,221 +25,259 @@ export Node, Document
 export @xd_str, @hd_str, @sc_str, @a_str
 ################################################################
 """
-  @aml typedef
+  @aml
 
+# Type Definition
+Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
-  # Type Definition
-  Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
+### Document Definition
+* Use `xd""` or `hd""` to define a XML or HTML document:
+```julia
+@aml mutable struct Doc xd""
+# add fields (elements) here
+end
+```
 
-  ### Document Definition
-  * Use `xd""` or `hd""` to define a XML or HTML document:
-  ```julia
-  @aml mutable struct Doc xd""
-    # add fields (elements) here
-  end
-  ```
+### Nodes (Elements) Definition
+* Specify the html/xml struct name as a string after the struct name after a space
+```julia
+@aml mutable struct Person "person"
+# add fields (elements) here
+end
+```
+* If the html/xml name is the same as struct name, you can use `"~"` instead
+```julia
+@aml mutable struct person "~"
+# add fields (elements) here
+end
+```
 
-  ### Nodes (Elements) Definition
-  * Specify the html/xml struct name as a string after the struct name after a space
-  ```julia
-  @aml mutable struct Person "person"
-    # add fields (elements) here
-  end
-  ```
-  * If the html/xml name is the same as struct name, you can use `"~"` instead
-  ```julia
-  @aml mutable struct person "~"
-    # add fields (elements) here
-  end
-  ```
+### Fields Names
+* Sepecify the html/xml field name as a string in front of the field after `,`
+```julia
+field, "study-field"
+```
+* If the html/xml name is the same as variable name, you can use `"~"` instead
+```julia
+age::UInt, "~"
+```
 
-  ### Fields Names
-  * Sepecify the html/xml field name as a string in front of the field after `,`
-  ```julia
+### Attributes
+* If the value is going to be an attribute put `a` before its name
+```julia
+id::Int64, a"~"
+```
+
+### Default Value
+* You can specify the default value for an argument by using `= defVal` syntax
+```julia
+GPA::Float64 = 4.5, "~"
+```
+
+### Value Types
+You can use Julia types or defined types for values. see and [Supported Value Types](https://aminya.github.io/AcuteML.jl/dev/supportedValueTypes/)  [Custom Value Types](https://aminya.github.io/AcuteML.jl/dev/customValueTypes/) for more information.
+
+* If you don't specify the type of a variable, it is considered to be string for aml manipulations:
+```julia
+field, "study-field"
+```
+However, for a high performance code specify String type (`field::String, "study-field"`)
+
+* For already `@aml` defined types, name should be the same as the defined type root name
+```julia
+university::University, "university"
+```
+
+* Table types are supported through PrettyTables.jl.
+
+### Value Checking
+You can define any restriction for values using functions.
+
+* To define any restrictions for the values of one field, define a function that checks a criteria for the field value and returns Bool, and put its name after a `,` after the field name:
+```julia
+GPA::Float64, "~", GPAcheck
+```
+
+* To define any restrictions for multiple values of a struct, define a function that gets all the variables and checks a criteria and returns Bool, and put its name after a `,` after the struct name:
+```julia
+@aml mutable struct Person "person", courseCheck
+# ...
+end
+```
+
+Refer to https://aminya.github.io/AcuteML.jl/dev/valueChecking/ for some of these functions examples.
+
+### Optional Fields
+* If a field is optional, don't forget to define its type as `UN{}` (Union with Nothing), and set the default value as `nothing`.
+```julia
+residence::UN{String}=nothing, "residence-stay" # optional with nothing as default value
+```
+```julia
+funds::UN{String}, "financial-funds"   # optional, but you should pass nothing manually in construction
+```
+
+### Empty Elements (Self-Closing) Definition
+* Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
+```julia
+@aml struct rest sc"~"
+end
+```
+-------------------------------------------------------
+
+# Example - Struct Definition
+
+First, we define the structs using `@aml` to store the data in:
+
+```julia
+using AcuteML
+
+# Types definition
+
+# Person Type
+@aml mutable struct Person "person", courseCheck
+  age::UInt64, "~"
   field, "study-field"
-  ```
-  * If the html/xml name is the same as variable name, you can use `"~"` instead
-  ```julia
-  age::UInt, "~"
-  ```
-
-  ### Attributes
-  * If the value is going to be an attribute put `a` before its name
-  ```julia
+  GPA::Float64 = 4.5, "~", GPAcheck
+  courses::Vector{String}, "taken-courses"
+  professors::UN{DataFrame} = nothing, "~"
   id::Int64, a"~"
-  ```
+end
 
-  ### Default Value
-  * You can specify the default value for an argument by using `= defVal` syntax
-  ```julia
-  GPA::Float64 = 4.5, "~"
-  ```
+@aml mutable struct University "university"
+  name, a"university-name"
+  people::Vector{Person}, "person"
+end
 
-  ### Value Types
-  You can use Julia types or  defined types for values.
+@aml mutable struct Doc xd""
+  university::University, "~"
+end
 
-  * If you don't specify the type of a variable, it is considered to be string for aml manipulations:
-  ```julia
-  field, "study-field"
-  ```
-  However, for a high performance code specify String type (`field::String, "study-field"`)
+```
 
-  * For already `@aml` defined types, name should be the same as the defined type root name
-  ```julia
-  university::University, "university"
-  ```
+```julia
+# Value Checking Functions
+GPAcheck(x) = x <= 4.5 && x >= 0
 
-  ### Value Checking
-  You can define any restriction for values using functions.
+function courseCheck(age, field, GPA, courses, id)
 
-  * To define any restrictions for the values of one field, define a function that checks a criteria for the field value and returns Bool, and put its name after a `,` after the field name:
-  ```julia
-  GPA::Float64, "~", GPAcheck
-  ```
-
-  * To define any restrictions for multiple values of a struct, define a function that gets all the variables and checks a criteria and returns Bool, and put its name after a `,` after the struct name:
-  ```julia
-  @aml mutable struct Person "person", courseCheck
-  # ...
-  end
-  ```
-
-  Refer to https://aminya.github.io/AcuteML.jl/dev/valueChecking/ for some of these functions examples.
-
-  ### Optional Fields
-  * If a field is optional, don't forget to define its type as `UN{}` (Union with Nothing), and set the default value as `nothing`.
-  ```julia
-  residence::UN{String}=nothing, "residence-stay" # optional with nothing as default value
-  ```
-  ```julia
-  funds::UN{String}, "financial-funds"   # optional, but you should pass nothing manually in construction
-  ```
-
-  ### Empty Elements (Self-Closing) Definition
-  * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
-  ```julia
-  @aml struct rest sc"~"
-  end
-  ```
-  -------------------------------------------------------
-
-  # Example - Struct Definition
-
-  First, we define the structs using `@aml` to store the data in:
-
-  ```julia
-  using AcuteML
-
-  # Types definition
-
-  # Person Type
-  @aml mutable struct Person "person", courseCheck
-      age::UInt64, "~"
-      field, "study-field"
-      GPA::Float64 = 4.5, "~", GPAcheck
-      courses::Vector{String}, "taken-courses"
-      id::Int64, a"~"
+  if field == "Mechanical Engineering"
+      relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
+  elseif field == "Computer Engineering"
+      relevant = ["Julia", "Algorithms"]
+  else
+      error("study field is not known")
   end
 
-  @aml mutable struct University "university"
-      name, a"university-name"
-      people::Vector{Person}, "person"
-  end
+  return any(in.(courses, Ref(relevant)))
+end
+```
+-------------------------------------------------------
 
-  @aml mutable struct Doc xd""
-      university::University, "~"
-  end
+# Example - Constructor
 
-  ```
+After we defined the structs, we can create instances of them by passing our data to the fields:
 
-  ```julia
-  # Value Checking Functions
-  GPAcheck(x) = x <= 4.5 && x >= 0
+```julia
 
-  function courseCheck(age, field, GPA, courses, id)
+P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
+P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
 
-      if field == "Mechanical Engineering"
-          relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
-      elseif field == "Computer Engineering"
-          relevant = ["Julia", "Algorithms"]
-      else
-          error("study field is not known")
-      end
+U = University(name="Julia University", people=[P1, P2])
 
-      return any(in.(courses, Ref(relevant)))
-  end
-  ```
-  -------------------------------------------------------
+D = Doc(university = U)
 
-  # Example - Constructor
+D.university.people[2].GPA=4.2 # mutability support after Doc creation
 
-  After we defined the structs, we can create instances of them by passing our data to the fields:
+```
 
-  ```julia
+```julia
+# An example that doesn't meet the criteria function for GPA because GPA is more than 4.5
+P3 = Person(age=99, field="Macro Wizard", GPA=10, courses=["Julia Magic"], id = 3)
+julia>
+GPA doesn't meet criteria function
+```
 
-  P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
-  P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
+```html
+julia> pprint(P1) # or print(P1.aml)
+<person id="1">
+<age>24</age>
+<study-field>Mechanical Engineering</study-field>
+<GPA>4.5</GPA>
+<taken-courses>Artificial Intelligence</taken-courses>
+<taken-courses>Robotics</taken-courses>
+</person>
 
-  U = University(name="Julia University", people=[P1, P2])
+julia> pprint(U) # or print(U.aml)
+<university university-name="Julia University">
+<person id="1">
+  <age>24</age>
+  <study-field>Mechanical Engineering</study-field>
+  <GPA>4.5</GPA>
+  <taken-courses>Artificial Intelligence</taken-courses>
+  <taken-courses>Robotics</taken-courses>
+</person>
+<person id="2">
+  <age>18</age>
+  <study-field>Computer Engineering</study-field>
+  <GPA>4.2</GPA>
+  <taken-courses>Julia</taken-courses>
+</person>
+</university>
 
-  D = Doc(university = U)
+julia> pprint(D) # or print(D.aml)
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<university university-name="Julia University">
+<person id="1">
+  <age>24</age>
+  <study-field>Mechanical Engineering</study-field>
+  <GPA>4.5</GPA>
+  <taken-courses>Artificial Intelligence</taken-courses>
+  <taken-courses>Robotics</taken-courses>
+</person>
+<person id="2">
+  <age>18</age>
+  <study-field>Computer Engineering</study-field>
+  <GPA>4.2</GPA>
+  <taken-courses>Julia</taken-courses>
+</person>
+</university>
+```
 
-  D.university.people[2].GPA=4.2 # mutability support after Doc creation
+P3 with Tables.jl type:
+```julia
+Profs1 = DataFrame(course = ["Artificial Intelligence", "Robotics"], professor = ["Prof. A", "Prof. B"] )
 
-  ```
+P3 = Person(age=24, field="Mechanical Engineering", courses = ["Artificial Intelligence", "Robotics"], professors= Profs1, id = 1)
+```
+```html
+julia> pprint(P3)
 
-  ```julia
-  # An example that doesn't meet the criteria function for GPA because GPA is more than 4.5
-  P3 = Person(age=99, field="Macro Wizard", GPA=10, courses=["Julia Magic"], id = 3)
-  julia>
-  GPA doesn't meet criteria function
-  ```
-
-  ```html
-  julia> pprint(P1) # or print(P1.aml)
-  <person id="1">
-    <age>24</age>
-    <study-field>Mechanical Engineering</study-field>
-    <GPA>4.5</GPA>
-    <taken-courses>Artificial Intelligence</taken-courses>
-    <taken-courses>Robotics</taken-courses>
-  </person>
-
-  julia> pprint(U) # or print(U.aml)
-  <university university-name="Julia University">
-    <person id="1">
-      <age>24</age>
-      <study-field>Mechanical Engineering</study-field>
-      <GPA>4.5</GPA>
-      <taken-courses>Artificial Intelligence</taken-courses>
-      <taken-courses>Robotics</taken-courses>
-    </person>
-    <person id="2">
-      <age>18</age>
-      <study-field>Computer Engineering</study-field>
-      <GPA>4.2</GPA>
-      <taken-courses>Julia</taken-courses>
-    </person>
-  </university>
-
-  julia> pprint(D) # or print(D.aml)
-  <?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-  <university university-name="Julia University">
-    <person id="1">
-      <age>24</age>
-      <study-field>Mechanical Engineering</study-field>
-      <GPA>4.5</GPA>
-      <taken-courses>Artificial Intelligence</taken-courses>
-      <taken-courses>Robotics</taken-courses>
-    </person>
-    <person id="2">
-      <age>18</age>
-      <study-field>Computer Engineering</study-field>
-      <GPA>4.2</GPA>
-      <taken-courses>Julia</taken-courses>
-    </person>
-  </university>
-  ```
+<person id="1">
+<age>24</age>
+<study-field>Mechanical Engineering</study-field>
+<GPA>4.5</GPA>
+<taken-courses>Artificial Intelligence</taken-courses>
+<taken-courses>Robotics</taken-courses>
+<table>
+<tr class="header">
+<th style="text-align: right; ">course</th>
+<th style="text-align: right; ">professor</th>
+</tr>
+<tr class="subheader headerLastRow">
+<th style="text-align: right; ">String</th>
+<th style="text-align: right; ">String</th>
+</tr>
+<tr>
+<td style="text-align: right; ">Artificial Intelligence</td>
+<td style="text-align: right; ">Prof. A</td>
+</tr>
+<tr>
+<td style="text-align: right; ">Robotics</td>
+<td style="text-align: right; ">Prof. B</td>
+</tr>
+</table>
+</person>
+```
 -------------------------------------------------------
 
 # Example - Extractor
