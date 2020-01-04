@@ -1,3 +1,36 @@
+################################################################
+# Literal Macros:
+# html document
+macro hd_str(s)
+    docOrElmType = -1
+    return docOrElmType, s
+end
+
+
+# xml document
+macro xd_str(s)
+    docOrElmType = -2
+    return docOrElmType, s
+end
+
+# self-closing
+macro sc_str(s)
+    docOrElmType= 10
+    return docOrElmType, s
+end
+
+# attribute
+macro a_str(s)
+    elmType = 2
+    return elmType, s
+end
+
+# namespace
+macro ns_str(s)
+    elmType = 18
+    return elmType, s
+end
+################################################################
 """
 @aml parser function
 """
