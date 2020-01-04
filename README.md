@@ -141,7 +141,7 @@ using AcuteML
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
-    professors::UN{DataFrame} = nothing, "~"
+    professors::UN{DataFrame} = nothing, "table"
     id::Int64, a"~"
 end
 
