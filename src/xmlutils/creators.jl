@@ -49,13 +49,13 @@ end
 Add one element to a node/document
 ```
 """
-function addelementOne!(aml::Document, name::String, value, argAmlType::Int64)
+function addelementOne!(aml::Document, name::String, value::T, argAmlType::Int64) where {T}
 
     if !isnothing(value) # do nothing if value is nothing
 
         if hasroot(aml)
             amlNode = root(aml)
-            if hasmethod(string, Tuple{T})
+            if !hasfield(T, :aml)
                 if argAmlType == 0 # normal elements
 
                     addelement!(aml, name, string(value))
@@ -188,7 +188,7 @@ function addelementVect!(aml::Document, name::String, value::Vector{T}, argAmlTy
 
         for ii = 1:length(value)
             if !isnothing(value[ii]) # do nothing if value is nothing
-                if hasmethod(string, Tuple{T})
+                if !hasfield(typeof(value[ii]), :aml)
                     if argAmlType == 0 # normal elements
 
                         addelement!(amlNode, name, string(value[ii]))
@@ -247,7 +247,7 @@ end
 #  defined or nothing
 function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) where {T}
     if !isnothing(value)
-        if hasmethod(string, Tuple{T})
+        if !hasfield(T, :aml)
             if argAmlType == 0 # normal elements
 
                 addelement!(aml, name, string(value))
@@ -309,7 +309,7 @@ end
 function addelementVect!(aml::Node, name::String, value::Vector{T}, argAmlType::Int64) where {T}
     for ii = 1:length(value)
         if !isnothing(value[ii]) # do nothing if value is nothing
-            if hasmethod(string, Tuple{T})
+            if !hasfield(typeof(value[ii]), :aml)
                 if argAmlType == 0 # normal elements
 
                     addelement!(aml, name, string(value[ii]))
