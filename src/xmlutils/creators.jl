@@ -78,48 +78,42 @@ end
 # strings
 function addelementOne!(aml::Document, name::String, value::String, amlType::Int64)
 
-    if !isnothing(value) # do nothing if value is nothing
+    if hasroot(aml)
+        amlNode = root(aml)
 
-        if hasroot(aml)
-            amlNode = root(aml)
+        if amlType == 0 # normal elements
 
-            if amlType == 0 # normal elements
+            addelement!(amlNode, name, value)
 
-                addelement!(amlNode, name, value)
+        elseif amlType == 2 # Attributes
 
-            elseif amlType == 2 # Attributes
+            link!(amlNode, AttributeNode(name, value))
 
-                link!(amlNode, AttributeNode(name, value))
-
-            end
-        else
-            error("You cannot insert a string in the document directly. Define a @aml defined field for xd/hd struct")
         end
-
+    else
+        error("You cannot insert a string in the document directly. Define a @aml defined field for xd/hd struct")
     end
+
 end
 
 # number
 function addelementOne!(aml::Document, name::String, value::T, amlType::Int64) where {T<:Union{Number, Bool}}
 
-    if !isnothing(value) # do nothing if value is nothing
+    if hasroot(aml)
+        amlNode = root(aml)
 
-        if hasroot(aml)
-            amlNode = root(aml)
+        if amlType == 0 # normal elements
 
-            if amlType == 0 # normal elements
+            addelement!(amlNode, name, string(value))
+        elseif amlType == 2 # Attributes
 
-                addelement!(amlNode, name, string(value))
-            elseif amlType == 2 # Attributes
+            link!(amlNode, AttributeNode(name, string(value)))
 
-                link!(amlNode, AttributeNode(name, string(value)))
-
-            end
-        else
-            error("You cannot insert a number in the document directly. Define a @aml defined field for xd/hd struct")
         end
-
+    else
+        error("You cannot insert a number in the document directly. Define a @aml defined field for xd/hd struct")
     end
+
 end
 ################################################################
 # vector of strings
