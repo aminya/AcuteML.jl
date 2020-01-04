@@ -55,7 +55,7 @@ U = University(name=&quot;Julia University&quot;, people=[P1, P2])
 D = Doc(university = U)</code></pre><pre><code class="language-julia"># An example that doesn&#39;t meet the critertia function for GPA because GPA is more than 4.5
 P3 = Person(age=99, field=&quot;Macro Wizard&quot;, GPA=10, courses=[&quot;Julia Magic&quot;], id = 3)
 julia&gt;
-GPA doesn&#39;t meet criteria function</code></pre><pre><code class="language-html">julia&gt; print(P1.aml)
+GPA doesn&#39;t meet criteria function</code></pre><pre><code class="language-html">julia&gt; pprint(P1) # or print(P1.aml)
 &lt;person id=&quot;1&quot;&gt;
   &lt;age&gt;24&lt;/age&gt;
   &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
@@ -64,7 +64,7 @@ GPA doesn&#39;t meet criteria function</code></pre><pre><code class="language-ht
   &lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
 &lt;/person&gt;
 
-julia&gt; print(U.aml)
+julia&gt; pprint(U) # or print(U.aml)
 &lt;university university-name=&quot;Julia University&quot;&gt;
   &lt;person id=&quot;1&quot;&gt;
     &lt;age&gt;24&lt;/age&gt;
@@ -81,7 +81,7 @@ julia&gt; print(U.aml)
   &lt;/person&gt;
 &lt;/university&gt;
 
-julia&gt; print(D.aml)
+julia&gt; pprint(D) # or print(D.aml)
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/REC-html40/loose.dtd&quot;&gt;
 &lt;university university-name=&quot;Julia University&quot;&gt;
   &lt;person id=&quot;1&quot;&gt;
