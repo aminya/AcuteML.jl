@@ -13,3 +13,13 @@ for fun in funs
         export $(fun)
     end
 end
+
+# moved to my fork of EzXML
+# function Base.print(x::Node)
+#     println("")
+#     prettyprint(x)
+# end
+# function Base.print(x::Document)
+#     println("")
+#     prettyprint(x)
+# end

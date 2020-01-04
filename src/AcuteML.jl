@@ -3,7 +3,7 @@ module AcuteML
 import EzXML.Node
 
 # aml macro
-include("utilities.jl")
+include("xmlutils.jl")
 include("amlParse.jl")
 # include("amlParseDynamic.jl") # kept only for the record
 include("amlCreate.jl")
