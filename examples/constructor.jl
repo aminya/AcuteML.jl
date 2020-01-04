@@ -1,12 +1,12 @@
-using AcuteML
+using AcuteML, DataFrames
 
 # Type Definition
-
 @aml mutable struct Person "person", courseCheck
     age::UInt64, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
+    professors::UN{DataFrame} = nothing, "~"
     id::Int64, a"~"
 end
 
@@ -22,7 +22,7 @@ end
 # Value Checking Functions
 GPAcheck(x) = x <= 4.5 && x >= 0
 
-function courseCheck(age, field, GPA, courses, id)
+function courseCheck(age, field, GPA, courses, professors, id)
 
     if field == "Mechanical Engineering"
         relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
@@ -38,11 +38,9 @@ end
 
 # Constructor
 
-P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
+P1 = Person(age=24, field="Mechanical Engineering", courses = ["Artificial Intelligence", "Robotics"], id = 1)
 
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
-
-P2.GPA=4.2 # mutability support
 
 # Two examples that doesn't meet the critertia function for GPA because GPA is more than 4.5
 #=
@@ -56,6 +54,8 @@ P1.GPA=5.0
 U = University(name="Julia University", people=[P1, P2])
 
 D = Doc(university = U)
+
+D.university.people[2].GPA=4.2 # mutability support after Doc creation
 
 
 pprint(P1) # or print(P1.aml)
