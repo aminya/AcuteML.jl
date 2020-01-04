@@ -1,5 +1,5 @@
 using AcuteML
-using Test
+using Test, Suppressor
 
 # Type Definition
 @aml mutable struct Person "person", courseCheck
@@ -47,8 +47,7 @@ end
 
     D = Doc(university = U)
 
-
-    @test print(P1.aml) == print(strip("""
+    @test @capture_out(print(P1.aml)) == @capture_out(print(strip("""
     <person id="1">
       <age>24</age>
       <study-field>Mechanical Engineering</study-field>
@@ -56,9 +55,9 @@ end
       <taken-courses>Artificial Intelligence</taken-courses>
       <taken-courses>Robotics</taken-courses>
     </person>
-    """))
+    """)))
 
-    @test print(P2.aml) == print(strip("""
+    @test @capture_out(print(P2.aml)) == print(strip("""
     <person id="2">
       <age>18</age>
       <study-field>Computer Engineering</study-field>
@@ -67,7 +66,7 @@ end
     </person>
     """))
 
-    @test print(U.aml) == print(strip("""
+    @test @capture_out(print(U.aml)) == print(strip("""
     <university university-name="Julia University">
       <person id="1">
         <age>24</age>
@@ -85,7 +84,7 @@ end
     </university>
     """))
 
-    @test print(D.aml) == print(strip("""
+    @test @capture_out(print(D.aml)) == print(strip("""
     <?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
     <university university-name="Julia University">
       <person id="1">
@@ -151,7 +150,7 @@ end
 
     P2 = U.people[2]
 
-    @test print(P2.aml) == print(strip("""
+    @test @capture_out(print(P2.aml)) == print(strip("""
     <person id="2">
         <age>18</age>
         <study-field>Computer Engineering</study-field>
