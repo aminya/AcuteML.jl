@@ -11,6 +11,9 @@ include("amlCreate.jl")
 # io
 include("io.jl")
 
+# DataTypesSupport
+include("amlTypesSupport.jl")
+
 # templating
 include("templating.jl")
 
@@ -301,13 +304,19 @@ macro aml(expr)
     expr = macroexpand(__module__, expr) # to expand @static
 
     #  check if aml is used before struct
-    expr isa Expr && expr.head == :struct || error("Invalid usage of @aml")
+    if expr isa Expr && expr.head == :struct
 
-    # expr.args[3] # arguments
-    # argParams.args # empty
-    expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
+        # expr.args[3] # arguments
+        # argParams.args # empty
+        expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
 
-    out = amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T)
+        out = amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T)
+
+    # elseif expr isa Expr && expr.head == :tuple
+    #     amlTypesSupport(expr)
+    # else
+        error("Invalid usage of @aml")
+    end
 
     return out
 end
