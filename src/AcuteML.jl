@@ -314,7 +314,7 @@ macro aml(expr)
 
     # elseif expr isa Expr && expr.head == :tuple
     #     amlTypesSupport(expr)
-    # else
+    else
         error("Invalid usage of @aml")
     end
 

@@ -55,7 +55,16 @@ function addelementOne!(aml::Document, name::String, value::T, argAmlType::Int64
 
         if hasroot(aml)
             amlNode = root(aml)
-            if !hasfield(T, :aml)
+            if hasfield(T, :aml)
+                link!(amlNode,value.aml)
+
+            elseif Tables.istable(value)
+                link!(amlNode,amlTable(value))
+
+            elseif hasmethod(aml, Tuple{T})
+                link!(amlNode,aml(value))
+
+            else
                 if argAmlType == 0 # normal elements
 
                     addelement!(aml, name, string(value))
@@ -64,8 +73,6 @@ function addelementOne!(aml::Document, name::String, value::T, argAmlType::Int64
                     link!(aml, AttributeNode(name, string(value)))
 
                 end
-            else
-                link!(amlNode,value.aml)
             end
         else
             setroot!(aml, value.aml)
@@ -186,21 +193,33 @@ function addelementVect!(aml::Document, name::String, value::Vector{T}, argAmlTy
     if hasroot(aml)
         amlNode = root(aml)
 
-        for ii = 1:length(value)
-            if !isnothing(value[ii]) # do nothing if value is nothing
-                if !hasfield(typeof(value[ii]), :aml)
+        for i = 1:length(value)
+            vi = value[i]
+            Ti = typeof(vi)
+
+            if Ti !=== Nothing # do nothing if value is nothing
+
+                if hasfield(Ti, :aml)
+                    link!(amlNode,vi.aml)
+
+                elseif Tables.istable(vi)
+                    link!(amlNode, amlTable(vi))
+
+                elseif hasmethod(aml, Tuple{Ti})
+                    link!(amlNode, aml(vi))
+
+                else
                     if argAmlType == 0 # normal elements
 
-                        addelement!(amlNode, name, string(value[ii]))
+                        addelement!(amlNode, name, string(vi))
                     elseif argAmlType == 2 # Attributes
 
-                        link!(amlNode, AttributeNode(name, string(value[ii])))
+                        link!(amlNode, AttributeNode(name, string(vi)))
 
                     end
-                else
-                    link!(amlNode,value[ii].aml)
                 end
             end
+
         end
 
     else
@@ -247,7 +266,17 @@ end
 #  defined or nothing
 function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) where {T}
     if !isnothing(value)
-        if !hasfield(T, :aml)
+
+        if hasfield(T, :aml)
+            link!(aml,value.aml)
+
+        elseif Tables.istable(value)
+            link!(aml,amlTable(value))
+
+        elseif hasmethod(aml, Tuple{T})
+            link!(aml,aml(value))
+
+        else
             if argAmlType == 0 # normal elements
 
                 addelement!(aml, name, string(value))
@@ -256,8 +285,6 @@ function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) wh
                 link!(aml, AttributeNode(name, string(value)))
 
             end
-        else
-            link!(aml,value.aml)
         end
     end
 end
@@ -308,19 +335,31 @@ end
 #  vector of defined or nothing
 function addelementVect!(aml::Node, name::String, value::Vector{T}, argAmlType::Int64) where {T}
     for ii = 1:length(value)
-        if !isnothing(value[ii]) # do nothing if value is nothing
-            if !hasfield(typeof(value[ii]), :aml)
+        vi = value[i]
+        Ti = typeof(vi)
+
+        if Ti !=== Nothing # do nothing if value is nothing
+
+            if hasfield(Ti, :aml)
+                link!(aml,value[ii].aml)
+
+            elseif Tables.istable(vi)
+                link!(aml, amlTable(vi))
+
+            elseif hasmethod(aml, Tuple{Ti})
+                link!(aml, aml(vi))
+
+            else
                 if argAmlType == 0 # normal elements
 
-                    addelement!(aml, name, string(value[ii]))
+                    addelement!(aml, name, string(vi))
                 elseif argAmlType == 2 # Attributes
 
-                    link!(aml, AttributeNode(name, string(value[ii])))
+                    link!(aml, AttributeNode(name, string(vi)))
 
                 end
-            else
-                link!(aml,value[ii].aml)
             end
+
         end
     end
 end
