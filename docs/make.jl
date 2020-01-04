@@ -15,7 +15,8 @@ makedocs(;
         "Home" => "index.md",
         "Templating" => "templating.md",
         "Value Checking" => "valueChecking.md",
-        "Cutom Value Types" => "customValueTypes.md",
+        "Value Checking" => "valueChecking.md",
+        "Supported Value Types" => "supportedValueTypes.md",
         "Custom Contructors" => "customConstructors.md",
         "Syntax Reference" => "SyntaxReference.md"
     ],

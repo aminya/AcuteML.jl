@@ -1,10 +1,10 @@
-# Custom Contructors
+# Custom Constructors
 
 # Define constructors on top of `@aml`
 You can add constructors to your `@aml` defined type. In the function that you define you should return a call to the type with keywords assigned to the values.
 
 ### Example
-In the following example we define two costom constuctors for our `@aml` defined struct.
+In the following example we define two custom constructors for our `@aml` defined struct.
 ```julia
 
 # define a struct using @aml
