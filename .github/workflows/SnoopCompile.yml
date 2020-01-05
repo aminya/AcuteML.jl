@@ -28,9 +28,10 @@ jobs:
       - name: Running Benchmark
         run: julia --project=@. -e 'include("deps/SnoopCompile/snoopBenchmark.jl")'
 
+
       # https://github.com/marketplace/actions/create-pull-request
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v2-beta
+        uses: peter-evans/create-pull-request@v2.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Update precompile_*.jl file
