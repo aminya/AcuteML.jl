@@ -13,11 +13,15 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
-        "Templating" => "templating.md",
-        "Value Checking" => "valueChecking.md",
+
         "Value Checking" => "valueChecking.md",
         "Supported Value Types" => "supportedValueTypes.md",
-        "Custom Contructors" => "customConstructors.md",
+        "Extra Contructors" => "extraConstructors.md",
+
+        "Custom Value Types" => "customValueTypes.md",
+        "Custom Contructors - AcuteML Backend" => "customConstructors.md",
+
+        "Templating" => "templating.md",
         "Syntax Reference" => "SyntaxReference.md"
     ],
 )

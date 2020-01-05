@@ -12,12 +12,17 @@ In addition you can use your `@aml` defined types in another `@aml` definition.
 
 see [Custom Value Types](https://aminya.github.io/AcuteML.jl/dev/customValueTypes/) for more information about all supported value types and custom value types.
 
+---------------------------------------------------
+
 ## `@aml` defined types
 
 For already `@aml` defined types, name should be the same as the defined type root name
 ```julia
 university::University, "university"
 ```
+
+---------------------------------------------------
+
 # Tables
 AcuteML uses PrettyTables.jl to crate HTML from Table type data.
 ```julia
@@ -55,6 +60,8 @@ pprint(P3)
 </person>
 =#
 ```
+
+---------------------------------------------------
 
 ## Dates and Time:
 

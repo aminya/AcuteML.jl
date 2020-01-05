@@ -1,53 +1,12 @@
-# Custom Constructors
-
-# Define constructors on top of `@aml`
-You can add constructors to your `@aml` defined type. In the function that you define you should return a call to the type with keywords assigned to the values.
-
-### Example
-In the following example we define two custom constructors for our `@aml` defined struct.
-```julia
-
-# define a struct using @aml
-@aml struct Pitch "pitch"
-    step::String, "step"
-    alter::UN{Float16} = nothing, "alter"
-    octave::Int8, "octave"
-end
-```
-```julia
-import MusicXML.pitch2xml  # some function from MusicXML.jl
-
-# 1st custom constructor:
-function Pitch(; pitch::Int64)
-
-    step, alter, octave = pitch2xml(pitch)
-
-    return Pitch(step = step, alter = alter, octave = octave) # return the main struct constructor with values assigned as keyword arguments
-end
-```
-```julia
-# 2nd custom constructor:
-function Pitch(; step::String)
-
-    if step == "C"
-        octave = 0
-    else
-        octave = 10
-    end
-
-    return Pitch(step = step, octave = octave) # return the main struct constructor with values assigned as keyword arguments
-end
-
-```
-
-# Making a Type and constructor from scratch
+# Custom Constructors - AcuteML Backend
+## Making a Type and constructor from scratch
 
 You can use AcuteML utilities to define custom type constructors from scratch or to override `@aml` defined constructors.
 
 Notice that if you don't use `@aml`, you should include `aml::Node` as one of your fields.
 
 Functions to use for custom html/xml constructor:
-- [docOrElmInit](@ref): Function to initialize the aml
+- [docOrElmInit](@ref): function to initialize the aml
 - [addelementOne!](@ref) : to add single elements
 - [addelementVect!](@ref) : to add multiple elements (vector)
 Use these functions, to make a method that calculates the `aml` inside the function and returns all of the fields.
@@ -56,6 +15,11 @@ Functions to use for custom html/xml extractor:
 - [findfirstcontent](@ref) : to extract single elements
 - [findallcontent](@ref) : to extract multiple elements (vector)
 Use these functions, to make a method that gets the `aml::Node` and calculates and returns all of the fields.
+
+Functions to support mutability:
+- [updatefirstcontent!](@ref): updates first element content. It also converts any type to string. element is given as string.
+- [updateallcontent!](@ref): finds all the elements with the address of string in the node, and updates the content
+
 
 # Example:
 In this example we define `Identity` with custom constructors:
