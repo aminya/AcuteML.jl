@@ -40,9 +40,9 @@ end
 ################################################################
 # Creators
 ################################################################
-
 # Document
-#  defined or nothing for Documents # add strings and others for documents
+################################################################
+# Any
 """
     addelementOne!(node, name, value, argAmlType)
 
@@ -51,100 +51,34 @@ Add one element to a node/document
 """
 function addelementOne!(aml::Document, name::String, value::T, argAmlType::Int64) where {T}
 
-    if !isnothing(value) # do nothing if value is nothing
-
-        if hasroot(aml)
-            amlNode = root(aml)
-            if !hasfield(T, :aml)
-                if argAmlType == 0 # normal elements
-
-                    addelement!(aml, name, string(value))
-                elseif argAmlType == 2 # Attributes
-
-                    link!(aml, AttributeNode(name, string(value)))
-
-                end
-            else
-                link!(amlNode,value.aml)
-            end
-        else
-            setroot!(aml, value.aml)
-        end
-
+    if hasroot(aml)
+        amlNode = root(aml)
+        addelementOne!(amlNode, name, value, argAmlType)
+    elseif hasfield(T, :aml)
+        setroot!(aml, value.aml)
+    else
+        error("You cannot insert $(T) in the document directly. Define a @aml defined field for xd/hd struct")
     end
 
 end
 
-# strings
-function addelementOne!(aml::Document, name::String, value::String, argAmlType::Int64)
-
-    if hasroot(aml)
-        amlNode = root(aml)
-
-        if argAmlType == 0 # normal elements
-
-            addelement!(amlNode, name, value)
-
-        elseif argAmlType == 2 # Attributes
-
-            link!(amlNode, AttributeNode(name, value))
-
-        end
-    else
-        error("You cannot insert a string in the document directly. Define a @aml defined field for xd/hd struct")
-    end
-
-end
-
-# number
-function addelementOne!(aml::Document, name::String, value::T, argAmlType::Int64) where {T<:Union{Number, Bool}}
-
-    if hasroot(aml)
-        amlNode = root(aml)
-
-        if argAmlType == 0 # normal elements
-
-            addelement!(amlNode, name, string(value))
-        elseif argAmlType == 2 # Attributes
-
-            link!(amlNode, AttributeNode(name, string(value)))
-
-        end
-    else
-        error("You cannot insert a number in the document directly. Define a @aml defined field for xd/hd struct")
-    end
-
+# Nothing
+function addelementOne!(aml::Document, name::String, value::Nothing, argAmlType::Int64)
+# do nothing if value is nothing
 end
 ################################################################
-# vector of strings
+# vector of Any
 """
     addelementVect!(node, name, value, argAmlType)
 
 Add a vector to a node/document
 ```
 """
-function addelementVect!(aml::Document, name::String, value::Vector{String}, argAmlType::Int64)
-
+function addelementVect!(aml::Document, name::String, value::Vector{T}, argAmlType::Int64) where {T}
 
     if hasroot(aml)
         amlNode = root(aml)
-
-        if argAmlType == 0 # normal elements
-
-            for ii = 1:length(value)
-                if !isnothing(value[ii]) # do nothing if value is nothing
-                    addelement!(amlNode, name, value[ii])
-                end
-            end
-
-        elseif argAmlType == 2 # Attributes
-
-            for ii = 1:length(value)
-                if !isnothing(value[ii]) # do nothing if value is nothing
-                    link!(amlNode, AttributeNode(name, value[ii]))
-                end
-            end
-        end
+        addelementVect!(amlNode, name, value, argAmlType)
 
     else
         error("You cannot insert a vector in the document directly. Define a @aml defined field for xd/hd struct")
@@ -152,65 +86,10 @@ function addelementVect!(aml::Document, name::String, value::Vector{String}, arg
 
 end
 
-# vector of numbers
-function addelementVect!(aml::Document, name::String, value::Vector{T}, argAmlType::Int64) where {T<:Union{Number, Bool}}
-
-    if hasroot(aml)
-        amlNode = root(aml)
-
-        if argAmlType == 0 # normal elements
-
-            for ii = 1:length(value)
-                if !isnothing(value[ii]) # do nothing if value is nothing
-                    addelement!(amlNode, name, string(value[ii]))
-                end
-            end
-
-        elseif argAmlType == 2 # Attributes
-
-            for ii = 1:length(value)
-                if !isnothing(value[ii]) # do nothing if value is nothing
-                    link!(amlNode, AttributeNode(name, string(value[ii])))
-                end
-            end
-        end
-
-    else
-        error("You cannot put string in the document directly.Define a @aml defined field for xd/hd struct")
-    end
-
-end
-
-#  vector of defined or nothing
-function addelementVect!(aml::Document, name::String, value::Vector{T}, argAmlType::Int64) where {T}
-    if hasroot(aml)
-        amlNode = root(aml)
-
-        for ii = 1:length(value)
-            if !isnothing(value[ii]) # do nothing if value is nothing
-                if !hasfield(typeof(value[ii]), :aml)
-                    if argAmlType == 0 # normal elements
-
-                        addelement!(amlNode, name, string(value[ii]))
-                    elseif argAmlType == 2 # Attributes
-
-                        link!(amlNode, AttributeNode(name, string(value[ii])))
-
-                    end
-                else
-                    link!(amlNode,value[ii].aml)
-                end
-            end
-        end
-
-    else
-        error("You cannot put string in the document directly. Define a @aml defined field for xd/hd struct")
-    end
-
-end
-
 ################################################################
 # Nodes
+################################################################
+
 # strings
 function addelementOne!(aml::Node, name::String, value::String, argAmlType::Int64)
 
@@ -244,41 +123,50 @@ function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) wh
     end
 end
 
-#  defined or nothing
+# Defined
 function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) where {T}
-    if !isnothing(value)
-        if !hasfield(T, :aml)
-            if argAmlType == 0 # normal elements
+    if hasfield(T, :aml)
+        link!(aml,value.aml)
 
-                addelement!(aml, name, string(value))
-            elseif argAmlType == 2 # Attributes
+    elseif Tables.istable(value)
+        link!(aml,amlTable(value))
 
-                link!(aml, AttributeNode(name, string(value)))
+    elseif hasmethod(aml, Tuple{T})
+        link!(aml,aml(value))
 
-            end
-        else
-            link!(aml,value.aml)
+    else
+        if argAmlType == 0 # normal elements
+
+            addelement!(aml, name, string(value))
+        elseif argAmlType == 2 # Attributes
+
+            link!(aml, AttributeNode(name, string(value)))
+
         end
     end
 end
 
+function addelementOne!(aml::Node, name::String, value::Nothing, argAmlType::Int64)
+    # do nothing
+end
+################################################################
 # vector of strings
 function addelementVect!(aml::Node, name::String, value::Vector{String}, argAmlType::Int64)
 
 
     if argAmlType == 0 # normal elements
 
-        for ii = 1:length(value)
-            if !isnothing(value[ii]) # do nothing if value is nothing
-                addelement!(aml, name, value[ii])
+        for i = 1:length(value)
+            if !isnothing(value[i]) # do nothing if value is nothing
+                addelement!(aml, name, value[i])
             end
         end
 
     elseif argAmlType == 2 # Attributes
 
-        for ii = 1:length(value)
-            if !isnothing(value[ii]) # do nothing if value is nothing
-                link!(aml, AttributeNode(name, value[ii]))
+        for i = 1:length(value)
+            if !isnothing(value[i]) # do nothing if value is nothing
+                link!(aml, AttributeNode(name, value[i]))
             end
         end
     end
@@ -289,38 +177,50 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}, argAmlType::
 
     if argAmlType == 0 # normal elements
 
-        for ii = 1:length(value)
-            if !isnothing(value[ii]) # do nothing if value is nothing
-                addelement!(aml, name, string(value[ii]))
+        for i = 1:length(value)
+            if !isnothing(value[i]) # do nothing if value is nothing
+                addelement!(aml, name, string(value[i]))
             end
         end
 
     elseif argAmlType == 2 # Attributes
 
-        for ii = 1:length(value)
-            if !isnothing(value[ii]) # do nothing if value is nothing
-                link!(aml, AttributeNode(name, string(value[ii])))
+        for i = 1:length(value)
+            if !isnothing(value[i]) # do nothing if value is nothing
+                link!(aml, AttributeNode(name, string(value[i])))
             end
         end
     end
 end
 
-#  vector of defined or nothing
+# Vector of defined or nothing
 function addelementVect!(aml::Node, name::String, value::Vector{T}, argAmlType::Int64) where {T}
-    for ii = 1:length(value)
-        if !isnothing(value[ii]) # do nothing if value is nothing
-            if !hasfield(typeof(value[ii]), :aml)
+    for i = 1:length(value)
+        vi = value[i]
+        Ti = typeof(vi)
+
+        if Ti !== Nothing # do nothing if value is nothing
+
+            if hasfield(Ti, :aml)
+                link!(aml,vi.aml)
+
+            elseif Tables.istable(vi)
+                link!(aml, amlTable(vi))
+
+            elseif hasmethod(aml, Tuple{Ti})
+                link!(aml, aml(vi))
+
+            else
                 if argAmlType == 0 # normal elements
 
-                    addelement!(aml, name, string(value[ii]))
+                    addelement!(aml, name, string(vi))
                 elseif argAmlType == 2 # Attributes
 
-                    link!(aml, AttributeNode(name, string(value[ii])))
+                    link!(aml, AttributeNode(name, string(vi)))
 
                 end
-            else
-                link!(aml,value[ii].aml)
             end
+
         end
     end
 end

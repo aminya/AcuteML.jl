@@ -77,7 +77,7 @@ GPA::Float64 = 4.5, "~"
 ```
 
 ### Value Types
-You can use Julia types or  defined types for values.
+You can use Julia types or defined types for values. see and [Supported Value Types](https://aminya.github.io/AcuteML.jl/dev/supportedValueTypes/)  [Custom Value Types](https://aminya.github.io/AcuteML.jl/dev/customValueTypes/) for more information.
 
 * If you don't specify the type of a variable, it is considered to be string for aml manipulations:
 ```julia
@@ -89,6 +89,8 @@ However, for a high performance code specify String type (`field::String, "study
 ```julia
 university::University, "university"
 ```
+
+* Table types are supported through PrettyTables.jl.
 
 ### Value Checking
 You can define any restriction for values using functions.
@@ -139,6 +141,7 @@ using AcuteML
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
+    professors::UN{DataFrame} = nothing, "table"
     id::Int64, a"~"
 end
 
@@ -240,6 +243,42 @@ julia> pprint(D) # or print(D.aml)
     <taken-courses>Julia</taken-courses>
   </person>
 </university>
+```
+
+P3 with Tables.jl type:
+```julia
+Profs1 = DataFrame(course = ["Artificial Intelligence", "Robotics"], professor = ["Prof. A", "Prof. B"] )
+
+P3 = Person(age=24, field="Mechanical Engineering", courses = ["Artificial Intelligence", "Robotics"], professors= Profs1, id = 1)
+```
+```html
+julia> pprint(P3)
+
+<person id="1">
+<age>24</age>
+<study-field>Mechanical Engineering</study-field>
+<GPA>4.5</GPA>
+<taken-courses>Artificial Intelligence</taken-courses>
+<taken-courses>Robotics</taken-courses>
+<table>
+<tr class="header">
+<th style="text-align: right; ">course</th>
+<th style="text-align: right; ">professor</th>
+</tr>
+<tr class="subheader headerLastRow">
+<th style="text-align: right; ">String</th>
+<th style="text-align: right; ">String</th>
+</tr>
+<tr>
+<td style="text-align: right; ">Artificial Intelligence</td>
+<td style="text-align: right; ">Prof. A</td>
+</tr>
+<tr>
+<td style="text-align: right; ">Robotics</td>
+<td style="text-align: right; ">Prof. B</td>
+</tr>
+</table>
+</person>
 ```
 -------------------------------------------------------
 

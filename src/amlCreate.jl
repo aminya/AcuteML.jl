@@ -1,7 +1,10 @@
 """
 @aml creator function
 """
-function amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T)
+function amlCreate(expr::Expr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T)
+
+    expr.head == :struct || error("Invalid usage of amlCreate")
+
     # defining outter constructors
     # Only define a constructor if the type has fields, otherwise we'll get a stack
     # overflow on construction

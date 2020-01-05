@@ -1,6 +1,8 @@
 using EzXML
 import EzXML: Document, Node
 
+import Tables
+
 export docOrElmInit, UN
 ################################################################
 UN{T}= Union{T, Nothing}

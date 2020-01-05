@@ -1,5 +1,5 @@
 using AcuteML
-using Test, Suppressor
+using Test, Suppressor, DataFrames
 
 # Type Definition
 @aml mutable struct Person "person", courseCheck
@@ -7,6 +7,7 @@ using Test, Suppressor
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
+    professors::UN{DataFrame} = nothing, "table"
     id::Int64, a"~"
 end
 
@@ -23,7 +24,7 @@ end
 # Value Checking Functions
 GPAcheck(x) = x <= 4.5 && x >= 0
 
-function courseCheck(age, field, GPA, courses, id)
+function courseCheck(age, field, GPA, courses, professors, id)
 
     if field == "Mechanical Engineering"
         relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
@@ -40,14 +41,15 @@ stripall(x::String) = replace(x, r"\s|\n"=>"")
 
 @testset "constructor" begin
 
-    P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
-    P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
+    P1 = Person(age=24, field="Mechanical Engineering", courses = ["Artificial Intelligence", "Robotics"], id = 1)
 
-    P2.GPA=4.2 # mutability support
+    P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
 
     U = University(name="Julia University", people=[P1, P2])
 
     D = Doc(university = U)
+
+    D.university.people[2].GPA=4.2 # mutability support after Doc creation
 
     @test stripall(@capture_out(pprint(P1))) == stripall("""
     <person id="1">
@@ -104,7 +106,42 @@ stripall(x::String) = replace(x, r"\s|\n"=>"")
       </person>
     </university>
     """)
+end
 
+@testset "Tables" begin
+
+    # Tables
+    Profs1 = DataFrame(course = ["Artificial Intelligence", "Robotics"], professor = ["Prof. A", "Prof. B"] )
+
+    P3 = Person(age=24, field="Mechanical Engineering", courses = ["Artificial Intelligence", "Robotics"], professors= Profs1, id = 1)
+
+    @test stripall(@capture_out(pprint(P3))) == stripall("""
+    <person id="1">
+  <age>24</age>
+  <study-field>Mechanical Engineering</study-field>
+  <GPA>4.5</GPA>
+  <taken-courses>Artificial Intelligence</taken-courses>
+  <taken-courses>Robotics</taken-courses>
+  <table>
+<tr class="header">
+<th style="text-align: right; ">course</th>
+<th style="text-align: right; ">professor</th>
+</tr>
+<tr class="subheader headerLastRow">
+<th style="text-align: right; ">String</th>
+<th style="text-align: right; ">String</th>
+</tr>
+<tr>
+<td style="text-align: right; ">Artificial Intelligence</td>
+<td style="text-align: right; ">Prof. A</td>
+</tr>
+<tr>
+<td style="text-align: right; ">Robotics</td>
+<td style="text-align: right; ">Prof. B</td>
+</tr>
+</table>
+</person>
+    """)
 
 end
 
