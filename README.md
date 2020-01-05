@@ -25,106 +25,11 @@ using AcuteML
 ```
 
 # Documentation
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AcuteML.jl/dev)
+Click on the badge: [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AcuteML.jl/dev)
 
--------------------------------------------------------
+See [Type Definition](https://aminya.github.io/AcuteML.jl/dev/#Main-macro-and-I/O-1) for comprehensive introduction to syntax. You can use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
-# Type Definition
-Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
-
-### Document Definition
-* Use `xd""` or `hd""` to define a XML or HTML document:
-```julia
-@aml mutable struct Doc xd""
-  # add fields (elements) here
-end
-```
-
-### Nodes (Elements) Definition
-* Specify the html/xml struct name as a string after the struct name after a space
-```julia
-@aml mutable struct Person "person"
-  # add fields (elements) here
-end
-```
-* If the html/xml name is the same as struct name, you can use `"~"` instead
-```julia
-@aml mutable struct person "~"
-  # add fields (elements) here
-end
-```
-
-### Fields Names
-* Sepecify the html/xml field name as a string in front of the field after `,`
-```julia
-field, "study-field"
-```
-* If the html/xml name is the same as variable name, you can use `"~"` instead
-```julia
-age::UInt, "~"
-```
-
-### Attributes
-* If the value is going to be an attribute put `a` before its name
-```julia
-id::Int64, a"~"
-```
-
-### Default Value
-* You can specify the default value for an argument by using `= defVal` syntax
-```julia
-GPA::Float64 = 4.5, "~"
-```
-
-### Value Types
-You can use Julia types or defined types for values. see and [Supported Value Types](https://aminya.github.io/AcuteML.jl/dev/supportedValueTypes/)  [Custom Value Types](https://aminya.github.io/AcuteML.jl/dev/customValueTypes/) for more information.
-
-* If you don't specify the type of a variable, it is considered to be string for aml manipulations:
-```julia
-field, "study-field"
-```
-However, for a high performance code specify String type (`field::String, "study-field"`)
-
-* For already `@aml` defined types, name should be the same as the defined type root name
-```julia
-university::University, "university"
-```
-
-* Table types are supported through PrettyTables.jl.
-
-### Value Checking
-You can define any restriction for values using functions.
-
-* To define any restrictions for the values of one field, define a function that checks a criteria for the field value and returns Bool, and put its name after a `,` after the field name:
-```julia
-GPA::Float64, "~", GPAcheck
-```
-
-* To define any restrictions for multiple values of a struct, define a function that gets all the variables and checks a criteria and returns Bool, and put its name after a `,` after the struct name:
-```julia
-@aml mutable struct Person "person", courseCheck
-# ...
-end
-```
-
-Refer to https://aminya.github.io/AcuteML.jl/dev/valueChecking/ for some of these functions examples.
-
-### Optional Fields
-* If a field is optional, don't forget to define its type as `UN{}` (Union with Nothing), and set the default value as `nothing`.
-```julia
-residence::UN{String}=nothing, "residence-stay" # optional with nothing as default value
-```
-```julia
-funds::UN{String}, "financial-funds"   # optional, but you should pass nothing manually in construction
-```
-
-### Empty Elements (Self-Closing) Definition
-* Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
-```julia
-@aml struct rest sc"~"
-end
-```
--------------------------------------------------------
+-----------------------------------------------
 
 # Example - Struct Definition
 
