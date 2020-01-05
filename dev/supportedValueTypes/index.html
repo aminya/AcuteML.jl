@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Supported Value Types · AcuteML.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link href="../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><h1>AcuteML.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../">Home</a></li><li><a class="toctext" href="../templating/">Templating</a></li><li><a class="toctext" href="../valueChecking/">Value Checking</a></li><li><a class="toctext" href="../valueChecking/">Value Checking</a></li><li class="current"><a class="toctext" href>Supported Value Types</a><ul class="internal"><li><a class="toctext" href="#@aml-defined-types-1"><code>@aml</code> defined types</a></li><li class="toplevel"><a class="toctext" href="#Tables-1">Tables</a></li><li><a class="toctext" href="#Dates-and-Time:-1">Dates and Time:</a></li></ul></li><li><a class="toctext" href="../customConstructors/">Custom Contructors</a></li><li><a class="toctext" href="../SyntaxReference/">Syntax Reference</a></li></ul></nav><article id="docs"><header><nav><ul><li><a href>Supported Value Types</a></li></ul><a class="edit-page" href="https://github.com/aminya/AcuteML.jl/blob/master/docs/src/supportedValueTypes.md#L"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Supported Value Types</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="Supported-Value-Types-1" href="#Supported-Value-Types-1">Supported Value Types</a></h1><p>You can use Julia types such as</p><ul><li>String</li><li>Number</li><li>Bool</li><li>Dates and Time</li><li>Tables.jl compatible types</li><li>...</li></ul><p>In addition you can use your <code>@aml</code> defined types in another <code>@aml</code> definition.</p><p>see <a href="https://aminya.github.io/AcuteML.jl/dev/customValueTypes/">Custom Value Types</a> for more information about all supported value types and custom value types.</p><h2><a class="nav-anchor" id="@aml-defined-types-1" href="#@aml-defined-types-1"><code>@aml</code> defined types</a></h2><p>For already <code>@aml</code> defined types, name should be the same as the defined type root name</p><pre><code class="language-julia">university::University, &quot;university&quot;</code></pre><h1><a class="nav-anchor" id="Tables-1" href="#Tables-1">Tables</a></h1><p>AcuteML uses PrettyTables.jl to crate HTML from Table type data.</p><pre><code class="language-julia"># Tables
+Profs1 = DataFrame(course = [&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;], professor = [&quot;Prof. A&quot;, &quot;Prof. B&quot;] )
+
+P3 = Person(age=24, field=&quot;Mechanical Engineering&quot;, courses = [&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;], professors= Profs1, id = 1)
+
+pprint(P3)
+#=
+&lt;person id=&quot;1&quot;&gt;
+&lt;age&gt;24&lt;/age&gt;
+&lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+&lt;GPA&gt;4.5&lt;/GPA&gt;
+&lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
+&lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
+&lt;table&gt;
+&lt;tr class=&quot;header&quot;&gt;
+&lt;th style=&quot;text-align: right; &quot;&gt;course&lt;/th&gt;
+&lt;th style=&quot;text-align: right; &quot;&gt;professor&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr class=&quot;subheader headerLastRow&quot;&gt;
+&lt;th style=&quot;text-align: right; &quot;&gt;String&lt;/th&gt;
+&lt;th style=&quot;text-align: right; &quot;&gt;String&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: right; &quot;&gt;Artificial Intelligence&lt;/td&gt;
+&lt;td style=&quot;text-align: right; &quot;&gt;Prof. A&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: right; &quot;&gt;Robotics&lt;/td&gt;
+&lt;td style=&quot;text-align: right; &quot;&gt;Prof. B&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/person&gt;
+=#</code></pre><h2><a class="nav-anchor" id="Dates-and-Time:-1" href="#Dates-and-Time:-1">Dates and Time:</a></h2><ul><li><a href="https://docs.julialang.org/en/v1/stdlib/Dates/#Dates.Date-Tuple{Int64,Int64,Int64}">Date</a></li></ul><p>Is covered under defined types, and it automatically is converted to the correct format</p><pre><code class="language-julia"># Defining
+Date(2013,7,1)
+Date(&quot;2013-7-1&quot;)</code></pre><pre><code class="language-xml">&lt;some-date&gt;YYYY-MM-DD&lt;/some-date&gt;
+&lt;some-date&gt;2013-07-01&lt;/some-date&gt;</code></pre><ul><li><a href="https://docs.julialang.org/en/v1/stdlib/Dates/#Dates.Time-NTuple{5,Int64}">Time</a></li></ul><p>Is covered under defined types, and it automatically is converted to the correct format</p><pre><code class="language-julia"># Defining
+Time(12,53,40)
+Time(&quot;12:53:40&quot;)</code></pre><pre><code class="language-xml">&lt;some-time&gt;hh:mm:ss&lt;/some-time&gt;
+&lt;some-time&gt;12:53:40&lt;/some-time&gt;</code></pre><ul><li><a href="https://docs.julialang.org/en/v1/stdlib/Dates/#Dates.DateTime-NTuple{7,Int64}">DateTime</a></li></ul><p>Is covered under defined types, and it automatically is converted to the correct format</p><pre><code class="language-julia"># Defining
+DateTime(2013,5,1,12,53,40)
+DateTime(&quot;2013-05-01T12:53:40&quot;)</code></pre><pre><code class="language-xml">&lt;some-datatime&gt;YYYY-MM-DDThh:mm:ss&lt;/some-datatime&gt;
+&lt;some-datatime&gt;2013-05-01T12:53:40&lt;/some-datatime&gt;</code></pre><footer><hr/><a class="previous" href="../valueChecking/"><span class="direction">Previous</span><span class="title">Value Checking</span></a><a class="next" href="../customConstructors/"><span class="direction">Next</span><span class="title">Custom Contructors</span></a></footer></article></body></html>
