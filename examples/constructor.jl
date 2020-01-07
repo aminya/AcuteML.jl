@@ -62,7 +62,7 @@ pprint(U) # or print(U.aml)
 
 pprint(D) # or print(D.aml)
 #=
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
 <university university-name="Julia University">
   <person id="1">
     <age>24</age>
