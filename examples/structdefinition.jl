@@ -1,3 +1,5 @@
+# see exmaples.jl first
+
 # Type Definition
 @aml mutable struct Person "person", courseCheck
     age::UInt64, "~"

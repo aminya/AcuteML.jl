@@ -1,3 +1,5 @@
+# see exmaples.jl first
+
 # Extractor
 xml = parsexml("""
 <?xml version="1.0" encoding="UTF-8"?>
