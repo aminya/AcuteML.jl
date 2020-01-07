@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Custom Value Types · AcuteML.jl</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">AcuteML.jl</span></div><form class="docs-search" action="search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="index.html">Home</a></li><li><a class="tocitem" href="valueChecking.html">Value Checking</a></li><li><a class="tocitem" href="supportedValueTypes.html">Supported Value Types</a></li><li><a class="tocitem" href="extraConstructors.html">Extra Contructors</a></li><li class="is-active"><a class="tocitem" href="customValueTypes.html">Custom Value Types</a><ul class="internal"><li><a class="tocitem" href="#Example-String-printing-and-parsing:-1"><span>Example - String printing and parsing:</span></a></li><li><a class="tocitem" href="#Example-Node-creation-and-parsing:-1"><span>Example - Node creation and parsing:</span></a></li></ul></li><li><a class="tocitem" href="customConstructors.html">Custom Contructors - AcuteML Backend</a></li><li><a class="tocitem" href="templating.html">Templating</a></li><li><a class="tocitem" href="SyntaxReference.html">Syntax Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="customValueTypes.html">Custom Value Types</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="customValueTypes.html">Custom Value Types</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/aminya/AcuteML.jl/blob/master/docs/src/customValueTypes.md#L" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Custom-Value-Types-1"><a class="docs-heading-anchor" href="#Custom-Value-Types-1">Custom Value Types</a><a class="docs-heading-anchor-permalink" href="#Custom-Value-Types-1" title="Permalink"></a></h1><p>In order to make a custom type work with <code>@aml</code>, you need to define two methods for your type:</p><ol><li></li></ol><pre><code class="language-julia"># String printing
+string(x::yourType) = some_string_as_your_type_content
+
+# or
+
+# Node creation
+aml(x::yourType) = a_Node</code></pre><ol><li></li></ol><pre><code class="language-julia"># String parsing
+yourType(x::String) = a_type_made_from_a_string
+
+# or
+
+# Node parsing
+yourType(x::Node) = a_type_made_from_a_Node</code></pre><hr/><p>Date and Time types are supported through string printing and parsing. Tables compatible types are supported through Node creation and parsing. A combination of two options for each method is also possible.</p><h2 id="Example-String-printing-and-parsing:-1"><a class="docs-heading-anchor" href="#Example-String-printing-and-parsing:-1">Example - String printing and parsing:</a><a class="docs-heading-anchor-permalink" href="#Example-String-printing-and-parsing:-1" title="Permalink"></a></h2><pre><code class="language-julia"># Defining
+Date(2013,7,1)
+
+# Methods Check
+string(Date(2013,7,1))
+Date(&quot;2013-7-1&quot;)
+############################
+# Defining
+Time(12,53,40)
+
+# Methods Check
+string(Time(12,53,40))
+Time(&quot;12:53:40&quot;)
+############################
+# Defining
+DateTime(2013,5,1,12,53,40)
+
+# Methods Check
+# check
+string(DateTime(2013,5,1,12,53,40))
+DateTime(&quot;2013-05-01T12:53:40&quot;)</code></pre><h2 id="Example-Node-creation-and-parsing:-1"><a class="docs-heading-anchor" href="#Example-Node-creation-and-parsing:-1">Example - Node creation and parsing:</a><a class="docs-heading-anchor-permalink" href="#Example-Node-creation-and-parsing:-1" title="Permalink"></a></h2><p>You can directly create a Node using AcuteML utilities. See <a href="https://aminya.github.io/AcuteML.jl/dev/customConstructors/">Custom Constructors</a> for more information.</p><p>You can also use a templating features of AcuteML to make a html as a string. For example, write a <code>html_as_string</code> function that returns the html as a string then, use <code>findfirst(&quot;html/body/HeaderName&quot;,parsehtml(str))</code> to parse it.</p><pre><code class="language-julia">function aml(x::YourType)
+  str::Stirng = hmtl_as_string(x)
+
+  html = findfirst(&quot;html/body/HeaderName&quot;,parsehtml(str))
+  unlink!(html)
+  return html
+end
+</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="extraConstructors.html">« Extra Contructors</a><a class="docs-footer-nextpage" href="customConstructors.html">Custom Contructors - AcuteML Backend »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Tuesday 7 January 2020 00:50">Tuesday 7 January 2020</span>. Using Julia version 1.5.0-DEV.16.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
