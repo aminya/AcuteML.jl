@@ -2,7 +2,7 @@
 ## Acute Markup Language
 
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AcuteML.jl/dev)
-[![Build Status (Travis)](https://travis-ci.com/aminya/AcuteML.jl.svg?branch=master)](https://travis-ci.com/aminya/AcuteML.jl)
+![Build Status (Github Actions)](https://github.com/aminya/AcuteML.jl/workflows/CI/badge.svg)
 [![Build status (Appveyor)](https://ci.appveyor.com/api/projects/status/65fuh2yi0qx99rv4?svg=true)](https://ci.appveyor.com/project/aminya/acuteml-jl)
 
 
