@@ -10,28 +10,31 @@ export addelementOne!, addelementVect!
 Function to initialize the aml
 
 type:
-0 : element node # default
-10: empty element node
--1: xml
--2: html
+"" : element node # default
+sc: empty element node (self closing)
+
+name:
+"html"
+"xml"
+"something"
 """
-function docOrElmInit(type::Int64 = 0, name::String = nothing)
+function docOrElmInit(literal::String = "", name::String = nothing)
 
-    if type == 0 # element node
+    if literal === "" || "sc"
 
-        out = ElementNode(name)
+        if name == "html"
+            out = HTMLDocument() # no URI and external id
+            htmlNode = ElementNode("html")
+            setroot!(out, htmlNode) # adding html node
 
-    elseif type == 10 # empty element node
-
-        out = ElementNode(name)
-
-    elseif type == -1 # xml
-
-        out = XMLDocument() # version 1
-
-    elseif type == -2 # html
-
-        out = HTMLDocument() # no URI and external id
+        elseif name == "xml"
+            out = XMLDocument() # version 1
+            
+        else
+            out = ElementNode(name) # element node
+        end
+    else
+        error("document or element cannot be initialized")
     end
 
     return out
