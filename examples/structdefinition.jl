@@ -1,3 +1,5 @@
+# see exmaples.jl first
+
 # Type Definition
 @aml mutable struct Person "person", courseCheck
     age::UInt64, "~"
@@ -13,7 +15,7 @@ end
     people::Vector{Person}, "person"
 end
 
-@aml mutable struct Doc xd""
+@aml mutable struct Doc "xml"
     university::University, "~"
 end
 

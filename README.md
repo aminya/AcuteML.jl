@@ -55,7 +55,7 @@ end
     people::Vector{Person}, "person"
 end
 
-@aml mutable struct Doc xd""
+@aml mutable struct Doc "xml"
     university::University, "~"
 end
 
@@ -132,7 +132,7 @@ julia> pprint(U) # or print(U.aml)
 </university>
 
 julia> pprint(D) # or print(D.aml)
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
 <university university-name="Julia University">
   <person id="1">
     <age>24</age>
@@ -196,7 +196,7 @@ After we defined the structs, we can automatically extract and store the data in
 using AcuteML
 
 xml = parsexml("""
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
 <university university-name="Julia University">
   <person id="1">
     <age>24</age>
@@ -208,7 +208,7 @@ xml = parsexml("""
   <person id="2">
     <age>18</age>
     <study-field>Computer Engineering</study-field>
-    <GPA>4</GPA>
+    <GPA>4.2</GPA>
     <taken-courses>Julia</taken-courses>
   </person>
 </university>

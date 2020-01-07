@@ -2,10 +2,18 @@ module AcuteML
 
 import EzXML.Node
 
+# missing julia functions for old versions 
+if VERSION < v"1.2.0"
+    hasfield(::Type{T}, name::Symbol) where T  = Core.Compiler.fieldindex(T, name, false) > 0
+    if VERSION < v"1.1.0"
+        isnothing(x) = x === nothing
+    end
+end
+
 # aml macro
 include("xmlutils.jl")
 include("amlParse.jl")
-# include("amlParseDynamic.jl") # kept only for the record
+# include("deprecated/amlParseDynamic.jl") # kept only for the record
 include("amlCreate.jl")
 
 # io
@@ -135,21 +143,21 @@ using AcuteML
 
 # Person Type
 @aml mutable struct Person "person", courseCheck
-  age::UInt64, "~"
-  field, "study-field"
-  GPA::Float64 = 4.5, "~", GPAcheck
-  courses::Vector{String}, "taken-courses"
-  professors::UN{DataFrame} = nothing, "table"
-  id::Int64, a"~"
+    age::UInt64, "~"
+    field, "study-field"
+    GPA::Float64 = 4.5, "~", GPAcheck
+    courses::Vector{String}, "taken-courses"
+    professors::UN{DataFrame} = nothing, "table"
+    id::Int64, a"~"
 end
 
 @aml mutable struct University "university"
-  name, a"university-name"
-  people::Vector{Person}, "person"
+    name, a"university-name"
+    people::Vector{Person}, "person"
 end
 
-@aml mutable struct Doc xd""
-  university::University, "~"
+@aml mutable struct Doc "xml"
+    university::University, "~"
 end
 
 ```
@@ -160,15 +168,15 @@ GPAcheck(x) = x <= 4.5 && x >= 0
 
 function courseCheck(age, field, GPA, courses, id)
 
-  if field == "Mechanical Engineering"
-      relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
-  elseif field == "Computer Engineering"
-      relevant = ["Julia", "Algorithms"]
-  else
-      error("study field is not known")
-  end
+    if field == "Mechanical Engineering"
+        relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
+    elseif field == "Computer Engineering"
+        relevant = ["Julia", "Algorithms"]
+    else
+        error("study field is not known")
+    end
 
-  return any(in.(courses, Ref(relevant)))
+    return any(in.(courses, Ref(relevant)))
 end
 ```
 -------------------------------------------------------
@@ -200,46 +208,46 @@ GPA doesn't meet criteria function
 ```html
 julia> pprint(P1) # or print(P1.aml)
 <person id="1">
-<age>24</age>
-<study-field>Mechanical Engineering</study-field>
-<GPA>4.5</GPA>
-<taken-courses>Artificial Intelligence</taken-courses>
-<taken-courses>Robotics</taken-courses>
+  <age>24</age>
+  <study-field>Mechanical Engineering</study-field>
+  <GPA>4.5</GPA>
+  <taken-courses>Artificial Intelligence</taken-courses>
+  <taken-courses>Robotics</taken-courses>
 </person>
 
 julia> pprint(U) # or print(U.aml)
 <university university-name="Julia University">
-<person id="1">
-  <age>24</age>
-  <study-field>Mechanical Engineering</study-field>
-  <GPA>4.5</GPA>
-  <taken-courses>Artificial Intelligence</taken-courses>
-  <taken-courses>Robotics</taken-courses>
-</person>
-<person id="2">
-  <age>18</age>
-  <study-field>Computer Engineering</study-field>
-  <GPA>4.2</GPA>
-  <taken-courses>Julia</taken-courses>
-</person>
+  <person id="1">
+    <age>24</age>
+    <study-field>Mechanical Engineering</study-field>
+    <GPA>4.5</GPA>
+    <taken-courses>Artificial Intelligence</taken-courses>
+    <taken-courses>Robotics</taken-courses>
+  </person>
+  <person id="2">
+    <age>18</age>
+    <study-field>Computer Engineering</study-field>
+    <GPA>4.2</GPA>
+    <taken-courses>Julia</taken-courses>
+  </person>
 </university>
 
 julia> pprint(D) # or print(D.aml)
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
 <university university-name="Julia University">
-<person id="1">
-  <age>24</age>
-  <study-field>Mechanical Engineering</study-field>
-  <GPA>4.5</GPA>
-  <taken-courses>Artificial Intelligence</taken-courses>
-  <taken-courses>Robotics</taken-courses>
-</person>
-<person id="2">
-  <age>18</age>
-  <study-field>Computer Engineering</study-field>
-  <GPA>4.2</GPA>
-  <taken-courses>Julia</taken-courses>
-</person>
+  <person id="1">
+    <age>24</age>
+    <study-field>Mechanical Engineering</study-field>
+    <GPA>4.5</GPA>
+    <taken-courses>Artificial Intelligence</taken-courses>
+    <taken-courses>Robotics</taken-courses>
+  </person>
+  <person id="2">
+    <age>18</age>
+    <study-field>Computer Engineering</study-field>
+    <GPA>4.2</GPA>
+    <taken-courses>Julia</taken-courses>
+  </person>
 </university>
 ```
 
@@ -289,7 +297,7 @@ After we defined the structs, we can automatically extract and store the data in
 using AcuteML
 
 xml = parsexml(\"\"\"
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
 <university university-name="Julia University">
   <person id="1">
     <age>24</age>
@@ -301,7 +309,7 @@ xml = parsexml(\"\"\"
   <person id="2">
     <age>18</age>
     <study-field>Computer Engineering</study-field>
-    <GPA>4</GPA>
+    <GPA>4.2</GPA>
     <taken-courses>Julia</taken-courses>
   </person>
 </university>

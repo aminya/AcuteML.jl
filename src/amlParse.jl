@@ -1,21 +1,8 @@
 ################################################################
 # Literal Macros:
-# html document
-macro hd_str(s)
-    docOrElmType = -1
-    return docOrElmType, s
-end
-
-
-# xml document
-macro xd_str(s)
-    docOrElmType = -2
-    return docOrElmType, s
-end
-
 # self-closing
 macro sc_str(s)
-    docOrElmType= 10
+    docOrElmType= "sc"
     return docOrElmType, s
 end
 
@@ -61,7 +48,7 @@ function amlParse(expr::Expr)
     argFuns = Vector{Union{Missing, Symbol, Function}}(undef, numArgs)
     argAmlTypes = Int64[]
     amlName = "my type"
-    docOrElmType = 0
+    docOrElmType = ""
     amlFun = Array{Union{Missing, Symbol, Function},0}(undef)
 
     for iData = 1:numData # iterating over arguments of each type argument
@@ -89,10 +76,10 @@ function amlParse(expr::Expr)
             end
 
             argExpr.args[i] =  nothing # removing "aml name" from expr args
-            docOrElmType = 0
+            docOrElmType = "" # decided based on name
 
         ################################################################
-        # Literal Struct name - xd/hd"aml name"
+        # Literal Struct name - sc"aml name"
         elseif isa(ei, Tuple)
             ################################################################
             # Struct aml
@@ -119,8 +106,8 @@ function amlParse(expr::Expr)
             end
 
         elseif ei.head == :tuple
-                ########################
-                # Struct Function - "aml name", F
+            ########################
+            # Struct Function - "aml name", F
             if isa(ei.args[1], String) && isa(ei.args[2], Union{Symbol,Function}) # "aml name", F
 
                 amlFun[1]=ei.args[2] # function
@@ -136,11 +123,11 @@ function amlParse(expr::Expr)
                     amlName = ei.args[1] # Type aml name
                 end
 
-                docOrElmType = 0
+                docOrElmType = "" # decided based on name
                 argExpr.args[i] =  nothing # removing "aml name" from expr args
 
-                ########################
-                # Literal and Struct Function - xd/hd"aml name", F
+            ########################
+            # Literal and Struct Function - xd/hd"aml name", F
             elseif isa(ei.args[1], Tuple)  && isa(ei.args[2], Union{Symbol,Function})
 
                 amlFun[1]=ei.args[2] # function
@@ -160,7 +147,7 @@ function amlParse(expr::Expr)
                 argExpr.args[i] =  nothing # removing "aml name" from expr args
         ################################################################
         # Arguments
-            ########################
+        ########################
             # No Def Value
             elseif ei.args[1] isa Union{Symbol,Expr} # var/var::T, "name"
 
@@ -400,7 +387,7 @@ function amlParse(expr::Expr)
 
     ########################
     # self closing tags checker
-    if  docOrElmType == 10
+    if  docOrElmType == "sc"
         # add a field with nothing type
         push!(argNames, "content") # argument ignored for aml
         push!(argTypes, Nothing)
