@@ -2,7 +2,7 @@ module AcuteML
 
 import EzXML.Node
 
-# missing julia functions for old versions 
+# missing julia functions for old versions
 if VERSION < v"1.2.0"
     hasfield(::Type{T}, name::Symbol) where T  = Core.Compiler.fieldindex(T, name, false) > 0
     if VERSION < v"1.1.0"
@@ -39,9 +39,14 @@ export @xd_str, @hd_str, @sc_str, @a_str
 Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
 ### Document Definition
-* Use `xd""` or `hd""` to define a XML or HTML document:
+* Use `"html"` or `"xml"` to define a HTML or XML document:
 ```julia
-@aml mutable struct Doc xd""
+@aml mutable struct Doc "xml"
+# add fields (elements) here
+end
+```
+```julia
+@aml mutable struct Web "html"
 # add fields (elements) here
 end
 ```
