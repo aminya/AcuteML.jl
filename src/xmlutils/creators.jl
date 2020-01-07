@@ -20,7 +20,7 @@ name:
 """
 function docOrElmInit(literal::String = "", name::String = nothing)
 
-    if literal === "" || "sc"
+    if literal === "" || literal === "sc"
 
         if name == "html"
             out = HTMLDocument() # no URI and external id
@@ -29,7 +29,7 @@ function docOrElmInit(literal::String = "", name::String = nothing)
 
         elseif name == "xml"
             out = XMLDocument() # version 1
-            
+
         else
             out = ElementNode(name) # element node
         end
@@ -98,11 +98,11 @@ function addelementOne!(aml::Node, name::String, value::String, argAmlType::Int6
 
     if !isnothing(value) # do nothing if value is nothing
 
-        if argAmlType == 0 # normal elements
+        if argAmlType === 0 # normal elements
 
             addelement!(aml, name, value)
 
-        elseif argAmlType == 2 # Attributes
+        elseif argAmlType === 2 # Attributes
 
             link!(aml, AttributeNode(name, value))
 
@@ -115,10 +115,10 @@ function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) wh
 
     if !isnothing(value) # do nothing if value is nothing
 
-        if argAmlType == 0 # normal elements
+        if argAmlType === 0 # normal elements
 
             addelement!(aml, name, string(value))
-        elseif argAmlType == 2 # Attributes
+        elseif argAmlType === 2 # Attributes
 
             link!(aml, AttributeNode(name, string(value)))
 
@@ -138,10 +138,10 @@ function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) wh
         link!(aml,aml(value))
 
     else
-        if argAmlType == 0 # normal elements
+        if argAmlType === 0 # normal elements
 
             addelement!(aml, name, string(value))
-        elseif argAmlType == 2 # Attributes
+        elseif argAmlType === 2 # Attributes
 
             link!(aml, AttributeNode(name, string(value)))
 
@@ -157,7 +157,7 @@ end
 function addelementVect!(aml::Node, name::String, value::Vector{String}, argAmlType::Int64)
 
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         for i = 1:length(value)
             if !isnothing(value[i]) # do nothing if value is nothing
@@ -165,7 +165,7 @@ function addelementVect!(aml::Node, name::String, value::Vector{String}, argAmlT
             end
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         for i = 1:length(value)
             if !isnothing(value[i]) # do nothing if value is nothing
@@ -178,7 +178,7 @@ end
 # vector of numbers
 function addelementVect!(aml::Node, name::String, value::Vector{T}, argAmlType::Int64) where {T<:Union{Number, Bool}}
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         for i = 1:length(value)
             if !isnothing(value[i]) # do nothing if value is nothing
@@ -186,7 +186,7 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}, argAmlType::
             end
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         for i = 1:length(value)
             if !isnothing(value[i]) # do nothing if value is nothing
@@ -214,10 +214,10 @@ function addelementVect!(aml::Node, name::String, value::Vector{T}, argAmlType::
                 link!(aml, aml(vi))
 
             else
-                if argAmlType == 0 # normal elements
+                if argAmlType === 0 # normal elements
 
                     addelement!(aml, name, string(vi))
-                elseif argAmlType == 2 # Attributes
+                elseif argAmlType === 2 # Attributes
 
                     link!(aml, AttributeNode(name, string(vi)))
 

@@ -10,7 +10,7 @@ Updates first element content. It also converts any type to string. element is g
 """
 function updatefirstcontent!(value::T, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T<:Union{String, Number, Bool}} # for strings, number and bool
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -24,7 +24,7 @@ function updatefirstcontent!(value::T, s::String, node::Union{Node, Document}, a
             elm.content = value
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         if haskey(node, s)
             node[s] = value
@@ -42,7 +42,7 @@ end
 # for defined types
 function updatefirstcontent!(value::T, s::String,node::Union{Node, Document}, argAmlType::Int64) where {T}
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -61,7 +61,7 @@ function updatefirstcontent!(value::T, s::String,node::Union{Node, Document}, ar
             end
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         if haskey(node, s)
             elm = node[s]
@@ -80,7 +80,7 @@ end
 # Nothing Alone
 function updatefirstcontent!(value::Nothing, s::String,node::Union{Node, Document}, argAmlType::Int64)
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -94,7 +94,7 @@ function updatefirstcontent!(value::Nothing, s::String,node::Union{Node, Documen
             unlink!(elm)
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         if haskey(node, s)
             elm = node[s]
@@ -118,7 +118,7 @@ Finds all the elements with the address of string in the node, and updates the c
 function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
 
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
@@ -136,7 +136,7 @@ function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Docume
             end
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         if haskey(node, s)
             elmsNode = node[s]
@@ -154,7 +154,7 @@ end
 # for defined types and nothing
 function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T}
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
@@ -162,7 +162,7 @@ function updateallcontent!(value::Vector{T}, s::String, node::Union{Node, Docume
             elmsNode = findalllocal(s, node) # a vector of Node elements
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         if haskey(node, s)
             elmsNode = node[s]

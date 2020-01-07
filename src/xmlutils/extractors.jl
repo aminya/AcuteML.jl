@@ -51,7 +51,7 @@ findfirstcontent(UInt8,"/midi-channel",node, 0)
 """
 function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T<:String} # for strings
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -65,7 +65,7 @@ function findfirstcontent(::Type{T}, s::String, node::Union{Node, Document}, arg
             return elm.content
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         if haskey(node, s)
             elm = node[s]
@@ -89,7 +89,7 @@ findfirstcontent(s::String,node::Union{Node, Document}, argAmlType::Int64) = fin
 # for numbers
 function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, argAmlType::Int64) where {T<:Union{Number,Bool}}
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -103,7 +103,7 @@ function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, argAm
             return parse(T, elm.content)
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         if haskey(node, s)
             elm = parse(T, node[s])
@@ -122,7 +122,7 @@ end
 # for defined types
 function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, argAmlType::Int64) where {T}
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elm = findfirst(s,node)
@@ -136,7 +136,7 @@ function findfirstcontent(::Type{T},s::String,node::Union{Node, Document}, argAm
             return T(elm)
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         if haskey(node, s)
             elm = node[s]
@@ -170,7 +170,7 @@ findallcontent(UInt8,"/midi-channel",node, 0)
 function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T<:String} # for strings
 
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
@@ -190,7 +190,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
             return elmsType
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         if haskey(node, s)
             elmsNode = node[s]
@@ -212,7 +212,7 @@ findallcontent(s::String, node::Union{Node, Document}, argAmlType::Int64) = find
 # for numbers
 function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T<:Union{Number,Bool}}
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
@@ -232,7 +232,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
             return elmsType
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         if haskey(node, s)
             elmsNode = parse(T, node[s])
@@ -256,7 +256,7 @@ end
 # for defined types
 function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T}
 
-    if argAmlType == 0 # normal elements
+    if argAmlType === 0 # normal elements
 
         if typeof(node) == Document || hasdocument(node)
             elmsNode = findall(s, node) # a vector of Node elements
@@ -264,7 +264,7 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Union{Node, Document
             elmsNode = findalllocal(s, node) # a vector of Node elements
         end
 
-    elseif argAmlType == 2 # Attributes
+    elseif argAmlType === 2 # Attributes
 
         if haskey(node, s)
             elmsNode = node[s]
