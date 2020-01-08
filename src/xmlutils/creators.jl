@@ -108,7 +108,7 @@ function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsAttrib
     end
 end
 
-function addelementOne!(aml::Node, name::String, value::Nothing, argAmlType::Int64)
+function addelementOne!(aml::Node, name::String, value::Nothing, argAmlType::Type)
     # do nothing
 end
 ################################################################
