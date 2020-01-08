@@ -37,6 +37,7 @@ end
 ################################################################
 # Nodes
 ################################################################
+# Local searchers (no namespace)
 """
     findfirstlocal(string, node)
 
@@ -317,11 +318,20 @@ function findallcontent(::Type{Vector{T}}, s::String, node::Node, argAmlType::In
     if isnothing(elmsNode) # return nothing if nothing is found
         return nothing
     else
-        elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
-        i=1
-        for elm in elmsNode
-            elmsType[i]=T(elm)
-            i+=1
+        if hasmethod(T, Tuple{String}) && Core.Compiler.return_type(T, Tuple{Node}) === Union{}
+            elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+            i=1
+            for elm in elmsNode
+                elmsType[i]=T(elm.content)
+                i+=1
+            end
+        else
+            elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+            i=1
+            for elm in elmsNode
+                elmsType[i]=T(elm)
+                i+=1
+            end
         end
         return elmsType
     end
@@ -333,3 +343,6 @@ findallcontent(::Type{Vector{UN{T}}},s::String,node::Node, argAmlType::Int64) wh
 
 # Nothing Alone
 findallcontent(::Type{Vector{Nothing}},s::String,node::Node, argAmlType::Int64) = nothing
+
+# vector of Any - consider it to be string
+findallcontent(::Type{Vector{Any}},s::String,node::Node, argAmlType::Int64) = findallcontent(Vector{String},s,node, argAmlType)
