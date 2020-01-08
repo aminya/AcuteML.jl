@@ -1,23 +1,3 @@
-################################################################
-# Literal Macros:
-# self-closing
-macro sc_str(s)
-    docOrElmType= "sc"
-    return docOrElmType, s
-end
-
-# attribute
-macro a_str(s)
-    argAmlType = 2
-    return argAmlType, s
-end
-
-# namespace
-macro ns_str(s)
-    argAmlType = 18
-    return argAmlType, s
-end
-################################################################
 """
 @aml parser function
 """
