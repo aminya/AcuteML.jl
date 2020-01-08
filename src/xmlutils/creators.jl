@@ -78,7 +78,7 @@ function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsAttrib
 end
 
 # Defined
-function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) where {T}
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsNormal) where {T}
     if hasfield(T, :aml)
         link!(aml,value.aml)
 
@@ -89,14 +89,22 @@ function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) wh
         link!(aml,aml(value))
 
     else
-        if argAmlType === 0 # normal elements
+        addelement!(aml, name, string(value))
+    end
+end
 
-            addelement!(aml, name, string(value))
-        elseif argAmlType === 2 # Attributes
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsAttribute) where {T}
+    if hasfield(T, :aml)
+        link!(aml, AttributeNode(name, value.aml))
 
-            link!(aml, AttributeNode(name, string(value)))
+    elseif Tables.istable(value)
+        link!(aml, AttributeNode(name, amlTable(value)))
 
-        end
+    elseif hasmethod(aml, Tuple{T})
+        link!(aml, AttributeNode(name, aml(value)))
+
+    else
+        link!(aml, AttributeNode(name, string(value)))
     end
 end
 
