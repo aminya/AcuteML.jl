@@ -48,10 +48,10 @@ end
 
 findfirst with ignoring namespaces. It considers element.name for returning the elements
 """
-function findfirstlocal(s::String, node::Node)
+function findfirstlocal( name::String, node::Node)
     out = nothing # return nothing if nothing is found
     for child in eachelement(node)
-        if child.name == s
+        if child.name == name
             out = child
             break
         end
@@ -64,10 +64,10 @@ end
 
 findalllocal with ignoring namespaces. It considers element.name for returning the elements
 """
-function findalllocal(s::String, node::Node)
+function findalllocal( name::String, node::Node)
     out = Node[]
     for child in eachelement(node)
-        if child.name == s
+        if child.name == name
             push!(out, child)
         end
     end
