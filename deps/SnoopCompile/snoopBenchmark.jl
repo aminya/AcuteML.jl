@@ -12,6 +12,7 @@ println("examples infer benchmark")
 
     # Use runtests.jl
     # include(joinpath(dirname(dirname(pathof(AcuteML))), "test","runtests.jl"))
+    include(joinpath(dirname(dirname(pathof(AcuteML))), "test","xmlutils.jl"))
 
     # Ues examples
     include(joinpath(dirname(dirname(pathof(AcuteML))), "examples","examples.jl"))
