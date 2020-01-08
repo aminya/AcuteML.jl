@@ -51,21 +51,10 @@ end
 ################################################################
 # Nodes
 ################################################################
-
-# strings
-function addelementOne!(aml::Node, name::String, value::String, argAmlType::Int64)
-
+# String
+function addelementOne!(aml::Node, name::String, value::String, argAmlType::AbsNormal)
     if !isnothing(value) # do nothing if value is nothing
-
-        if argAmlType === 0 # normal elements
-
-            addelement!(aml, name, value)
-
-        elseif argAmlType === 2 # Attributes
-
-            link!(aml, AttributeNode(name, value))
-
-        end
+        addelement!(aml, name, value)
     end
 end
 
