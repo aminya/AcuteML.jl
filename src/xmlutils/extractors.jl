@@ -89,120 +89,112 @@ findfirstcontent("/instrument-name",node, 0)
 findfirstcontent(UInt8,"/midi-channel",node, 0)
 ```
 """
-function findfirstcontent(::Type{T}, s::String, node::Node, argAmlType::Int64) where{T<:String} # for strings
+function findfirstcontent(::Type{T},  name::String, node::Node, argAmlType::Type{AbsNormal}) where{T<:String} # for strings
 
-    if argAmlType === 0 # normal elements
-
-        if hasdocument(node)
-            elm = findfirst(s,node)
-        else
-            elm = findfirstlocal(s,node)
-        end
-
-        if isnothing(elm) # return nothing if nothing is found
-            return nothing
-        else
-            return elm.content
-        end
-
-    elseif argAmlType === 2 # Attributes
-
-        if haskey(node, s)
-            elm = node[s]
-            return elm
-
-        else # return nothing if nothing is found
-            elm = nothing
-            return elm
-        end
-
+    if hasdocument(node)
+        elm = findfirst(name,node)
+    else
+        elm = findfirstlocal(name,node)
     end
 
+    if isnothing(elm) # return nothing if nothing is found
+        return nothing
+    else
+        return elm.content
+    end
+end
 
+function findfirstcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:String} # for strings
+    if haskey(node, name)
+        elm = node[name]
+        return elm
 
+    else # return nothing if nothing is found
+        elm = nothing
+        return elm
+    end
 end
 
 
 # if no type is provided consider it to be string
-findfirstcontent(s::String,node::Node, argAmlType::Int64) = findfirstcontent(Union{String, Nothing}, s, node, argAmlType)
+findfirstcontent( name::String,node::Node, argAmlType::Type{<:AbsDocOrNode}) = findfirstcontent(Union{String, Nothing}, name, node, argAmlType) # Union!!!
 
-# for numbers
-function findfirstcontent(::Type{T},s::String, node::Node, argAmlType::Int64) where {T<:Union{Number,Bool}}
+# Number,Bool
+function findfirstcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsNormal}) where {T<:Union{Number,Bool}}
 
-    if argAmlType === 0 # normal elements
-
-        if hasdocument(node)
-            elm = findfirst(s,node)
-        else
-            elm = findfirstlocal(s,node)
-        end
-
-        if isnothing(elm) # return nothing if nothing is found
-            return nothing
-        else
-            return parse(T, elm.content)
-        end
-
-    elseif argAmlType === 2 # Attributes
-
-        if haskey(node, s)
-            elm = parse(T, node[s])
-            return elm
-
-        else # return nothing if nothing is found
-            elm = nothing
-            return elm
-        end
-
+    if hasdocument(node)
+        elm = findfirst(name,node)
+    else
+        elm = findfirstlocal(name,node)
     end
 
+    if isnothing(elm) # return nothing if nothing is found
+        return nothing
+    else
+        return parse(T, elm.content)
+    end
 
 end
 
+function findfirstcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:Union{Number,Bool}}
+    if haskey(node, name)
+        elm = parse(T, node[name])
+        return elm
+
+    else # return nothing if nothing is found
+        elm = nothing
+        return elm
+    end
+end
+
+
 # for defined types
-function findfirstcontent(::Type{T},s::String,node::Node, argAmlType::Int64) where {T}
+function findfirstcontent(::Type{T}, name::String,node::Node, argAmlType::Type{AbsNormal}) where {T}
 
-    if argAmlType === 0 # normal elements
-
-        if hasdocument(node)
-            elm = findfirst(s,node)
-        else
-            elm = findfirstlocal(s,node)
-        end
-
-        if isnothing(elm) # return nothing if nothing is found
-            return nothing
-        else
-            # TODO: better specialized method detection
-            # https://julialang.slack.com/archives/C6A044SQH/p1578442480438100
-            if hasmethod(T, Tuple{String}) &&  Core.Compiler.return_type(T, Tuple{Node})=== Union{}
-                return T(elm.content)
-            else
-                return T(elm)
-            end
-        end
-
-    elseif argAmlType === 2 # Attributes
-
-        if haskey(node, s)
-            elm = node[s]
-            return elm
-
-        else # return nothing if nothing is found
-            elm = nothing
-            return elm
-        end
-
+    if hasdocument(node)
+        elm = findfirst(name,node)
+    else
+        elm = findfirstlocal(name,node)
     end
 
+    if isnothing(elm) # return nothing if nothing is found
+        return nothing
+    else
+        # TODO: better specialized method detection
+        # https://julialang.slack.com/archives/C6A044SQH/p1578442480438100
+        if hasmethod(T, Tuple{String}) &&  Core.Compiler.return_type(T, Tuple{Node})=== Union{}
+            return T(elm.content)
+        else
+            return T(elm)
+        end
+    end
+
+end
+
+
+function findfirstcontent(::Type{T}, name::String,node::Node, argAmlType::Type{AbsAttribute}) where {T}
+
+    if haskey(node, name)
+        elm = node[name]
+        return elm
+
+    else # return nothing if nothing is found
+        elm = nothing
+        return elm
+    end
 
 end
 
 # Union with Nothing
-findfirstcontent(::Type{UN{T}},s::String,node::Node, argAmlType::Int64) where {T} = findfirstcontent(T,s,node, argAmlType)
+findfirstcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{<:AbsDocOrNode}) where {T} = findfirstcontent(T, name, node, argAmlType)
+
+findfirstcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{AbsNormal}) where {T} = findfirstcontent(T, name, node, argAmlType)
 
 # Nothing Alone
-findfirstcontent(::Type{Nothing},s::String,node::Node, argAmlType::Int64) = nothing
+findfirstcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{<:AbsDocOrNode}) = nothing
+
+findfirstcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{AbsNormal}) = nothing
+
 ################################################################
 # Vector extraction
 """
