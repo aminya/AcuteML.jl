@@ -22,6 +22,22 @@ function findallcontent( name::String, doc::Document, argAmlType::Type{AbsNormal
     name = '/'* name
     findallcontent(Vector{String}, name, root(doc), argAmlType)
 end
+
+# For attributes search in the root
+function findfirstcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{AbsAttribute}) where {T}
+    findfirstcontent(T, name, root(doc), argAmlType)
+end
+
+function findfirstcontent(name::String, doc::Document, argAmlType::Type{AbsAttribute})
+    findfirstcontent(String, name, root(doc), argAmlType)
+end
+
+function findallcontent(::Type{T},  name::String, doc::Document, argAmlType::Type{AbsAttribute}) where {T}
+    findallcontent(T, name, root(doc), argAmlType)
+end
+
+function findallcontent(name::String, doc::Document, argAmlType::Type{AbsAttribute})
+    findallcontent(Vector{String}, name, root(doc), argAmlType)
 end
 ################################################################
 # Nodes
