@@ -183,7 +183,7 @@ function amlCreate(expr::Expr, argParams, argDefVal, argTypes, argVars, argNames
         # Type name is a single name (symbol)
         if T isa Symbol
 
-            docOrElmconst = :( aml = docOrElmInit($docOrElmType) )
+            docOrElmconst = :( aml = docOrElmInit($docOrElmType, $amlName) )
 
             typeDefinition =:($expr)
 
@@ -245,7 +245,7 @@ function amlCreate(expr::Expr, argParams, argDefVal, argTypes, argVars, argNames
             Q = [U isa Expr && U.head == :<: ? U.args[1] : U for U in P]
             SQ = :($S{$(Q...)})
 
-            docOrElmconst = :( aml = docOrElmInit($docOrElmType) )
+            docOrElmconst = :( aml = docOrElmInit($docOrElmType, $amlName) )
 
             typeDefinition =:($expr)
 
