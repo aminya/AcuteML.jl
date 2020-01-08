@@ -111,78 +111,15 @@ end
 function addelementOne!(aml::Node, name::String, value::Nothing, argAmlType::Type)
     # do nothing
 end
+
+function addelementOne!(aml::Node, name::String, value, argAmlType::AbsIgnore)
+    # do nothing
+end
 ################################################################
-# vector of strings
-function addelementVect!(aml::Node, name::String, value::Vector{String}, argAmlType::Int64)
 
-
-    if argAmlType === 0 # normal elements
-
-        for i = 1:length(value)
-            if !isnothing(value[i]) # do nothing if value is nothing
-                addelement!(aml, name, value[i])
-            end
-        end
-
-    elseif argAmlType === 2 # Attributes
-
-        for i = 1:length(value)
-            if !isnothing(value[i]) # do nothing if value is nothing
-                link!(aml, AttributeNode(name, value[i]))
-            end
-        end
-    end
-end
-
-# vector of numbers
-function addelementVect!(aml::Node, name::String, value::Vector{T}, argAmlType::Int64) where {T<:Union{Number, Bool}}
-
-    if argAmlType === 0 # normal elements
-
-        for i = 1:length(value)
-            if !isnothing(value[i]) # do nothing if value is nothing
-                addelement!(aml, name, string(value[i]))
-            end
-        end
-
-    elseif argAmlType === 2 # Attributes
-
-        for i = 1:length(value)
-            if !isnothing(value[i]) # do nothing if value is nothing
-                link!(aml, AttributeNode(name, string(value[i])))
-            end
-        end
-    end
-end
-
-# Vector of defined or nothing
-function addelementVect!(aml::Node, name::String, value::Vector{T}, argAmlType::Int64) where {T}
+# Vector
+function addelementVect!(aml::Node, name::String, value::Vector, argAmlType::Type)
     for i = 1:length(value)
-        vi = value[i]
-        Ti = typeof(vi)
-
-        if Ti !== Nothing # do nothing if value is nothing
-
-            if hasfield(Ti, :aml)
-                link!(aml,vi.aml)
-
-            elseif Tables.istable(vi)
-                link!(aml, amlTable(vi))
-
-            elseif hasmethod(aml, Tuple{Ti})
-                link!(aml, aml(vi))
-
-            else
-                if argAmlType === 0 # normal elements
-
-                    addelement!(aml, name, string(vi))
-                elseif argAmlType === 2 # Attributes
-
-                    link!(aml, AttributeNode(name, string(vi)))
-
-                end
-            end
-
-        end
+        addelementOne!(aml, name, value[i], argAmlType)
     end
 end
