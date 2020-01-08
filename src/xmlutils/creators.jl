@@ -11,7 +11,7 @@ export addelementOne!, addelementVect!
 Add one element to a node/document
 ```
 """
-function addelementOne!(aml::Document, name::String, value::T, argAmlType::Int64) where {T}
+function addelementOne!(aml::Document, name::String, value::T, argAmlType::Type) where {T}
 
     if hasroot(aml)
         amlNode = root(aml)
@@ -25,7 +25,7 @@ function addelementOne!(aml::Document, name::String, value::T, argAmlType::Int64
 end
 
 # Nothing
-function addelementOne!(aml::Document, name::String, value::Nothing, argAmlType::Int64)
+function addelementOne!(aml::Document, name::String, value::Nothing, argAmlType::Type)
 # do nothing if value is nothing
 end
 ################################################################
@@ -36,7 +36,7 @@ end
 Add a vector to a node/document
 ```
 """
-function addelementVect!(aml::Document, name::String, value::Vector{T}, argAmlType::Int64) where {T}
+function addelementVect!(aml::Document, name::String, value::Vector{T}, argAmlType::Type) where {T}
 
     if hasroot(aml)
         amlNode = root(aml)
