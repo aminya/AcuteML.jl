@@ -58,19 +58,22 @@ function addelementOne!(aml::Node, name::String, value::String, argAmlType::AbsN
     end
 end
 
-# number
-function addelementOne!(aml::Node, name::String, value::T, argAmlType::Int64) where {T<:Union{Number, Bool}}
-
+function addelementOne!(aml::Node, name::String, value::String, argAmlType::AbsAttribute)
     if !isnothing(value) # do nothing if value is nothing
+        link!(aml, AttributeNode(name, value))
+    end
+end
 
-        if argAmlType === 0 # normal elements
+# Number, Bool
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsNormal) where {T<:Union{Number, Bool}}
+    if !isnothing(value) # do nothing if value is nothing
+        addelement!(aml, name, string(value))
+    end
+end
 
-            addelement!(aml, name, string(value))
-        elseif argAmlType === 2 # Attributes
-
-            link!(aml, AttributeNode(name, string(value)))
-
-        end
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsAttribute) where {T<:Union{Number, Bool}}
+    if !isnothing(value) # do nothing if value is nothing
+        link!(aml, AttributeNode(name, string(value)))
     end
 end
 
