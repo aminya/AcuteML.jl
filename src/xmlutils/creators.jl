@@ -29,14 +29,14 @@ function addelementOne!(aml::Document, name::String, value::Nothing, argAmlType:
 # do nothing if value is nothing
 end
 ################################################################
-# vector of Any
+# Vector
 """
     addelementVect!(node, name, value, argAmlType)
 
 Add a vector to a node/document
 ```
 """
-function addelementVect!(aml::Document, name::String, value::Vector{T}, argAmlType::Type) where {T}
+function addelementVect!(aml::Document, name::String, value::Vector, argAmlType::Type)
 
     if hasroot(aml)
         amlNode = root(aml)
