@@ -101,7 +101,7 @@ using AcuteML, Test
     @test "val" == findfirstcontent(String, "node/normalString", dxml, 0)
     @test "val" == findfirstcontent("node/normalString", dxml, 0)
     addelementOne!(dxml, "attString", "val", 2)
-    @test_skip "val" == findfirstcontent(String, "attString", root(dxml), 2)
+    @test "val" == findfirstcontent(String, "attString", dxml, 2)
 
     using Dates
     addelementOne!(dxml, "Date", Date(2013,7,1), 0)

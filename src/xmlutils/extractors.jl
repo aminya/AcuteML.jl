@@ -4,7 +4,7 @@ export findalllocal, findfirstlocal, findfirstcontent, findallcontent
 ################################################################
 # Documents
 function findfirstcontent(::Type{T}, s::String, doc::Document, argAmlType::Int64) where {T}
-    if hasroot(doc) && root(doc).name == "html"
+    if hasroot(doc) && (root(doc).name == "html" || argAmlType == 2)
         findfirstcontent(T, s, root(doc), argAmlType)
     else
         findfirstcontent(T, s, doc.node, argAmlType)
@@ -12,7 +12,7 @@ function findfirstcontent(::Type{T}, s::String, doc::Document, argAmlType::Int64
 end
 
 function findfirstcontent(s::String, doc::Document, argAmlType::Int64)
-    if hasroot(doc) && root(doc).name == "html"
+    if hasroot(doc) && (root(doc).name == "html" || argAmlType == 2)
         findfirstcontent(String, s, root(doc), argAmlType)
     else
         findfirstcontent(String, s, doc.node, argAmlType)
@@ -20,7 +20,7 @@ function findfirstcontent(s::String, doc::Document, argAmlType::Int64)
 end
 
 function findallcontent(::Type{T}, s::String, doc::Document, argAmlType::Int64) where {T}
-    if hasroot(doc) && root(doc).name == "html"
+    if hasroot(doc) && (root(doc).name == "html" || argAmlType == 2)
         findallcontent(T, s, root(doc), argAmlType)
     else
         findallcontent(T, s, doc.node, argAmlType)
@@ -28,7 +28,7 @@ function findallcontent(::Type{T}, s::String, doc::Document, argAmlType::Int64) 
 end
 
 function findallcontent(s::String, doc::Document, argAmlType::Int64)
-    if hasroot(doc) && root(doc).name == "html"
+    if hasroot(doc) && (root(doc).name == "html" || argAmlType == 2)
         findallcontent(Vector{String}, s, root(doc), argAmlType)
     else
         findallcontent(Vector{String}, s, doc.node, argAmlType)
