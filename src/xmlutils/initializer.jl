@@ -7,19 +7,19 @@
 
 Function to initialize the aml
 """
-function docOrElmInit(::Type{AbsHtml})
+function docOrElmInit(::Type{AbsHtml}, amlName::String = "html")
     out = HTMLDocument() # no URI and external id
-    htmlNode = ElementNode("html")
+    htmlNode = ElementNode(amlName)
     setroot!(out, htmlNode) # adding html node
     return out
 end
 
-function docOrElmInit(::Type{AbsXml})
+function docOrElmInit(::Type{AbsXml}, amlName::String = "xml")
     out = XMLDocument() # version 1
     return out
 end
 
-function docOrElmInit(::Type{Union{AbsNormal, AbsEmpty}})
-    out = ElementNode(name) # element node
+function docOrElmInit(::Type{Union{AbsNormal, AbsEmpty}}, amlName::String)
+    out = ElementNode(amlName) # element node
     return out
 end
