@@ -11,7 +11,7 @@ export addelementOne!, addelementVect!
 Add one element to a node/document
 ```
 """
-function addelementOne!(aml::Document, name::String, value::T, argAmlType::Type) where {T}
+function addelementOne!(aml::Document, name::String, value::T, argAmlType::Type{<:AbsDocOrNode}) where {T}
 
     if hasroot(aml)
         amlNode = root(aml)
@@ -25,7 +25,7 @@ function addelementOne!(aml::Document, name::String, value::T, argAmlType::Type)
 end
 
 # Nothing
-function addelementOne!(aml::Document, name::String, value::Nothing, argAmlType::Type)
+function addelementOne!(aml::Document, name::String, value::Nothing, argAmlType::Type{<:AbsDocOrNode})
 # do nothing if value is nothing
 end
 ################################################################
@@ -36,7 +36,7 @@ end
 Add a vector to a node/document
 ```
 """
-function addelementVect!(aml::Document, name::String, value::Vector, argAmlType::Type)
+function addelementVect!(aml::Document, name::String, value::Vector, argAmlType::Type{<:AbsDocOrNode})
 
     if hasroot(aml)
         amlNode = root(aml)
@@ -52,33 +52,33 @@ end
 # Nodes
 ################################################################
 # String
-function addelementOne!(aml::Node, name::String, value::String, argAmlType::AbsNormal)
+function addelementOne!(aml::Node, name::String, value::String, argAmlType::Type{AbsNormal})
     if !isnothing(value) # do nothing if value is nothing
         addelement!(aml, name, value)
     end
 end
 
-function addelementOne!(aml::Node, name::String, value::String, argAmlType::AbsAttribute)
+function addelementOne!(aml::Node, name::String, value::String, argAmlType::Type{AbsAttribute})
     if !isnothing(value) # do nothing if value is nothing
         link!(aml, AttributeNode(name, value))
     end
 end
 
 # Number, Bool
-function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsNormal) where {T<:Union{Number, Bool}}
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::Type{AbsNormal}) where {T<:Union{Number, Bool}}
     if !isnothing(value) # do nothing if value is nothing
         addelement!(aml, name, string(value))
     end
 end
 
-function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsAttribute) where {T<:Union{Number, Bool}}
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribute}) where {T<:Union{Number, Bool}}
     if !isnothing(value) # do nothing if value is nothing
         link!(aml, AttributeNode(name, string(value)))
     end
 end
 
 # Defined
-function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsNormal) where {T}
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::Type{AbsNormal}) where {T}
     if hasfield(T, :aml)
         link!(aml,value.aml)
 
@@ -93,7 +93,7 @@ function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsNormal
     end
 end
 
-function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsAttribute) where {T}
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribute}) where {T}
     if hasfield(T, :aml)
         link!(aml, AttributeNode(name, value.aml))
 
@@ -108,7 +108,7 @@ function addelementOne!(aml::Node, name::String, value::T, argAmlType::AbsAttrib
     end
 end
 
-function addelementOne!(aml::Node, name::String, value::Nothing, argAmlType::Type)
+function addelementOne!(aml::Node, name::String, value::Nothing, argAmlType::Type{<:AbsDocOrNode})
     # do nothing
 end
 
@@ -118,7 +118,7 @@ end
 ################################################################
 
 # Vector
-function addelementVect!(aml::Node, name::String, value::Vector, argAmlType::Type)
+function addelementVect!(aml::Node, name::String, value::Vector, argAmlType::Type{<:AbsDocOrNode})
     for i = 1:length(value)
         addelementOne!(aml, name, value[i], argAmlType)
     end
