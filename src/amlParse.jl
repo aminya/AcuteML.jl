@@ -26,9 +26,9 @@ function amlParse(expr::Expr)
     argTypes = Vector{Union{Missing,Type, Symbol, Expr}}(undef, numArgs)
     argNames =Vector{Union{Missing,String}}(undef, numArgs)
     argFuns = Vector{Union{Missing, Symbol, Function}}(undef, numArgs)
-    argAmlTypes = Int64[]
-    amlName = "my type"
-    docOrElmType = ""
+    argAmlTypes = Type[]
+    local amlName::String
+    local docOrElmType::Type
     amlFun = Array{Union{Missing, Symbol, Function},0}(undef)
 
     for iData = 1:numData # iterating over arguments of each type argument
@@ -56,7 +56,7 @@ function amlParse(expr::Expr)
             end
 
             argExpr.args[i] =  nothing # removing "aml name" from expr args
-            docOrElmType = "" # decided based on name
+            docOrElmType = aml_dispatch(AbsDocOrNode, amlName) # decided based on name
 
         ################################################################
         # Literal Struct name - sc"aml name"
@@ -103,7 +103,7 @@ function amlParse(expr::Expr)
                     amlName = ei.args[1] # Type aml name
                 end
 
-                docOrElmType = "" # decided based on name
+                docOrElmType = aml_dispatch(AbsDocOrNode, amlName) # decided based on name
                 argExpr.args[i] =  nothing # removing "aml name" from expr args
 
             ########################
@@ -175,7 +175,7 @@ function amlParse(expr::Expr)
                     end
 
                 else
-                    push!(argAmlTypes, 0) # non-literal
+                    push!(argAmlTypes, AbsNormal) # non-literal
 
                     ni = ei.args[2]
 
@@ -256,7 +256,7 @@ function amlParse(expr::Expr)
                     end
 
                 else
-                    push!(argAmlTypes, 0) # non-literal
+                    push!(argAmlTypes, AbsNormal) # non-literal
 
                     ni = ei.args[2].args[2]
 
@@ -367,12 +367,12 @@ function amlParse(expr::Expr)
 
     ########################
     # self closing tags checker
-    if  docOrElmType == "sc"
+    if  docOrElmType == AbsEmpty
         # add a field with nothing type
         push!(argNames, "content") # argument ignored for aml
         push!(argTypes, Nothing)
         push!(argFuns,missing)
-        push!(argAmlTypes,10)
+        push!(argAmlTypes, AbsIgnore)
         push!(argParams, Expr(:kw, :content, nothing))
         push!(argVars, :content)
         push!(argDefVal, nothing)
