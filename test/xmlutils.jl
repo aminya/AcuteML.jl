@@ -94,3 +94,47 @@ using AcuteML, Test
 
     ################################################################
     ################################################################
+    import EzXML: setroot!
+    setroot!(dxml, docOrElmInit("", "node"))
+
+    addelementOne!(dxml, "normalString", "val", 0)
+    @test "val" == findfirstcontent(String, "node/normalString", dxml, 0)
+    @test "val" == findfirstcontent("node/normalString", dxml, 0)
+    addelementOne!(dxml, "attString", "val", 2)
+    @test_skip "val" == findfirstcontent(String, "attString", root(dxml), 2)
+
+    using Dates
+    addelementOne!(dxml, "Date", Date(2013,7,1), 0)
+    @test Date(2013,7,1) == findfirstcontent(Date, "node/Date", dxml, 0)
+    addelementOne!(dxml, "Time", Time(12,53,40), 0)
+    @test Time(12,53,40) == findfirstcontent(Time, "node/Time", dxml, 0)
+
+    addelementOne!(dxml, "DateTime", DateTime(2013,5,1,12,53,40), 0)
+    @test DateTime(2013,5,1,12,53,40) == findfirstcontent(DateTime, "node/DateTime", dxml, 0)
+
+    using DataFrames
+    addelementOne!(dxml, "DataFrame",  DataFrame(course = ["Artificial Intelligence", "Robotics"], professor = ["Prof. A", "Prof. B"] ), 0)
+    @test_skip  DataFrame(course = ["Artificial Intelligence", "Robotics"], professor = ["Prof. A", "Prof. B"] ) == findfirstcontent(DataFrame, "node/DataFrame", dxml, 0)
+
+    addelementOne!(dxml, "Nothing", nothing, 2)
+    @test nothing == findfirstcontent(Nothing, "node/Nothing", dxml, 0)
+    @test nothing == findfirstcontent(Union{Nothing,String}, "node/Nothing", dxml, 0)
+    ################################################################
+    addelementVect!(dxml, "stringVect", ["aa", "bb"], 0)
+    @test ["aa", "bb"] == findallcontent(Vector{String}, "node/stringVect", dxml, 0)
+
+    addelementVect!(dxml, "floatVect", [5.6, 7.8], 0)
+    @test [5.6, 7.8] == findallcontent(Vector{Float64}, "node/floatVect", dxml, 0)
+
+    addelementVect!(dxml, "intVect", [5, 6], 0)
+    @test [5, 6] == findallcontent(Vector{Int64}, "node/intVect", dxml, 0)
+
+    addelementVect!(dxml, "DateVect", [Date(2013,7,1), Date(2014,7,1)], 0)
+    @test [Date(2013,7,1), Date(2014,7,1)] == findallcontent(Vector{Date}, "node/DateVect", dxml, 0)
+
+    addelementVect!(dxml, "TimeVect", [Time(12,53,42), Time(12,53,40)], 0)
+    @test [Time(12,53,42), Time(12,53,40)] == findallcontent(Vector{Time}, "node/TimeVect", dxml, 0)
+
+    addelementVect!(dxml, "AnyVect", ["aa", Time(12,53,40), 2, nothing], 0)
+    @test  string.(["aa", Time(12,53,40), 2]) == findallcontent(typeof(["aa", Time(12,53,40), 2, nothing]), "node/AnyVect", dxml, 0)
+end
