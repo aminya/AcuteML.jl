@@ -32,3 +32,22 @@ function aml_dispatch(docOrElmType::AbsDocOrNode, name::String)
 end
 
 ################################################################
+# Literal Macros
+################################################################
+# Empty (self-closing)
+macro sc_str(s)
+    docOrElmType = AbsEmpty
+    return docOrElmType, s
+end
+################################################################
+# attribute
+macro a_str(s)
+    argAmlType = AbsAttribute
+    return argAmlType, s
+end
+################################################################
+# # namespace
+# macro ns_str(s)
+#     argAmlType = 18
+#     return argAmlType, s
+# end
