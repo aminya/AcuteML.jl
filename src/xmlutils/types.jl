@@ -19,7 +19,7 @@ abstract type AbsEmpty <: AbsNormal end
 abstract type AbsIgnore end
 
 ################################################################
-function aml_dispatch(docOrElmType::AbsDocOrNode, name::String)
+function aml_dispatch(docOrElmType::Type{AbsDocOrNode}, name::String)
 
     if name == "html"
         docOrElmType = AbsHtml
