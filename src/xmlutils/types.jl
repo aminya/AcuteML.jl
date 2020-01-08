@@ -12,7 +12,8 @@ abstract type AbsHtml <: AbsDocument end
 # Nodes
 abstract type AbsNormal <: AbsNode end
 abstract type AbsAttribute <: AbsNode end
-abstract type AbsEmpty <: AbsNode end
+
+abstract type AbsEmpty <: AbsNormal end
 
 # Ignore
 abstract type AbsIgnore end
