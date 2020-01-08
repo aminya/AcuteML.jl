@@ -1,46 +1,5 @@
 export addelementOne!, addelementVect!
 ################################################################
-# Init
-################################################################
-# doc or element initialize
-"""
-    docOrElmInit(name)
-    docOrElmInit(type, name)
-
-Function to initialize the aml
-
-type:
-"" : element node # default
-sc: empty element node (self closing)
-
-name:
-"html"
-"xml"
-"something"
-"""
-function docOrElmInit(literal::String = "", name::String = nothing)
-
-    if literal === "" || literal === "sc"
-
-        if name == "html"
-            out = HTMLDocument() # no URI and external id
-            htmlNode = ElementNode("html")
-            setroot!(out, htmlNode) # adding html node
-
-        elseif name == "xml"
-            out = XMLDocument() # version 1
-
-        else
-            out = ElementNode(name) # element node
-        end
-    else
-        error("document or element cannot be initialized")
-    end
-
-    return out
-end
-
-################################################################
 # Creators
 ################################################################
 # Document
