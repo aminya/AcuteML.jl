@@ -27,8 +27,8 @@ function amlParse(expr::Expr)
     argNames =Vector{Union{Missing,String}}(undef, numArgs)
     argFuns = Vector{Union{Missing, Symbol, Function}}(undef, numArgs)
     argAmlTypes = Type[]
-    local amlName::String
-    local docOrElmType::Type
+    amlName = "name"
+    docOrElmType = AbsDocOrNode
     amlFun = Array{Union{Missing, Symbol, Function},0}(undef)
 
     for iData = 1:numData # iterating over arguments of each type argument
