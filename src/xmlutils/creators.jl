@@ -9,7 +9,6 @@ export addelementOne!, addelementVect!
     addelementOne!(node, name, value, argAmlType)
 
 Add one element to a node/document
-```
 """
 function addelementOne!(aml::Document, name::String, value::T, argAmlType::Type{<:AbsDocOrNode}) where {T}
 
@@ -19,7 +18,7 @@ function addelementOne!(aml::Document, name::String, value::T, argAmlType::Type{
     elseif hasfield(T, :aml)
         setroot!(aml, value.aml)
     else
-        error("You cannot insert $(T) in the document directly. Define a @aml defined field for xd/hd struct")
+        error("You cannot insert $(T) in the document directly. Define a @aml defined field for xml or html document struct")
     end
 
 end
@@ -43,7 +42,7 @@ function addelementVect!(aml::Document, name::String, value::Vector, argAmlType:
         addelementVect!(amlNode, name, value, argAmlType)
 
     else
-        error("You cannot insert a vector in the document directly. Define a @aml defined field for xd/hd struct")
+        error("You cannot insert a vector in the document directly. Define a @aml defined field for xml or html document struct")
     end
 
 end
@@ -52,7 +51,7 @@ end
 # Nodes
 ################################################################
 # String
-function addelementOne!(aml::Node, name::String, value::String, argAmlType::Type{AbsNormal})
+function addelementOne!(aml::Node, name::String, value::String, argAmlType::Type{<:AbsNormal})
     if !isnothing(value) # do nothing if value is nothing
         addelement!(aml, name, value)
     end
@@ -65,7 +64,7 @@ function addelementOne!(aml::Node, name::String, value::String, argAmlType::Type
 end
 
 # Number, Bool
-function addelementOne!(aml::Node, name::String, value::T, argAmlType::Type{AbsNormal}) where {T<:Union{Number, Bool}}
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::Type{<:AbsNormal}) where {T<:Union{Number, Bool}}
     if !isnothing(value) # do nothing if value is nothing
         addelement!(aml, name, string(value))
     end
@@ -78,7 +77,7 @@ function addelementOne!(aml::Node, name::String, value::T, argAmlType::Type{AbsA
 end
 
 # Defined
-function addelementOne!(aml::Node, name::String, value::T, argAmlType::Type{AbsNormal}) where {T}
+function addelementOne!(aml::Node, name::String, value::T, argAmlType::Type{<:AbsNormal}) where {T}
     if hasfield(T, :aml)
         link!(aml,value.aml)
 
