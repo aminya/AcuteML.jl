@@ -2,36 +2,43 @@ export updateallcontent!, updatefirstcontent!
 ################################################################
 # Updaters
 ################################################################
-# Single Updater
-"""
-    updatefirstcontent(value, string, node, argAmlType)
+# Documents
+function updatefirstcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNormal}) where {T}
+    name = '/'* name
+    updatefirstcontent(T, name, root(doc), argAmlType)
+end
 
-Updates first element content. It also converts any type to string. element is given as string.
-"""
-function updatefirstcontent!(value::T, s::String, node::Union{Node, Document}, argAmlType::Int64) where{T<:Union{String, Number, Bool}} # for strings, number and bool
+function updatefirstcontent(name::String, doc::Document, argAmlType::Type{<:AbsNormal})
+    name = '/'* name
+    updatefirstcontent(String, name, root(doc), argAmlType)
+end
 
-    if argAmlType === 0 # normal elements
+function updateallcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNormal}) where {T}
+    name = '/'* name
+    updateallcontent(T, name, root(doc), argAmlType)
+end
 
-        if typeof(node) == Document || hasdocument(node)
-            elm = findfirst(s,node)
-        else
-            elm = findfirstlocal(s,node)
-        end
+function updateallcontent(name::String, doc::Document, argAmlType::Type{<:AbsNormal})
+    name = '/'* name
+    updateallcontent(Vector{String}, name, root(doc), argAmlType)
+end
 
-        if isnothing(elm) # error if nothing is found
-            return error("field not found in aml")
-        else
-            elm.content = value
-        end
+# For attributes search in the root
+function updatefirstcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{AbsAttribute}) where {T}
+    updatefirstcontent(T, name, root(doc), argAmlType)
+end
 
-    elseif argAmlType === 2 # Attributes
+function updatefirstcontent(name::String, doc::Document, argAmlType::Type{AbsAttribute})
+    updatefirstcontent(String, name, root(doc), argAmlType)
+end
 
-        if haskey(node, s)
-            node[s] = value
+function updateallcontent(::Type{T},  name::String, doc::Document, argAmlType::Type{AbsAttribute}) where {T}
+    updateallcontent(T, name, root(doc), argAmlType)
+end
 
-        else # error if nothing is found
-            return error("field not found in aml")
-        end
+function updateallcontent(name::String, doc::Document, argAmlType::Type{AbsAttribute})
+    updateallcontent(Vector{String}, name, root(doc), argAmlType)
+end
 
     end
 
