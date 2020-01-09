@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Syntax Reference · AcuteML.jl</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">AcuteML.jl</span></div><form class="docs-search" action="search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="index.html">Home</a></li><li><a class="tocitem" href="valueChecking.html">Value Checking</a></li><li><a class="tocitem" href="supportedValueTypes.html">Supported Value Types</a></li><li><a class="tocitem" href="extraConstructors.html">Extra Contructors</a></li><li><a class="tocitem" href="customValueTypes.html">Custom Value Types</a></li><li><a class="tocitem" href="customConstructors.html">Custom Contructors - AcuteML Backend</a></li><li><a class="tocitem" href="templating.html">Templating</a></li><li class="is-active"><a class="tocitem" href="SyntaxReference.html">Syntax Reference</a><ul class="internal"><li class="toplevel"><a class="tocitem" href="#Templating-1"><span>Templating</span></a></li><li class="toplevel"><a class="tocitem" href="#Backend-utilities-1"><span>Backend utilities</span></a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="SyntaxReference.html">Syntax Reference</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="SyntaxReference.html">Syntax Reference</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/aminya/AcuteML.jl/blob/master/docs/src/SyntaxReference.md#L" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><ul><li><a href="SyntaxReference.html#AcuteML.addelementOne!-Union{Tuple{T}, Tuple{Document,String,T,Type{#s14} where #s14&lt;:AbsDocOrNode}} where T"><code>AcuteML.addelementOne!</code></a></li><li><a href="SyntaxReference.html#AcuteML.addelementVect!-Tuple{Document,String,Array{T,1} where T,Type{#s13} where #s13&lt;:AbsDocOrNode}"><code>AcuteML.addelementVect!</code></a></li><li><a href="SyntaxReference.html#AcuteML.docOrElmInit"><code>AcuteML.docOrElmInit</code></a></li><li><a href="SyntaxReference.html#AcuteML.findallcontent-Union{Tuple{T}, Tuple{Type{Array{T,1}},String,Node,Type{#s20} where #s20&lt;:AbsNormal}} where T&lt;:String"><code>AcuteML.findallcontent</code></a></li><li><a href="SyntaxReference.html#AcuteML.findalllocal-Tuple{String,Node}"><code>AcuteML.findalllocal</code></a></li><li><a href="SyntaxReference.html#AcuteML.findfirstcontent-Union{Tuple{T}, Tuple{Type{T},String,Node,Type{#s13} where #s13&lt;:AbsNormal}} where T&lt;:String"><code>AcuteML.findfirstcontent</code></a></li><li><a href="SyntaxReference.html#AcuteML.findfirstlocal-Tuple{String,Node}"><code>AcuteML.findfirstlocal</code></a></li><li><a href="SyntaxReference.html#AcuteML.newTemplate"><code>AcuteML.newTemplate</code></a></li><li><a href="SyntaxReference.html#AcuteML.render2file"><code>AcuteML.render2file</code></a></li><li><a href="SyntaxReference.html#AcuteML.updateallcontent!-Union{Tuple{T}, Tuple{Array{T,1},String,Node,Type{#s19} where #s19&lt;:AbsNormal}} where T&lt;:Union{Number, String}"><code>AcuteML.updateallcontent!</code></a></li><li><a href="SyntaxReference.html#AcuteML.updatefirstcontent!-Union{Tuple{T}, Tuple{T,String,Node,Type{#s21} where #s21&lt;:AbsNormal}} where T&lt;:Union{Number, String}"><code>AcuteML.updatefirstcontent!</code></a></li><li><a href="index.html#AcuteML.@aml"><code>AcuteML.@aml</code></a></li><li><a href="SyntaxReference.html#AcuteML.@aml-Tuple{Any}"><code>AcuteML.@aml</code></a></li></ul><h1 id="Main-Macro-and-IO-1"><a class="docs-heading-anchor" href="#Main-Macro-and-IO-1">Main Macro and IO</a><a class="docs-heading-anchor-permalink" href="#Main-Macro-and-IO-1" title="Permalink"></a></h1><article class="docstring"><header><a class="docstring-binding" id="AcuteML.@aml-Tuple{Any}" href="#AcuteML.@aml-Tuple{Any}"><code>AcuteML.@aml</code></a> — <span class="docstring-category">Macro</span></header><section><div><p>@aml</p><p><strong>Type Definition</strong></p><p>Use <code>@aml</code> macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.</p><p><strong>Document Definition</strong></p><ul><li>Use <code>&quot;html&quot;</code> or <code>&quot;xml&quot;</code> to define a HTML or XML document:</li></ul><pre><code class="language-julia">@aml mutable struct Doc &quot;xml&quot;
+# add fields (elements) here
+end</code></pre><pre><code class="language-julia">@aml mutable struct Web &quot;html&quot;
+# add fields (elements) here
+end</code></pre><p><strong>Nodes (Elements) Definition</strong></p><ul><li>Specify the html/xml struct name as a string after the struct name after a space</li></ul><pre><code class="language-julia">@aml mutable struct Person &quot;person&quot;
+# add fields (elements) here
+end</code></pre><ul><li>If the html/xml name is the same as struct name, you can use <code>&quot;~&quot;</code> instead</li></ul><pre><code class="language-julia">@aml mutable struct person &quot;~&quot;
+# add fields (elements) here
+end</code></pre><p><strong>Fields Names</strong></p><ul><li>Sepecify the html/xml field name as a string in front of the field after <code>,</code></li></ul><pre><code class="language-julia">field, &quot;study-field&quot;</code></pre><ul><li>If the html/xml name is the same as variable name, you can use <code>&quot;~&quot;</code> instead</li></ul><pre><code class="language-julia">age::UInt, &quot;~&quot;</code></pre><p><strong>Attributes</strong></p><ul><li>If the value is going to be an attribute put <code>a</code> before its name</li></ul><pre><code class="language-julia">id::Int64, a&quot;~&quot;</code></pre><p><strong>Default Value</strong></p><ul><li>You can specify the default value for an argument by using <code>= defVal</code> syntax</li></ul><pre><code class="language-julia">GPA::Float64 = 4.5, &quot;~&quot;</code></pre><p><strong>Value Types</strong></p><p>You can use Julia types or defined types for values. see and <a href="https://aminya.github.io/AcuteML.jl/dev/supportedValueTypes/">Supported Value Types</a>  <a href="https://aminya.github.io/AcuteML.jl/dev/customValueTypes/">Custom Value Types</a> for more information.</p><ul><li>If you don&#39;t specify the type of a variable, it is considered to be string for aml manipulations:</li></ul><pre><code class="language-julia">field, &quot;study-field&quot;</code></pre><p>However, for a high performance code specify String type (<code>field::String, &quot;study-field&quot;</code>)</p><ul><li>For already <code>@aml</code> defined types, name should be the same as the defined type root name</li></ul><pre><code class="language-julia">university::University, &quot;university&quot;</code></pre><ul><li>Table types are supported through PrettyTables.jl.</li></ul><p><strong>Value Checking</strong></p><p>You can define any restriction for values using functions.</p><ul><li>To define any restrictions for the values of one field, define a function that checks a criteria for the field value and returns Bool, and put its name after a <code>,</code> after the field name:</li></ul><pre><code class="language-julia">GPA::Float64, &quot;~&quot;, GPAcheck</code></pre><ul><li>To define any restrictions for multiple values of a struct, define a function that gets all the variables and checks a criteria and returns Bool, and put its name after a <code>,</code> after the struct name:</li></ul><pre><code class="language-julia">@aml mutable struct Person &quot;person&quot;, courseCheck
+# ...
+end</code></pre><p>Refer to https://aminya.github.io/AcuteML.jl/dev/valueChecking/ for some of these functions examples.</p><p><strong>Optional Fields</strong></p><ul><li>If a field is optional, don&#39;t forget to define its type as <code>UN{}</code> (Union with Nothing), and set the default value as <code>nothing</code>.</li></ul><pre><code class="language-julia">residence::UN{String}=nothing, &quot;residence-stay&quot; # optional with nothing as default value</code></pre><pre><code class="language-julia">funds::UN{String}, &quot;financial-funds&quot;   # optional, but you should pass nothing manually in construction</code></pre><p><strong>Empty Elements (Self-Closing) Definition</strong></p><ul><li>Use <code>sc&quot;name&quot;</code> to define a self-closing (empty) element (e.g. <code>&lt;rest /&gt;</code>)</li></ul><pre><code class="language-julia">@aml struct rest sc&quot;~&quot;
+end</code></pre><hr/><p><strong>Example - Struct Definition</strong></p><p>First, we define the structs using <code>@aml</code> to store the data in:</p><pre><code class="language-julia">using AcuteML
+
+# Types definition
+
+# Person Type
+@aml mutable struct Person &quot;person&quot;, courseCheck
+    age::UInt64, &quot;~&quot;
+    field, &quot;study-field&quot;
+    GPA::Float64 = 4.5, &quot;~&quot;, GPAcheck
+    courses::Vector{String}, &quot;taken-courses&quot;
+    professors::UN{DataFrame} = nothing, &quot;table&quot;
+    id::Int64, a&quot;~&quot;
+end
+
+@aml mutable struct University &quot;university&quot;
+    name, a&quot;university-name&quot;
+    people::Vector{Person}, &quot;person&quot;
+end
+
+@aml mutable struct Doc &quot;xml&quot;
+    university::University, &quot;~&quot;
+end
+</code></pre><pre><code class="language-julia"># Value Checking Functions
+GPAcheck(x) = x &lt;= 4.5 &amp;&amp; x &gt;= 0
+
+function courseCheck(age, field, GPA, courses, id)
+
+    if field == &quot;Mechanical Engineering&quot;
+        relevant = [&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;, &quot;Machine Design&quot;]
+    elseif field == &quot;Computer Engineering&quot;
+        relevant = [&quot;Julia&quot;, &quot;Algorithms&quot;]
+    else
+        error(&quot;study field is not known&quot;)
+    end
+
+    return any(in.(courses, Ref(relevant)))
+end</code></pre><hr/><p><strong>Example - Constructor</strong></p><p>After we defined the structs, we can create instances of them by passing our data to the fields:</p><pre><code class="language-julia">
+P1 = Person(age=24, field=&quot;Mechanical Engineering&quot;, courses=[&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;], id = 1)
+P2 = Person(age=18, field=&quot;Computer Engineering&quot;, GPA=4, courses=[&quot;Julia&quot;], id = 2)
+
+U = University(name=&quot;Julia University&quot;, people=[P1, P2])
+
+D = Doc(university = U)
+
+D.university.people[2].GPA=4.2 # mutability support after Doc creation
+</code></pre><pre><code class="language-julia"># An example that doesn&#39;t meet the criteria function for GPA because GPA is more than 4.5
+P3 = Person(age=99, field=&quot;Macro Wizard&quot;, GPA=10, courses=[&quot;Julia Magic&quot;], id = 3)
+julia&gt;
+GPA doesn&#39;t meet criteria function</code></pre><pre><code class="language-html">julia&gt; pprint(P1) # or print(P1.aml)
+&lt;person id=&quot;1&quot;&gt;
+  &lt;age&gt;24&lt;/age&gt;
+  &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+  &lt;GPA&gt;4.5&lt;/GPA&gt;
+  &lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
+  &lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
+&lt;/person&gt;
+
+julia&gt; pprint(U) # or print(U.aml)
+&lt;university university-name=&quot;Julia University&quot;&gt;
+  &lt;person id=&quot;1&quot;&gt;
+    &lt;age&gt;24&lt;/age&gt;
+    &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4.5&lt;/GPA&gt;
+    &lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
+    &lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
+  &lt;/person&gt;
+  &lt;person id=&quot;2&quot;&gt;
+    &lt;age&gt;18&lt;/age&gt;
+    &lt;study-field&gt;Computer Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4.2&lt;/GPA&gt;
+    &lt;taken-courses&gt;Julia&lt;/taken-courses&gt;
+  &lt;/person&gt;
+&lt;/university&gt;
+
+julia&gt; pprint(D) # or print(D.aml)
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;university university-name=&quot;Julia University&quot;&gt;
+  &lt;person id=&quot;1&quot;&gt;
+    &lt;age&gt;24&lt;/age&gt;
+    &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4.5&lt;/GPA&gt;
+    &lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
+    &lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
+  &lt;/person&gt;
+  &lt;person id=&quot;2&quot;&gt;
+    &lt;age&gt;18&lt;/age&gt;
+    &lt;study-field&gt;Computer Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4.2&lt;/GPA&gt;
+    &lt;taken-courses&gt;Julia&lt;/taken-courses&gt;
+  &lt;/person&gt;
+&lt;/university&gt;</code></pre><p>P3 with Tables.jl type:</p><pre><code class="language-julia">Profs1 = DataFrame(course = [&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;], professor = [&quot;Prof. A&quot;, &quot;Prof. B&quot;] )
+
+P3 = Person(age=24, field=&quot;Mechanical Engineering&quot;, courses = [&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;], professors= Profs1, id = 1)</code></pre><pre><code class="language-html">julia&gt; pprint(P3)
+
+&lt;person id=&quot;1&quot;&gt;
+&lt;age&gt;24&lt;/age&gt;
+&lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+&lt;GPA&gt;4.5&lt;/GPA&gt;
+&lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
+&lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
+&lt;table&gt;
+&lt;tr class=&quot;header&quot;&gt;
+&lt;th style=&quot;text-align: right; &quot;&gt;course&lt;/th&gt;
+&lt;th style=&quot;text-align: right; &quot;&gt;professor&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr class=&quot;subheader headerLastRow&quot;&gt;
+&lt;th style=&quot;text-align: right; &quot;&gt;String&lt;/th&gt;
+&lt;th style=&quot;text-align: right; &quot;&gt;String&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: right; &quot;&gt;Artificial Intelligence&lt;/td&gt;
+&lt;td style=&quot;text-align: right; &quot;&gt;Prof. A&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: right; &quot;&gt;Robotics&lt;/td&gt;
+&lt;td style=&quot;text-align: right; &quot;&gt;Prof. B&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/person&gt;</code></pre><hr/><p><strong>Example - Extractor</strong></p><p>After we defined the structs, we can automatically extract and store the data in their fields:</p><pre><code class="language-julia">using AcuteML
+
+xml = parsexml(&quot;&quot;&quot;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;university university-name=&quot;Julia University&quot;&gt;
+  &lt;person id=&quot;1&quot;&gt;
+    &lt;age&gt;24&lt;/age&gt;
+    &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4.5&lt;/GPA&gt;
+    &lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
+    &lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
+  &lt;/person&gt;
+  &lt;person id=&quot;2&quot;&gt;
+    &lt;age&gt;18&lt;/age&gt;
+    &lt;study-field&gt;Computer Engineering&lt;/study-field&gt;
+    &lt;GPA&gt;4.2&lt;/GPA&gt;
+    &lt;taken-courses&gt;Julia&lt;/taken-courses&gt;
+  &lt;/person&gt;
+&lt;/university&gt;
+&quot;&quot;&quot;)
+
+# extract Doc
+D = Doc(xml) # StructName(xml) like Doc(xml) extracts the data and stores them in proper format
+
+# Now you can access all of the data by calling the fieldnames
+
+# extract University
+U = D.university
+
+julia&gt;U.name
+&quot;Julia University&quot;
+
+# extract Person
+
+P1 = U.people[1]
+
+julia&gt;P1.age
+24
+
+julia&gt;P1.field
+Mechanical Engineering
+
+julia&gt;P1.GPA
+4.5
+
+julia&gt;P1.courses
+[&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;]
+
+julia&gt;P1.id
+1</code></pre></div></section></article><h1 id="Templating-1"><a class="docs-heading-anchor" href="#Templating-1">Templating</a><a class="docs-heading-anchor-permalink" href="#Templating-1" title="Permalink"></a></h1><article class="docstring"><header><a class="docstring-binding" id="AcuteML.newTemplate" href="#AcuteML.newTemplate"><code>AcuteML.newTemplate</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">newTemplate(name)</code></pre><p>Create new destination html file as the template</p><pre><code class="language-none">newTemplate(name, :function)</code></pre><p>Prints a function to be used as a template</p><p><strong>Examples</strong></p><pre><code class="language-julia"># you can create a file and edit the file directly by using
+newTemplate(&quot;person&quot;)
+
+## create person function to store out html template
+newTemplate(&quot;person&quot;, :function)</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="AcuteML.render2file" href="#AcuteML.render2file"><code>AcuteML.render2file</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">render2file(destination, overwrite, var...)</code></pre><p>render variables passed as an input to the destination file.</p><p>You should put var in the destination file/string so var is evaluated there. Pass the variables as keyword arguments with the same name you used in the html string/file. Variables should be string,</p><p>If you want to statically overwrite the file pass <code>true</code> as the 2nd argument to the function. Useful if you don&#39;t want a dynamic website.</p><p><strong>Examples</strong></p><pre><code class="language-julia"># Add the following html code to the generated html file
+#=
+&lt;person id=$(id)&gt;
+  &lt;age&gt;$(age)&lt;/age&gt;
+  &lt;study-field&gt;$(field)&lt;/study-field&gt;
+  &lt;GPA&gt;$(GPA)&lt;/GPA&gt;
+  &lt;taken-courses&gt;$(courses[1])&lt;/taken-courses&gt;
+  &lt;taken-courses&gt;$(courses[2])&lt;/taken-courses&gt;
+&lt;/person&gt;
+=#
+
+# Specify the template (or its path), and also the variables for rendering
+out =render2file(&quot;person&quot;, false,
+  id = 1,
+  age = 24,
+  field = &quot;Mechanical Engineering&quot;,
+  GPA = 4.5,
+  courses = [&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;])
+
+# you pass `true` as the 2nd argument to owerwrite person.html statically.
+</code></pre></div></section></article><h1 id="Backend-utilities-1"><a class="docs-heading-anchor" href="#Backend-utilities-1">Backend utilities</a><a class="docs-heading-anchor-permalink" href="#Backend-utilities-1" title="Permalink"></a></h1><article class="docstring"><header><a class="docstring-binding" id="AcuteML.docOrElmInit" href="#AcuteML.docOrElmInit"><code>AcuteML.docOrElmInit</code></a> — <span class="docstring-category">Function</span></header><section><div><pre><code class="language-julia">docOrElmInit(docOrElmType)</code></pre><p>Function to initialize the aml</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="AcuteML.addelementOne!-Union{Tuple{T}, Tuple{Document,String,T,Type{#s14} where #s14&lt;:AbsDocOrNode}} where T" href="#AcuteML.addelementOne!-Union{Tuple{T}, Tuple{Document,String,T,Type{#s14} where #s14&lt;:AbsDocOrNode}} where T"><code>AcuteML.addelementOne!</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia">addelementOne!(node, name, value, argAmlType)</code></pre><p>Add one element to a node/document</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="AcuteML.addelementVect!-Tuple{Document,String,Array{T,1} where T,Type{#s13} where #s13&lt;:AbsDocOrNode}" href="#AcuteML.addelementVect!-Tuple{Document,String,Array{T,1} where T,Type{#s13} where #s13&lt;:AbsDocOrNode}"><code>AcuteML.addelementVect!</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia">addelementVect!(node, name, value, argAmlType)</code></pre><p>Add a vector to a node/document ```</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="AcuteML.findallcontent-Union{Tuple{T}, Tuple{Type{Array{T,1}},String,Node,Type{#s20} where #s20&lt;:AbsNormal}} where T&lt;:String" href="#AcuteML.findallcontent-Union{Tuple{T}, Tuple{Type{Array{T,1}},String,Node,Type{#s20} where #s20&lt;:AbsNormal}} where T&lt;:String"><code>AcuteML.findallcontent</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia">findallcontent(type, string, node, argAmlType)</code></pre><p>Finds all the elements with the address of string in the node, and converts the elements to Type object.</p><pre><code class="language-julia">findallcontent(UInt8,&quot;midi-channel&quot;, node, AbsNormal)</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="AcuteML.findalllocal-Tuple{String,Node}" href="#AcuteML.findalllocal-Tuple{String,Node}"><code>AcuteML.findalllocal</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia">findfirstlocal(string, node)</code></pre><p>findalllocal with ignoring namespaces. It considers element.name for returning the elements</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="AcuteML.findfirstcontent-Union{Tuple{T}, Tuple{Type{T},String,Node,Type{#s13} where #s13&lt;:AbsNormal}} where T&lt;:String" href="#AcuteML.findfirstcontent-Union{Tuple{T}, Tuple{Type{T},String,Node,Type{#s13} where #s13&lt;:AbsNormal}} where T&lt;:String"><code>AcuteML.findfirstcontent</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia">findfirstcontent(element, node, argAmlType)
+findfirstcontent(type, element,node, argAmlType)</code></pre><p>Returns first element content. It also convert to the desired format by passing type. element is given as string.</p><pre><code class="language-julia">findfirstcontent(&quot;instrument-name&quot;,node, AbsNormal)
+findfirstcontent(UInt8,&quot;midi-channel&quot;,node, AbsNormal)</code></pre></div></section></article><article class="docstring"><header><a class="docstring-binding" id="AcuteML.findfirstlocal-Tuple{String,Node}" href="#AcuteML.findfirstlocal-Tuple{String,Node}"><code>AcuteML.findfirstlocal</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia">findfirstlocal(string, node)</code></pre><p>findfirst with ignoring namespaces. It considers element.name for returning the elements</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="AcuteML.updateallcontent!-Union{Tuple{T}, Tuple{Array{T,1},String,Node,Type{#s19} where #s19&lt;:AbsNormal}} where T&lt;:Union{Number, String}" href="#AcuteML.updateallcontent!-Union{Tuple{T}, Tuple{Array{T,1},String,Node,Type{#s19} where #s19&lt;:AbsNormal}} where T&lt;:Union{Number, String}"><code>AcuteML.updateallcontent!</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia">updateallcontent!(value, string, node, argAmlType)</code></pre><p>Finds all the elements with the address of string in the node, and updates the content</p></div></section></article><article class="docstring"><header><a class="docstring-binding" id="AcuteML.updatefirstcontent!-Union{Tuple{T}, Tuple{T,String,Node,Type{#s21} where #s21&lt;:AbsNormal}} where T&lt;:Union{Number, String}" href="#AcuteML.updatefirstcontent!-Union{Tuple{T}, Tuple{T,String,Node,Type{#s21} where #s21&lt;:AbsNormal}} where T&lt;:Union{Number, String}"><code>AcuteML.updatefirstcontent!</code></a> — <span class="docstring-category">Method</span></header><section><div><pre><code class="language-julia">updatefirstcontent(value, string, node, argAmlType)</code></pre><p>Updates first element content. It also converts any type to string. element is given as string.</p></div></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="templating.html">« Templating</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Thursday 9 January 2020 11:47">Thursday 9 January 2020</span>. Using Julia version 1.3.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
