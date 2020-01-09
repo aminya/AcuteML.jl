@@ -20,5 +20,5 @@ Pages   = ["templating.jl"]
 
 ```@autodocs
 Modules = [AcuteML]
-Pages   = ["utilities.jl"]
+Pages   = ["xmlutils.jl", "types.jl", "initializer.jl", "creators.jl", "extractors.jl", "updaters.jl"]
 ```
