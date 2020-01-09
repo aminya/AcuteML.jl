@@ -188,12 +188,16 @@ end
 # Union with Nothing
 findfirstcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{<:AbsDocOrNode}) where {T} = findfirstcontent(T, name, node, argAmlType)
 
-findfirstcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{AbsNormal}) where {T} = findfirstcontent(T, name, node, argAmlType)
+findfirstcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{<:AbsNormal}) where {T} = findfirstcontent(T, name, node, argAmlType)
+
+findfirstcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T} = findfirstcontent(T, name, node, argAmlType)
 
 # Nothing Alone
 findfirstcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{<:AbsDocOrNode}) = nothing
 
-findfirstcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{AbsNormal}) = nothing
+findfirstcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{<:AbsNormal}) = nothing
+
+findfirstcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{AbsAttribute}) = nothing
 
 ################################################################
 # Vector extraction
@@ -346,8 +350,23 @@ end
 # Union with Nothing
 findallcontent(::Type{Vector{UN{T}}}, name::String,node::Node, argAmlType::Type{<:AbsDocOrNode}) where {T} = findallcontent(Vector{T},name,node, argAmlType)
 
+findallcontent(::Type{Vector{UN{T}}}, name::String,node::Node, argAmlType::Type{<:AbsNormal}) where {T} = findallcontent(Vector{T},name,node, argAmlType)
+
+
+findallcontent(::Type{Vector{UN{T}}}, name::String,node::Node, argAmlType::Type{AbsAttribute}) where {T} = findallcontent(Vector{T},name,node, argAmlType)
+
+
 # Nothing Alone
 findallcontent(::Type{Vector{Nothing}}, name::String,node::Node, argAmlType::Type{<:AbsDocOrNode}) = nothing
 
+findallcontent(::Type{Vector{Nothing}}, name::String,node::Node, argAmlType::Type{<:AbsNormal}) = nothing
+
+findallcontent(::Type{Vector{Nothing}}, name::String,node::Node, argAmlType::Type{AbsAttribute}) = nothing
+
+
 # vector of Any - consider it to be string
 findallcontent(::Type{Vector{Any}}, name::String,node::Node, argAmlType::Type{<:AbsDocOrNode}) = findallcontent(Vector{String},name,node, argAmlType)
+
+findallcontent(::Type{Vector{Any}}, name::String,node::Node, argAmlType::Type{<:AbsNormal}) = findallcontent(Vector{String},name,node, argAmlType)
+
+findallcontent(::Type{Vector{Any}}, name::String,node::Node, argAmlType::Type{<:AbsAttribute}) = findallcontent(Vector{String},name,node, argAmlType)
