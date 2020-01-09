@@ -64,8 +64,8 @@ function amlParse(expr::Expr)
             ################################################################
             # Struct aml
             ########################
-            # Literal only  xd/hd"aml name"
-            if isa(ei, Tuple{Int64,String})
+            # Literal only  sc"aml name"
+            if isa(ei, Tuple{Type,String})
 
                 amlFun[1]=missing # function
 
@@ -107,7 +107,7 @@ function amlParse(expr::Expr)
                 argExpr.args[i] =  nothing # removing "aml name" from expr args
 
             ########################
-            # Literal and Struct Function - xd/hd"aml name", F
+            # Literal and Struct Function - sc"aml name", F
             elseif isa(ei.args[1], Tuple)  && isa(ei.args[2], Union{Symbol,Function})
 
                 amlFun[1]=ei.args[2] # function
