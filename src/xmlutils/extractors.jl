@@ -3,23 +3,23 @@ export findalllocal, findfirstlocal, findfirstcontent, findallcontent
 # Extractors
 ################################################################
 # Documents
-function findfirstcontent(::Type{T},  name::String, doc::Document, argAmlType::Type{AbsNormal}) where {T}
-    name = '/'* name
+function findfirstcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNormal}) where {T}
+    name = "//"* name
     findfirstcontent(T, name, root(doc), argAmlType)
 end
 
-function findfirstcontent( name::String, doc::Document, argAmlType::Type{AbsNormal})
-    name = '/'* name
+function findfirstcontent(name::String, doc::Document, argAmlType::Type{<:AbsNormal})
+    name = "//"* name
     findfirstcontent(String, name, root(doc), argAmlType)
 end
 
-function findallcontent(::Type{T},  name::String, doc::Document, argAmlType::Type{AbsNormal}) where {T}
-    name = '/'* name
+function findallcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNormal}) where {T}
+    name = "//"* name
     findallcontent(T, name, root(doc), argAmlType)
 end
 
-function findallcontent( name::String, doc::Document, argAmlType::Type{AbsNormal})
-    name = '/'* name
+function findallcontent(name::String, doc::Document, argAmlType::Type{<:AbsNormal})
+    name = "//"* name
     findallcontent(Vector{String}, name, root(doc), argAmlType)
 end
 
