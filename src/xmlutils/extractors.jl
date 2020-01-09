@@ -221,24 +221,19 @@ function findallcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType:
         return nothing
     else
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
-        i=1
-        for elm in elmsNode
+        for (i, elm) in enumerate(elmsNode)
             elmsType[i]=elm.content
-            i+=1
         end
         return elmsType
     end
 end
 
 function findallcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:String} # for strings
-
     if haskey(node, name)
         elmsNode = node[name]
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
-        i=1
-        for elm in elmsNode
+        for (i, elm) in enumerate(elmsNode)
             elmsType[i]=elm
-            i+=1
         end
         return elmsType
     else  # return nothing if nothing is found
@@ -261,24 +256,19 @@ function findallcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType
         return nothing
     else
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
-        i=1
-        for elm in elmsNode
+        for (i, elm) in enumerate(elmsNode)
             elmsType[i]=parse(T, elm.content)
-            i+=1
         end
         return elmsType
     end
 end
 
 function findallcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:Union{Number,Bool}}
-
     if haskey(node, name)
         elmsNode = parse(T, node[name])
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
-        i=1
-        for elm in elmsNode
+        for (i, elm) in enumerate(elmsNode)
             elmsType[i]=parse(T, elm)
-            i+=1
         end
         return elmsType
     else  # return nothing if nothing is found
@@ -300,24 +290,20 @@ function findallcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType
     else
         if hasmethod(T, Tuple{String}) && Core.Compiler.return_type(T, Tuple{Node}) === Union{}
             elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
-            i=1
-            for elm in elmsNode
+            for (i, elm) in enumerate(elmsNode)
                 elmsType[i]=T(elm.content)
-                i+=1
             end
         else
             elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
-            i=1
-            for elm in elmsNode
+            for (i, elm) in enumerate(elmsNode)
                 elmsType[i]=T(elm)
-                i+=1
             end
         end
         return elmsType
     end
 
 end
-function findallcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbsAttribute}) where{T}
+function findallcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where{T}
 
     if haskey(node, name)
         elmsNode = node[name]
@@ -330,17 +316,13 @@ function findallcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType
     else
         if hasmethod(T, Tuple{String}) && Core.Compiler.return_type(T, Tuple{Node}) === Union{}
             elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
-            i=1
-            for elm in elmsNode
+            for (i, elm) in enumerate(elmsNode)
                 elmsType[i]=T(elm.content)
-                i+=1
             end
         else
             elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
-            i=1
-            for elm in elmsNode
+            for (i, elm) in enumerate(elmsNode)
                 elmsType[i]=T(elm)
-                i+=1
             end
         end
         return elmsType
