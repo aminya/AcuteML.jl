@@ -37,14 +37,14 @@ function Identity(;pitch = nothing, rest = nothing, unpitched = nothing)
 
     # This constructor only allows one the fields to exist - similar to choice element in XS
 
-    aml = docOrElmInit("identity")
+    aml = docOrElmInit(AbsNormal, "identity")
 
     if pitch != nothing
-        addelementOne!(aml, "pitch", pitch)
+        addelementOne!(aml, "pitch", pitch, AbsNormal)
     elseif rest != nothing
-        addelementOne!(aml, "rest", rest)
+        addelementOne!(aml, "rest", rest, AbsNormal)
     elseif unpitched != nothing
-        addelementOne!(aml, "unpitched", unpitched)
+        addelementOne!(aml, "unpitched", unpitched, AbsNormal)
     else
         error("one of the pitch, rest or unpitched should be given")
     end
@@ -54,9 +54,9 @@ end
 
 function Identity(;aml)
 
-        pitch = findfirstcontent(Pitch, "pitch", aml, 0)
-        rest = findfirstcontent(Rest, "rest", aml, 0)
-        unpitched = findfirstcontent(Unpitched, "unpitched", aml, 0)
+        pitch = findfirstcontent(Pitch, "pitch", aml, AbsNormal)
+        rest = findfirstcontent(Rest, "rest", aml, AbsNormal)
+        unpitched = findfirstcontent(Unpitched, "unpitched", aml, AbsNormal)
 
         return Identity(pitch, rest, unpitched, aml)
 end
