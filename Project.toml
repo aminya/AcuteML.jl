@@ -15,11 +15,11 @@ Tables = "0.2"
 julia = "1"
 
 [extras]
-Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+EzXML = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
 Suppressor = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-EzXML = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
 
 [targets]
 test = ["Test", "Suppressor", "DataFrames", "Dates", "EzXML"]
