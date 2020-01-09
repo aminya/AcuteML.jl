@@ -23,3 +23,9 @@ function docOrElmInit(::Type{<:AbsNormal}, amlName::String)
     out = ElementNode(amlName) # element node
     return out
 end
+
+# no type method
+function docOrElmInit(amlName::String)
+    out = ElementNode(amlName) # element node
+    return out
+end
