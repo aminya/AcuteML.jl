@@ -19,7 +19,7 @@ function docOrElmInit(::Type{AbsXml}, amlName::String = "xml")
     return out
 end
 
-function docOrElmInit(::Type{Union{AbsNormal, AbsEmpty}}, amlName::String)
+function docOrElmInit(::Type{<:AbsNormal}, amlName::String)
     out = ElementNode(amlName) # element node
     return out
 end
