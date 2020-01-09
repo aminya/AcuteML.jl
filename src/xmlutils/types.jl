@@ -16,7 +16,7 @@ abstract type AbsAttribute <: AbsNode end
 abstract type AbsEmpty <: AbsNormal end
 
 # Ignore
-abstract type AbsIgnore end
+abstract type AbsIgnore <: AbsDocOrNode end
 
 ################################################################
 function aml_dispatch(docOrElmType::Type{AbsDocOrNode}, name::String)
