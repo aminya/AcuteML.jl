@@ -352,7 +352,8 @@ julia>P1.id
 ```
 """
 macro aml(expr)
-    expr = macroexpand(__module__, expr) # to expand @static
+    expr = macroexpand(__module__, expr) # to expand literal macros and @static
+    # expr = macroexpand(@__MODULE__, expr) # for functions debuging.
 
     #  check if aml is used before struct
     if expr isa Expr && expr.head == :struct
