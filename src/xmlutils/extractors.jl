@@ -48,7 +48,7 @@ end
 
 findfirst with ignoring namespaces. It considers element.name for returning the elements
 """
-function findfirstlocal( name::String, node::Node)
+function findfirstlocal(name::String, node::Node)
     out = nothing # return nothing if nothing is found
     for child in eachelement(node)
         if child.name == name
@@ -64,7 +64,7 @@ end
 
 findalllocal with ignoring namespaces. It considers element.name for returning the elements
 """
-function findalllocal( name::String, node::Node)
+function findalllocal(name::String, node::Node)
     out = Node[]
     for child in eachelement(node)
         if child.name == name
@@ -80,13 +80,13 @@ end
 ################################################################
 # Single extraction
 """
-    findfirstcontent(element,node, argAmlType)
-    findfirstcontent(type,element,node, argAmlType)
+    findfirstcontent(element, node, argAmlType)
+    findfirstcontent(type, element,node, argAmlType)
 
 Returns first element content. It also convert to the desired format by passing type. element is given as string.
 ```julia
-findfirstcontent("/instrument-name",node, 0)
-findfirstcontent(UInt8,"/midi-channel",node, 0)
+findfirstcontent("instrument-name",node, AbsNormal)
+findfirstcontent(UInt8,"midi-channel",node, AbsNormal)
 ```
 """
 function findfirstcontent(::Type{T},  name::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T<:String} # for strings
