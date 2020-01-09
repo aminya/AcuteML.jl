@@ -112,6 +112,14 @@ function addelementOne!(aml::Node, name::String, value::Nothing, argAmlType::Typ
     # do nothing
 end
 
+function addelementOne!(aml::Node, name::String, value::Nothing, argAmlType::Type{<:AbsNormal})
+    # do nothing
+end
+
+function addelementOne!(aml::Node, name::String, value::Nothing, argAmlType::Type{AbsAttribute})
+    # do nothing
+end
+
 function addelementOne!(aml::Node, name::String, value, argAmlType::AbsIgnore)
     # do nothing
 end
