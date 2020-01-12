@@ -149,6 +149,7 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
                     end
 
                 end
+            amlext[i]=argext(isVector, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
 
             end
 
@@ -356,3 +357,39 @@ function argconst(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, a
     end
     return amlconstI
 end
+################################################################
+"""
+Each argument extractor
+"""
+function argext(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+
+    if !isVector
+        if !hasCheckFunction
+            amlextI=:($argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
+        else
+            amlextI=quote
+
+                $argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
+
+                if !isnothing($argVarsI) && !(($(esc(argFunsI)))($argVarsI))
+                    error("$($argNamesI) doesn't meet criteria function")
+                end
+            end
+        end
+    else
+        if !hasCheckFunction
+            amlextI=:($argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
+        else
+            amlextI=quote
+
+                $argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
+
+                if !isnothing($argVarsI) && !(($(esc(argFunsI)))($argVarsI))
+                    error("$($argNamesI) doesn't meet criteria function")
+                end
+            end
+        end
+    end
+    return amlextI
+end
+################################################################
