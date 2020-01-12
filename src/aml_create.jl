@@ -130,6 +130,7 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
                     amlext[i]=quote
 
                         $argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
+            amlconst[i]=argconst(isVector, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
 
                         if !isnothing($argVarsI) && !(($(esc(argFunsI)))($argVarsI))
                             error("$($argNamesI) doesn't meet criteria function")
@@ -322,4 +323,36 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
         out = nothing
     end
     return out
+end
+"""
+Each argument constructor
+"""
+function argconst(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+
+    if !isVector
+        if !hasCheckFunction
+            amlconstI=:(addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
+        else
+            amlconstI=quote
+                if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
+                    addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
+                else
+                    error("$($argNamesI) doesn't meet criteria function")
+                end
+            end
+        end
+    else
+        if !hasCheckFunction
+            amlconstI=:(addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
+        else
+            amlconstI=quote
+                if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
+                    addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
+                else
+                    error("$($argNamesI) doesn't meet criteria function")
+                end
+            end
+        end
+    end
+    return amlconstI
 end
