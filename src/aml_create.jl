@@ -44,111 +44,23 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
             ##########################
             # call Expr - For mutability
             argVarsCall[i] = :(str.$argVarsI)
+            argVarsCallI = argVarsCall[i]
 
             # Vector
             if (isa(argTypesI, Expr) && argTypesI.args[1] == :Vector) || (!isa(argTypesI, Union{Symbol, Expr}) && argTypesI <: Array)
 
-
-                # Function missing
-                if ismissing(argFunsI)
-
-                    amlconst[i]=:(addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
-
-                    amlext[i]=:($argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
-
-                    if mutability
-                        amlmutability[i] = quote
-                            if name == $argSymI
-                                updateallcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
-                            end
-                        end
-                    end
-
-                # Function provided
-                else
-                    amlconst[i]=quote
-                        if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
-                            addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
-                        else
-                            error("$($argNamesI) doesn't meet criteria function")
-                        end
-                    end
-
-
-                    amlext[i]=quote
-
-                        $argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
-
-                        if !isnothing($argVarsI) && !(($(esc(argFunsI)))($argVarsI))
-                            error("$($argNamesI) doesn't meet criteria function")
-                        end
-                    end
-
-                    if mutability
-                        amlmutability[i] = quote
-                            if name == $argSymI
-                                if !isnothing($(argVarsCall[i])) && ($(esc(argFunsI)))($(argVarsCall[i]))
-                                    updateallcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
-                                else
-                                    error("$($argNamesI) doesn't meet criteria function")
-                                end
-                            end
-                        end
-                    end
-
-                end
-
+                isVector = true
             ##########################
             # Non Vector
             elseif isa(argTypesI, Symbol) || (isa(argTypesI, Expr) && argTypesI.args[1] == :Union ) || (isa(argTypesI, Expr) && argTypesI.args[1] == :UN) || !(argTypesI <: Array)
 
-                # Function missing
-                if ismissing(argFunsI)
+                isVector = false
+            end
 
-                    amlconst[i]=:(addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
-                    amlext[i]=:($argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
+            hasCheckFunction = !ismissing(argFunsI)
 
-                    if mutability
-
-                        amlmutability[i] = quote
-                            if name == $argSymI
-                                updatefirstcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
-                            end
-                        end
-                    end
-
-                # Function provided
-                else
-                    amlconst[i]=quote
-                        if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
-                            addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
-                        else
-                            error("$($argNamesI) doesn't meet criteria function")
-                        end
-                    end
-
-                    amlext[i]=quote
-
-                        $argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
             amlconst[i]=argconst(isVector, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
 
-                        if !isnothing($argVarsI) && !(($(esc(argFunsI)))($argVarsI))
-                            error("$($argNamesI) doesn't meet criteria function")
-                        end
-                    end
-                    if mutability
-                        amlmutability[i] = quote
-                            if name == $argSymI
-                                if !isnothing($(argVarsCall[i])) && ($(esc(argFunsI)))($(argVarsCall[i]))
-                                    updatefirstcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
-                                else
-                                    error("$($argNamesI) doesn't meet criteria function")
-                                end
-                            end
-                        end
-                    end
-
-                end
             amlext[i]=argext(isVector, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
 
             if mutability
@@ -327,6 +239,9 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
     end
     return out
 end
+
+################################################################
+################################################################
 """
 Each argument constructor
 """
