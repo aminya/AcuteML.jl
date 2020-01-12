@@ -70,20 +70,8 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
         end # endfor
 
         ################################################################
-
-        if mutability
-            if !ismissing(amlFun[1])
-                F=amlFun[1]
-                amlFunCheckerMutability = quote
-                    if !( ($(esc(F)))($(argVarsCall...)) )
-                        error("struct criteria function ($($(esc(F)))) isn't meet")
-                    end
-                end
-            else
-                amlFunCheckerMutability = nothing
-            end
-        end
         amlFunChecker = aml_checkFunction(amlFun, argVars)
+        amlFunCheckerMutability = aml_mutabilityCheckFunction(mutability, amlFun, argVarsCall)
 
         ################################################################
         # Type name is a single name (symbol)
@@ -344,6 +332,7 @@ function argmutability(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVar
     end
     return amlmutabilityI
 end
+################################################################
 
 function aml_checkFunction(amlFun, argVars)
     # aml Function
@@ -360,3 +349,18 @@ function aml_checkFunction(amlFun, argVars)
     return amlFunChecker
 end
 ################################################################
+function aml_mutabilityCheckFunction(mutability, amlFun, argVarsCall)
+    if mutability
+        if !ismissing(amlFun[1])
+            F=amlFun[1]
+            amlFunCheckerMutability = quote
+                if !( ($(esc(F)))($(argVarsCall...)) )
+                    error("struct criteria function ($($(esc(F)))) isn't meet")
+                end
+            end
+        else
+            amlFunCheckerMutability = nothing
+        end
+    end
+    return amlFunCheckerMutability
+end
