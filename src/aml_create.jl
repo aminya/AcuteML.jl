@@ -151,6 +151,8 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
                 end
             amlext[i]=argext(isVector, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
 
+            if mutability
+                amlmutability[i] = argmutability(isVector, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
             end
 
         end # endfor
@@ -393,3 +395,47 @@ function argext(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, arg
     return amlextI
 end
 ################################################################
+"""
+Each argument mutability
+"""
+function argmutability(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+
+    if !isVector
+        if !hasCheckFunction
+            amlmutabilityI = quote
+                if name == $argSymI
+                    updatefirstcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
+                end
+            end
+        else
+            amlmutabilityI = quote
+                if name == $argSymI
+                    if !isnothing($(argVarsCallI)) && ($(esc(argFunsI)))($(argVarsCallI))
+                        updatefirstcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
+                    else
+                        error("$($argNamesI) doesn't meet criteria function")
+                    end
+                end
+            end
+        end
+    else
+        if !hasCheckFunction
+            amlmutabilityI = quote
+                if name == $argSymI
+                    updateallcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
+                end
+            end
+        else
+            amlmutabilityI = quote
+                if name == $argSymI
+                    if !isnothing($(argVarsCallI)) && ($(esc(argFunsI)))($(argVarsCallI))
+                        updateallcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
+                    else
+                        error("$($argNamesI) doesn't meet criteria function")
+                    end
+                end
+            end
+        end
+    end
+    return amlmutabilityI
+end
