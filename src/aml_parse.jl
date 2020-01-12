@@ -1,9 +1,9 @@
 """
 @aml parser function
 """
-function amlParse(expr::Expr)
+function aml_parse(expr::Expr)
 
-    expr.head == :struct || error("Invalid usage of amlParse")
+    expr.head == :struct || error("Invalid usage of aml_parse")
 
     # reminder:
     # var is a symbol
@@ -355,7 +355,7 @@ function amlParse(expr::Expr)
 
             elseif ei.head == :block  # anything else should be evaluated again
                 # can arise with use of @static inside type decl
-                argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
+                argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = aml_parse(expr)
             else
                 continue
             end
@@ -377,7 +377,7 @@ function amlParse(expr::Expr)
         push!(argVars, :content)
         push!(argDefVal, nothing)
         push!(argExpr.args,:(content::Nothing))
-        # argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
+        # argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = aml_parse(expr)
     end
 
     ########################

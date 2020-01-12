@@ -38,7 +38,7 @@ uses push! instead of static sizing.
 
 Only kept for the record.
 """
-function amlParseDynamic(expr)
+function aml_parseDynamic(expr)
 
     # reminder:
     # var is a symbol
@@ -386,7 +386,7 @@ function amlParseDynamic(expr)
 
             elseif ei.head == :block  # anything else should be evaluated again
                 # can arise with use of @static inside type decl
-                argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T  = amlParse(expr)
+                argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T  = aml_parse(expr)
             else
                 continue
             end
@@ -408,7 +408,7 @@ function amlParseDynamic(expr)
         push!(argVars, :content)
         push!(argDefVal, nothing)
         push!(argExpr.args,:(content::Nothing))
-        # argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T  = amlParse(expr)
+        # argExpr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T  = aml_parse(expr)
     end
 
     ########################

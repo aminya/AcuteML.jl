@@ -12,9 +12,9 @@ end
 
 # aml macro
 include("xmlutils.jl")
-include("amlParse.jl")
-# include("deprecated/amlParseDynamic.jl") # kept only for the record
-include("amlCreate.jl")
+include("aml_parse.jl")
+# include("deprecated/aml_parseDynamic.jl") # kept only for the record
+include("aml_create.jl")
 
 # io
 include("io.jl")
@@ -360,9 +360,9 @@ macro aml(expr)
 
         # expr.args[3] # arguments
         # argParams.args # empty
-        expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = amlParse(expr)
+        expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = aml_parse(expr)
 
-        out = amlCreate(expr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T)
+        out = aml_create(expr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T)
 
     # elseif expr isa Expr && expr.head == :tuple
     #     amlTypesSupport(expr)
