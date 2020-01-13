@@ -70,32 +70,32 @@ end
 """
 Each argument extractor
 """
-function arg_ext(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+function arg_ext(argParsedTypeI::Type{<:AbstractVector}, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+    if !hasCheckFunction
+        argextI=:($argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
+    else
+        argextI=quote
 
-    if !isVector
-        if !hasCheckFunction
-            argextI=:($argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
-        else
-            argextI=quote
+            $argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
 
-                $argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
-
-                if !isnothing($argVarsI) && !(($(esc(argFunsI)))($argVarsI))
-                    error("$($argNamesI) doesn't meet criteria function")
-                end
+            if !isnothing($argVarsI) && !(($(esc(argFunsI)))($argVarsI))
+                error("$($argNamesI) doesn't meet criteria function")
             end
         end
+    end
+    return argextI
+end
+
+function arg_ext(argParsedTypeI, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+    if !hasCheckFunction
+        argextI=:($argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
     else
-        if !hasCheckFunction
-            argextI=:($argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
-        else
-            argextI=quote
+        argextI=quote
 
-                $argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
+            $argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
 
-                if !isnothing($argVarsI) && !(($(esc(argFunsI)))($argVarsI))
-                    error("$($argNamesI) doesn't meet criteria function")
-                end
+            if !isnothing($argVarsI) && !(($(esc(argFunsI)))($argVarsI))
+                error("$($argNamesI) doesn't meet criteria function")
             end
         end
     end
