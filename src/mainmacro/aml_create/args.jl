@@ -1,4 +1,35 @@
 """
+Parses argument type for sentence creation. Only three output are considered:
+- Vector
+- Dict
+- Other (Any)
+
+Only used to determine the correct xml utils sets of functions
+"""
+function arg_typeparse(argTypesI)
+    # Vector
+    if (isa(argTypesI, Expr) && argTypesI.args[1] == :Vector) ||
+       (!isa(argTypesI, Union{Symbol,Expr}) && argTypesI <: AbstractVector)
+
+       argParsedTypeI = AbstractVector
+
+    # Dict
+    elseif (isa(argTypesI, Expr) && argTypesI.args[1] == :Dict) ||
+           (!isa(argTypesI, Union{Symbol,Expr}) && argTypesI <: AbstractDict)
+
+        argParsedTypeI = AbstractDict
+
+    # # Non Vector
+    # elseif isa(argTypesI, Symbol) ||
+    #        (isa(argTypesI, Expr) && argTypesI.args[1] == :Union) ||
+    #        (isa(argTypesI, Expr) && argTypesI.args[1] == :UN) ||
+    #        !(argTypesI <: AbstractVector)
+    else
+        argParsedTypeI = Any
+    end
+
+    return argParsedTypeI
+end
 Each argument constructor
 """
 function arg_const(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
