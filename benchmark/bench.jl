@@ -92,9 +92,9 @@ Benchmark Result
 ------------------------------
 New type system
 
-9.601 μs (92 allocations: 11.34 KiB)
-20.401 μs (72 allocations: 11.58 KiB)
-491.200 μs (348 allocations: 22.61 KiB)
+9.200 μs (93 allocations: 11.36 KiB)
+19.799 μs (72 allocations: 11.58 KiB)
+489.401 μs (348 allocations: 22.61 KiB
 
 -------------------------------------
 Old Type System
