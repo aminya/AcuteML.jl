@@ -12,9 +12,9 @@ end
 
 # aml macro
 include("xmlutils.jl")
-include("aml_parse.jl")
-# include("deprecated/aml_parseDynamic.jl") # kept only for the record
-include("aml_create.jl")
+include("mainmacro/aml_parse.jl")
+# include("mainmacro/deprecated/aml_parseDynamic.jl") # kept only for the record
+include("mainmacro/aml_create.jl")
 
 # io
 include("io.jl")
