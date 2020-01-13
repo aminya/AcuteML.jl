@@ -5,9 +5,9 @@ function arg_const(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, 
 
     if !isVector
         if !hasCheckFunction
-            amlconstI=:(addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
+            argconstI=:(addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
         else
-            amlconstI=quote
+            argconstI=quote
                 if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
                     addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
                 else
@@ -17,9 +17,9 @@ function arg_const(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, 
         end
     else
         if !hasCheckFunction
-            amlconstI=:(addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
+            argconstI=:(addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
         else
-            amlconstI=quote
+            argconstI=quote
                 if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
                     addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
                 else
@@ -28,7 +28,7 @@ function arg_const(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, 
             end
         end
     end
-    return amlconstI
+    return argconstI
 end
 ################################################################
 """
@@ -38,9 +38,9 @@ function arg_ext(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, ar
 
     if !isVector
         if !hasCheckFunction
-            amlextI=:($argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
+            argextI=:($argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
         else
-            amlextI=quote
+            argextI=quote
 
                 $argVarsI = findfirstcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
 
@@ -51,9 +51,9 @@ function arg_ext(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, ar
         end
     else
         if !hasCheckFunction
-            amlextI=:($argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
+            argextI=:($argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
         else
-            amlextI=quote
+            argextI=quote
 
                 $argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
 
@@ -63,7 +63,7 @@ function arg_ext(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, ar
             end
         end
     end
-    return amlextI
+    return argextI
 end
 ################################################################
 """
@@ -73,13 +73,13 @@ function arg_mutability(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVa
 
     if !isVector
         if !hasCheckFunction
-            amlmutabilityI = quote
+            argmutabilityI = quote
                 if name == $argSymI
                     updatefirstcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
                 end
             end
         else
-            amlmutabilityI = quote
+            argmutabilityI = quote
                 if name == $argSymI
                     if !isnothing($(argVarsCallI)) && ($(esc(argFunsI)))($(argVarsCallI))
                         updatefirstcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
@@ -91,13 +91,13 @@ function arg_mutability(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVa
         end
     else
         if !hasCheckFunction
-            amlmutabilityI = quote
+            argmutabilityI = quote
                 if name == $argSymI
                     updateallcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
                 end
             end
         else
-            amlmutabilityI = quote
+            argmutabilityI = quote
                 if name == $argSymI
                     if !isnothing($(argVarsCallI)) && ($(esc(argFunsI)))($(argVarsCallI))
                         updateallcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
@@ -108,5 +108,5 @@ function arg_mutability(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVa
             end
         end
     end
-    return amlmutabilityI
+    return argmutabilityI
 end
