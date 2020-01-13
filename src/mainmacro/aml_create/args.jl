@@ -30,35 +30,40 @@ function arg_typeparse(argTypesI)
 
     return argParsedTypeI
 end
+################################################################
+"""
 Each argument constructor
 """
-function arg_const(isVector::Bool, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+function arg_const(argParsedTypeI::Type{<:AbstractVector}, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
 
-    if !isVector
-        if !hasCheckFunction
-            argconstI=:(addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
-        else
-            argconstI=quote
-                if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
-                    addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
-                else
-                    error("$($argNamesI) doesn't meet criteria function")
-                end
-            end
-        end
+    if !hasCheckFunction
+        argconstI=:(addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
     else
-        if !hasCheckFunction
-            argconstI=:(addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
-        else
-            argconstI=quote
-                if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
-                    addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
-                else
-                    error("$($argNamesI) doesn't meet criteria function")
-                end
+        argconstI=quote
+            if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
+                addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
+            else
+                error("$($argNamesI) doesn't meet criteria function")
             end
         end
     end
+    return argconstI
+end
+
+function arg_const(argParsedTypeI, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+
+    if !hasCheckFunction
+        argconstI=:(addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
+    else
+        argconstI=quote
+            if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
+                addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
+            else
+                error("$($argNamesI) doesn't meet criteria function")
+            end
+        end
+    end
+
     return argconstI
 end
 ################################################################
