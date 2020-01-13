@@ -74,36 +74,8 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
         ################################################################
         # Type name is a single name (symbol)
         if T isa Symbol
-
-            docOrElmconst = :( aml = docOrElmInit($docOrElmType, $amlName) )
-
-            typeDefinition =:($expr)
-
-            amlFunChecker = aml_checkFunction(amlFun, argVars)
-
-            # Constructor
-            amlConstructor = aml_constructor(T, argParams, amlFunChecker, docOrElmconst, argconst, argVars)
-            # Extractor
-            amlExtractor = aml_extractor(T, argext, amlFunChecker, argVars)
-
-            nothingMethod = :( ($(esc(T)))(::Nothing) = nothing )
-            # convertNothingMethod = :(Base.convert(::Type{($(esc(T)))}, ::Nothing) = nothing) # for passing nothing to function without using Union{Nothing, T} in the definition
-            selfMethod = :( ($(esc(T)))(in::$(esc(T))) = $(esc(T))(in.aml) )
-            pprintMethod = :( AcuteML.pprint(in::$(esc(T))) = pprint(in.aml) )
-
-            mutabilityExp = aml_mutablity(mutability, T, argmutability, amlFun, argVarsCall)
-
-            out = quote
-                Base.@__doc__($(esc(typeDefinition)))
-                $amlConstructor
-                $amlExtractor
-                $nothingMethod
-                # $convertNothingMethod
-                $selfMethod
-                $pprintMethod
-                $mutabilityExp
-            end
-
+            S = T
+            isCurly = false
         ################################################################
         # Parametric type structs
         elseif T isa Expr && T.head == :curly
@@ -115,47 +87,51 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
             Q = [U isa Expr && U.head == :<: ? U.args[1] : U for U in P]
             SQ = :($S{$(Q...)})
 
-            docOrElmconst = :( aml = docOrElmInit($docOrElmType, $amlName) )
-
-            typeDefinition =:($expr)
-
-            amlFunChecker = aml_checkFunction(amlFun, argVars)
-
-            # Constructor
-            ## normal
-            amlConstructor = aml_constructor(S, argParams, amlFunChecker, docOrElmconst, argconst, argVars)
-            ## curly
-            amlConstructorCurly = aml_constructor(SQ, P, argParams, amlFunChecker, docOrElmconst, argconst, argVars)
-
-            # Extractor
-            ## normal
-            amlExtractor = aml_extractor(S, argext, amlFunChecker, argVars)
-
-            ## curly
-            amlExtractorCurly = aml_extractor(SQ, P, argext, amlFunChecker, argVars)
-
-            nothingMethod = :( ($(esc(S)))(::Nothing) = nothing )
-            # convertNothingMethod = :(Base.convert(::Type{($(esc(S)))}, ::Nothing) = nothing) # for passing nothing to function without using Union{Nothing, ...} in the definition
-            selfMethod = :( ($(esc(S)))(in::$(esc(S))) = $(esc(S))(in.aml) )
-            pprintMethod = :( AcuteML.pprint(in::$(esc(S))) = pprint(in.aml) )
-
-            mutabilityExp = aml_mutablity(mutability, S, argmutability, amlFun, argVarsCall)
-
-             out = quote
-                 Base.@__doc__($(esc(typeDefinition)))
-                 $amlConstructor
-                 $amlConstructorCurly
-                 $amlExtractor
-                 $amlExtractorCurly
-                 $nothingMethod
-                 # $convertNothingMethod
-                 $selfMethod
-                 $pprintMethod
-                 $mutabilityExp
-             end
+            isCurly = true
         ################################################################
         else
             error("Invalid usage of @aml")
+        end
+        ################################################################
+        docOrElmconst = :( aml = docOrElmInit($docOrElmType, $amlName) )
+
+        typeDefinition =:($expr)
+
+        amlFunChecker = aml_checkFunction(amlFun, argVars)
+
+        # Constructor
+        amlConstructor = aml_constructor(S, argParams, amlFunChecker, docOrElmconst, argconst, argVars)
+        # Extractor
+        amlExtractor = aml_extractor(S, argext, amlFunChecker, argVars)
+
+        if isCurly
+            # Constructor
+            amlConstructorCurly = aml_constructor(SQ, P, argParams, amlFunChecker, docOrElmconst, argconst, argVars)
+            # Extractor
+            amlExtractorCurly = aml_extractor(SQ, P, argext, amlFunChecker, argVars)
+        else
+            amlConstructorCurly = nothing
+            amlExtractorCurly = nothing
+        end
+
+        nothingMethod = :( ($(esc(S)))(::Nothing) = nothing )
+        # convertNothingMethod = :(Base.convert(::Type{($(esc(S)))}, ::Nothing) = nothing) # for passing nothing to function without using Union{Nothing, S} in the definition
+        selfMethod = :( ($(esc(S)))(in::$(esc(S))) = $(esc(S))(in.aml) )
+        pprintMethod = :( AcuteML.pprint(in::$(esc(S))) = pprint(in.aml) )
+
+        mutabilityExp = aml_mutablity(mutability, S, argmutability, amlFun, argVarsCall)
+
+        out = quote
+            Base.@__doc__($(esc(typeDefinition)))
+            $amlConstructor
+            $amlConstructorCurly
+            $amlExtractor
+            $amlExtractorCurly
+            $nothingMethod
+            # $convertNothingMethod
+            $selfMethod
+            $pprintMethod
+            $mutabilityExp
         end
     else
         out = nothing
