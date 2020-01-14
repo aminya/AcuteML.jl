@@ -37,11 +37,11 @@ Each argument constructor
 function arg_const(argParsedTypeI::Type{<:AbstractVector}, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
 
     if !hasCheckFunction
-        argconstI=:(addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
+        argconstI=:(addelm!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
     else
         argconstI=quote
             if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
-                addelementVect!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
+                addelm!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
             else
                 error("$($argNamesI) doesn't meet criteria function")
             end
@@ -53,11 +53,11 @@ end
 function arg_const(argParsedTypeI, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
 
     if !hasCheckFunction
-        argconstI=:(addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
+        argconstI=:(addelm!(aml, $argNamesI, $argVarsI, $argAmlTypesI))
     else
         argconstI=quote
             if !isnothing($argVarsI) && ($(esc(argFunsI)))($argVarsI)
-                addelementOne!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
+                addelm!(aml, $argNamesI, $argVarsI, $argAmlTypesI)
             else
                 error("$($argNamesI) doesn't meet criteria function")
             end
