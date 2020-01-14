@@ -7,7 +7,7 @@ Notice that if you don't use `@aml`, you should include `aml::Node` as one of yo
 
 Functions to use for custom html/xml constructor:
 - [docOrElmInit](@ref): function to initialize the aml
-- [addelementOne!](@ref) : to add single elements
+- [addelm!](@ref) : to add single elements
 - [addelementVect!](@ref) : to add multiple elements (vector)
 Use these functions, to make a method that calculates the `aml` inside the function and returns all of the fields.
 
@@ -40,11 +40,11 @@ function Identity(;pitch = nothing, rest = nothing, unpitched = nothing)
     aml = docOrElmInit(AbsNormal, "identity")
 
     if pitch != nothing
-        addelementOne!(aml, "pitch", pitch, AbsNormal)
+        addelm!(aml, "pitch", pitch, AbsNormal)
     elseif rest != nothing
-        addelementOne!(aml, "rest", rest, AbsNormal)
+        addelm!(aml, "rest", rest, AbsNormal)
     elseif unpitched != nothing
-        addelementOne!(aml, "unpitched", unpitched, AbsNormal)
+        addelm!(aml, "unpitched", unpitched, AbsNormal)
     else
         error("one of the pitch, rest or unpitched should be given")
     end
