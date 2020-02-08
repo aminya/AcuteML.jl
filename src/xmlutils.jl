@@ -1,4 +1,4 @@
-using EzXML
+using EzXML, TypeTransform
 import EzXML: Document, Node
 
 import Tables
