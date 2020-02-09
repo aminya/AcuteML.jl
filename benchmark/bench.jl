@@ -7,11 +7,11 @@ using AcuteML, BenchmarkTools
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
-    id::Int64, a"~"
+    id::Int64, att"~"
 end
 
 @aml mutable struct University doc"university"
-    name, a"university-name"
+    name, att"university-name"
     people::Vector{Person}, "person"
 end
 

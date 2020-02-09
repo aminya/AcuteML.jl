@@ -28,7 +28,7 @@ macro sc_str(s)
 end
 ################################################################
 # attribute
-macro a_str(s)
+macro att_str(s)
     argAmlType = AbsAttribute
     return argAmlType, s
 end

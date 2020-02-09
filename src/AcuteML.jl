@@ -69,7 +69,7 @@ age::UInt, "~"
 ### Attributes
 * If the value is going to be an attribute put `a` before its name
 ```julia
-id::Int64, a"~"
+id::Int64, att"~"
 ```
 
 ### Default Value
@@ -144,11 +144,11 @@ using AcuteML
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
     professors::UN{DataFrame} = nothing, "table"
-    id::Int64, a"~"
+    id::Int64, att"~"
 end
 
 @aml mutable struct University doc"university"
-    name, a"university-name"
+    name, att"university-name"
     people::Vector{Person}, "person"
 end
 

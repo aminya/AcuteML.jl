@@ -45,11 +45,11 @@ using AcuteML
     GPA::Float64 = 4.5, "~", GPAcheck
     courses::Vector{String}, "taken-courses"
     professors::UN{DataFrame} = nothing, "table"
-    id::Int64, a"~"
+    id::Int64, att"~"
 end
 
 @aml mutable struct University doc"university"
-    name, a"university-name"
+    name, att"university-name"
     people::Vector{Person}, "person"
 end
 
