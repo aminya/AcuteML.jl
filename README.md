@@ -25,7 +25,7 @@ using AcuteML
 # Documentation
 Click on the badge: [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AcuteML.jl/dev)
 
-See [Type Definition](https://aminya.github.io/AcuteML.jl/dev/#Main-macro-and-I/O-1) for comprehensive introduction to syntax. You can use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
+See [Type Definition](https://aminya.github.io/AcuteML.jl/dev/#Main-macro-and-I/O-1) for a comprehensive introduction to syntax. You can use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
 -----------------------------------------------
 
