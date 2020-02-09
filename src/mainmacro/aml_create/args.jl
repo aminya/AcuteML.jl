@@ -72,29 +72,6 @@ end
 """
 Each argument mutability
 """
-function arg_mutability(argParsedTypeI::Type{<:AbstractVector}, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
-
-    if !hasCheckFunction
-        argmutabilityI = quote
-            if name == $argSymI
-                updateallcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
-            end
-        end
-    else
-        argmutabilityI = quote
-            if name == $argSymI
-                if !isnothing($(argVarsCallI)) && ($(esc(argFunsI)))($(argVarsCallI))
-                    updateallcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
-                else
-                    error("$($argNamesI) doesn't meet criteria function")
-                end
-            end
-        end
-    end
-    return argmutabilityI
-end
-
-
 function arg_mutability(argParsedTypeI, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
     if !hasCheckFunction
         argmutabilityI = quote
