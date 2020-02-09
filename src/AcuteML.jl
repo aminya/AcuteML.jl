@@ -67,7 +67,7 @@ age::UInt, "~"
 ```
 
 ### Attributes
-* If the value is going to be an attribute put `a` before its name
+* If the value is going to be an attribute put `att` before its name
 ```julia
 id::Int64, att"~"
 ```
@@ -119,6 +119,20 @@ residence::UN{String}=nothing, "residence-stay" # optional with nothing as defau
 ```julia
 funds::UN{String}, "financial-funds"   # optional, but you should pass nothing manually in construction
 ```
+
+### Text Nodes
+* If the value is going to be in a Text node:
+    - use `text"index"` for non-vector field type, which `index` is an Integer that shows the positon of text node. If you give `text""` it considers it like `text"1"`.
+
+    ```julia
+    textnode_single:String, text"2"
+    ```
+
+    - use `text"indices"` for vector field type, which `indices` is an array index that shows the positons of the text nodes. If you give `text""` it considers it like `text"[:]"`
+
+    ```julia
+    textnode_vector::Vector{String}, text"[2:3]"
+    ```
 
 ### Empty Elements (Self-Closing) Definition
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
