@@ -66,10 +66,20 @@ end
 #     return out
 # end
 
+"""
+    parse_textindex(indexstr::String)
+
+Index is a String of an Integer e.g. "2". If indexstr is empty (`""`) it returns the first one found.
+"""
+function parse_textindex(indexstr::String)
+    if indexstr == ""
+        index = 1
     else
-        error("not yet supported")
+        indexExpr = Meta.parse(indexstr)
+        indexExpr isa Integer || error("give index as an Integer e.g. \"2\"")
+        index = eval(indexExpr)
     end
-    return out
+    return index
 end
 
 """
