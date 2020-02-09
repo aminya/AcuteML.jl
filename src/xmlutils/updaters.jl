@@ -15,11 +15,11 @@ end
 Finds all the elements with the address of string in the node, and updates the content.
 """
 @transform function updatecontent!(value::T, s::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
-    if hasdocument(node)
-        elm = findfirst(s, node)
-    else
+    # if hasdocument(node)
+    #     elm = findfirst(s, node)
+    # else
         elm = findfirstlocal(s, node)
-    end
+    # end
 
     if isnothing(elm) # error if nothing is found
         return error("field not found in aml")
@@ -39,11 +39,11 @@ end
 
 # Defined types
 function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{<:AbsNormal}) where {T}
-    if hasdocument(node)
-        elm = findfirst(s,node)
-    else
+    # if hasdocument(node)
+    #     elm = findfirst(s,node)
+    # else
         elm = findfirstlocal(s,node)
-    end
+    # end
 
     if isnothing(elm) # error if nothing is found
         return error("field not found in aml")
@@ -70,11 +70,11 @@ end
 
 # Nothing Alone
 @transform function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{allsubtypes(AbsNormal)})
-    if hasdocument(node)
-        elm = findfirst(s,node)
-    else
+    # if hasdocument(node)
+    #     elm = findfirst(s,node)
+    # else
         elm = findfirstlocal(s,node)
-    end
+    # end
 
     if isnothing(elm) # error if nothing is found
         return error("field not found in aml")
@@ -96,11 +96,11 @@ end
 # Vector update
 
 @transform function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
-    if hasdocument(node)
-        elmsNode = findall(s, node) # a vector of Node elements
-    else
+    # if hasdocument(node)
+    #     elmsNode = findall(s, node) # a vector of Node elements
+    # else
         elmsNode = findalllocal(s, node) # a vector of Node elements
-    end
+    # end
 
     if isnothing(elmsNode) # error if nothing is found
         return error("field not found in aml")
@@ -125,11 +125,11 @@ end
 # for defined types and nothing
 function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T}
 
-    if typeof(node) == Document || hasdocument(node)
-        elmsNode = findall(s, node) # a vector of Node elements
-    else
+    # if hasdocument(node)
+    #     elmsNode = findall(s, node) # a vector of Node elements
+    # else
         elmsNode = findalllocal(s, node) # a vector of Node elements
-    end
+    # end
 
     if isnothing(elmsNode) # error if nothing is found
         return error("field not found in aml")
