@@ -104,6 +104,22 @@ function findtextlocal(index::Integer, node::Node)
     return out
 end
 
+"""
+    parse_textindices(indicesstr::String)
+
+Index is a String of an Integer e.g. "2". If indicesstr is empty (`""`) it returns the all of the text nodes.
+"""
+function parse_textindices(indicesstr::String)
+    if indicesstr == ""
+        indices = Colon()
+    else
+        indicesExpr = Meta.parse(indicesstr)
+        indicesExpr.head == :vect || error("give indices as a vetor e.g. [2:3], [2, 3] ,[:]")
+        indices = eval(indexExpr)
+    end
+    return indices
+end
+
 
         iText = 0
         out = nothing # return nothing if nothing is found
