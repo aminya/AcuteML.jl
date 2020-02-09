@@ -75,7 +75,7 @@ function parse_textindex(indexstr::String)
     if indexstr == ""
         index = 1
     elseif indexstr == "end"
-        index = "end"
+        index = Inf
     else
         indexExpr = Meta.parse(indexstr)
         indexExpr isa Integer || error("give index as an Integer e.g. \"2\"")
@@ -105,8 +105,8 @@ function findtextlocal(index::Integer, node::Node)
     end
     return out
 end
-function findtextlocal(index::String, node::Node)
-    if index != "end"
+function findtextlocal(index::Float64, node::Node)
+    if index != Inf
         error("index should be \"end\"")
     end
     out = nothing # return nothing if nothing is found
