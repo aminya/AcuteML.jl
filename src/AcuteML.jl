@@ -121,20 +121,20 @@ funds::UN{String}, "financial-funds"   # optional, but you should pass nothing m
 ```
 
 ### Text Nodes
-* If the value is going to be in a Text node:
-    - use `text"index"` for non-vector field type, which `index` is an Integer that shows the positon of text node. If you give `text""` it considers it like `text"1"`.
+If the value is going to be in a Text node:
+- use `text"index"` for non-vector field type, which `index` is an Integer that shows the positon of text node. If you give `text""` it considers it like `text"1"`.
 
-    ```julia
-    textnode_single:String, text"2"
-    ```
+```julia
+textnode_single:String, text"2"
+```
 
-    - use `text"indices"` for vector field type, which `indices` is an array index that shows the positons of the text nodes. If you give `text""` it considers it like `text"[:]"`
+- use `text"indices"` for vector field type, which `indices` is an array index that shows the positons of the text nodes. If you give `text""` it considers it like `text"[:]"`
 
-    ```julia
-    textnode_vector::Vector{String}, text"[2:3]"
-    ```
+```julia
+textnode_vector::Vector{String}, text"[2:3]"
+```
 
-Note that the vector Text nodes can only be used in extraction. For creation, you need to make separate fields with correct position in the struct definition.
+Note that the vector Text nodes should only be used as the last field of a struct (because possible positons for text node should be known). Alternatively, you can make non-vector separate fields with correct position in the struct definition.
 
 ### Empty Elements (Self-Closing) Definition
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
