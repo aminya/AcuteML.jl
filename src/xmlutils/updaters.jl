@@ -3,20 +3,20 @@ export updatecontent!
 # Updaters
 ################################################################
 # Documents
-function updatecontent(value::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNormal}) where {T}
-    name = '/'* name
-    updatecontent(value, name, root(doc), argAmlType)
+function updatecontent!(value, name::String, doc::Document, argAmlType::Type{<:AbsNormal})
+    name = "//"* name
+    updatecontent!(value, name, root(doc), argAmlType)
 end
 
 # For attributes search in the root
-function updatecontent(value::Type{T}, name::String, doc::Document, argAmlType::Type{AbsAttribute}) where {T}
-    updatecontent(value, name, root(doc), argAmlType)
+function updatecontent!(value, name::String, doc::Document, argAmlType::Type{AbsAttribute})
+    updatecontent!(value, name, root(doc), argAmlType)
 end
 ################################################################
 # Nodes
 # Single Updater
 """
-    updatecontent(value, element::String, node, argAmlType)
+    updatecontent!(value, element::String, node, argAmlType)
 
 Finds all the elements with the address of string in the node, and updates the content.
 """
@@ -112,7 +112,7 @@ end
         return error("field not found in aml")
     else
         for (i, elm) in enumerate(elmsNode)
-            elm = value[i]
+            elm.content = value[i]
         end
     end
 end
@@ -121,7 +121,7 @@ function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Typ
     if haskey(node, s)
         elmsNode = node[s]
         for (i, elm) in enumerate(elmsNode)
-            elm = value[i]
+            elm.content = value[i]
         end
     else # error if nothing is found
         return error("field not found in aml")
@@ -152,7 +152,6 @@ function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Typ
                 end
             end
         end
-        return elmsType
     end
 
 end
@@ -180,7 +179,5 @@ function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Typ
                 end
             end
         end
-        return elmsType
     end
-
 end
