@@ -34,7 +34,7 @@ macro att_str(s)
 end
 ################################################################
 # text node
-macro text_str(s)
+macro txt_str(s)
     argAmlType = AbsText
     return argAmlType, s
 end

@@ -21,7 +21,7 @@ export @aml
 # types
 export Node, Document
 # literals
-export @doc_str, @empty_str, @att_str, @text_str
+export @doc_str, @empty_str, @att_str, @txt_str
 ################################################################
 """
   @aml
@@ -122,16 +122,16 @@ funds::UN{String}, "financial-funds"   # optional, but you should pass nothing m
 
 ### Text Nodes
 If the value is going to be in a Text node:
-- use `text"index"` for non-vector field type, which `index` is an Integer that shows the positon of text node. If you give `text""` it considers it like `text"1"`.
+- use `txt"index"` for non-vector field type, which `index` is an Integer that shows the positon of text node. If you give `txt""` it considers it like `txt"1"`.
 
 ```julia
-textnode_single:String, text"2"
+textnode_single:String, txt"2"
 ```
 
-- use `text"indices"` for vector field type, which `indices` is an array index that shows the positons of the text nodes. If you give `text""` it considers it like `text"[:]"`
+- use `txt"indices"` for vector field type, which `indices` is an array index that shows the positons of the text nodes. If you give `txt""` it considers it like `txt"[:]"`
 
 ```julia
-textnode_vector::Vector{String}, text"[2:3]"
+textnode_vector::Vector{String}, txt"[2:3]"
 ```
 
 Note that the vector Text nodes should only be used as the last field of a struct (because possible positons for text node should be known). Alternatively, you can make non-vector separate fields with correct position in the struct definition.
