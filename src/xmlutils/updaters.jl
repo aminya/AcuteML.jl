@@ -47,7 +47,7 @@ end
 
 Updates first element content. It also converts any type to string. element is given as string.
 """
-function updatefirstcontent!(value::T, s::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
+@transform function updatefirstcontent!(value::T, s::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
     if hasdocument(node)
         elm = findfirst(s, node)
     else
@@ -102,7 +102,7 @@ function updatefirstcontent!(value::T, s::String,node::Node, argAmlType::Type{Ab
 end
 
 # Nothing Alone
-function updatefirstcontent!(value::Nothing, s::String,node::Node, argAmlType::Type{<:AbsNormal})
+@transform function updatefirstcontent!(value::Nothing, s::String,node::Node, argAmlType::Type{allsubtypes(AbsNormal)})
     if hasdocument(node)
         elm = findfirst(s,node)
     else
@@ -132,7 +132,7 @@ end
 
 Finds all the elements with the address of string in the node, and updates the content
 """
-function updateallcontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
+@transform function updateallcontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
     if hasdocument(node)
         elmsNode = findall(s, node) # a vector of Node elements
     else
