@@ -30,9 +30,9 @@ export @doc_str, @sc_str, @a_str
 Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
 ### Document Definition
-* Use `"html"` or `"xml"` to define a HTML or XML document:
+* Use doc literal before the root name to define a HTML or XML document. For HTML documents root should always be "html".
 ```julia
-@aml mutable struct Doc "xml"
+@aml mutable struct Doc doc"xml_root"
 # add fields (elements) here
 end
 ```
