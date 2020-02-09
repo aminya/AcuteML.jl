@@ -10,13 +10,9 @@ using AcuteML, BenchmarkTools
     id::Int64, a"~"
 end
 
-@aml mutable struct University "university"
+@aml mutable struct University doc"university"
     name, a"university-name"
     people::Vector{Person}, "person"
-end
-
-@aml mutable struct Doc "xml"
-    university::University, "~"
 end
 
 # Value Checking Functions
@@ -44,17 +40,16 @@ function creation()
 
     U = University(name="Julia University", people=[P1, P2])
 
-    D = Doc(university = U)
-    return P1, P2, U, D
+    return P1, P2, U
 end
 
-function mutability(P1, P2, U, D)
+function mutability(P1, P2, U)
     P1.age = UInt(22)
     # P1.courses = ["Artificial Intelligence", "Robotics", "Machine Design"]
 
     P2.GPA=4.2 # mutability support
     U.name = "MIT"
-    return P1, P2, U, D
+    return P1, P2, U
 end
 
 function extraction()
@@ -75,14 +70,14 @@ function extraction()
       </person>
     </university>
     """)
-    D = Doc(xml)
+    U = University(xml)
 end
 
 @btime creation();
 
-P1, P2, U, D = creation();
+P1, P2, U = creation();
 
-@btime mutability($P1, $P2, $U, $D);
+@btime mutability($P1, $P2, $U);
 
 @btime extraction();
 

@@ -3,24 +3,12 @@ export findcontent, findalllocal, findfirstlocal
 # Extractors
 ################################################################
 # Documents
-function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNormal}) where {T}
-    name = "//"* name
+function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNode}) where {T}
     findcontent(T, name, root(doc), argAmlType)
 end
 
 # if no type is provided consider it to be Vector{Union{String, Nothing}}
-function findcontent(name::String, doc::Document, argAmlType::Type{<:AbsNormal})
-    name = "//"* name
-    findcontent(Vector{Union{String, Nothing}}, name, root(doc), argAmlType)
-end
-
-# For attributes search in the root
-function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{AbsAttribute}) where {T}
-    findcontent(T, name, root(doc), argAmlType)
-end
-
-# if no type is provided consider it to be Vector{Union{String, Nothing}}
-function findcontent(name::String, doc::Document, argAmlType::Type{AbsAttribute})
+function findcontent(name::String, doc::Document, argAmlType::Type{<:AbsNode})
     findcontent(Vector{Union{String, Nothing}}, name, root(doc), argAmlType)
 end
 ################################################################
@@ -31,6 +19,8 @@ end
     findfirstlocal(string, node)
 
 findfirst with ignoring namespaces. It considers element.name for returning the elements
+
+Much faster than EzXML.findfirst
 """
 function findfirstlocal(name::String, node::Node)
     out = nothing # return nothing if nothing is found
@@ -44,9 +34,11 @@ function findfirstlocal(name::String, node::Node)
 end
 
 """
-    findfirstlocal(string, node)
+    findalllocal(string, node)
 
 findalllocal with ignoring namespaces. It considers element.name for returning the elements
+
+Much faster than EzXML.findfirst
 """
 function findalllocal(name::String, node::Node)
     out = Node[]
@@ -80,11 +72,11 @@ findcontent(UInt8,"midi-channel",node, AbsNormal)
 """
 @transform function findcontent(::Type{T},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:String} # for strings
 
-    if hasdocument(node)
-        elm = findfirst(name,node)
-    else
+    # if hasdocument(node)
+    #     elm = findfirst(name,node)
+    # else
         elm = findfirstlocal(name,node)
-    end
+    # end
 
     if isnothing(elm) # return nothing if nothing is found
         return nothing
@@ -107,11 +99,11 @@ end
 # Number,Bool
 @transform function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Union{Number,Bool}}
 
-    if hasdocument(node)
-        elm = findfirst(name,node)
-    else
+    # if hasdocument(node)
+    #     elm = findfirst(name,node)
+    # else
         elm = findfirstlocal(name,node)
-    end
+    # end
 
     if isnothing(elm) # return nothing if nothing is found
         return nothing
@@ -136,11 +128,11 @@ end
 # for defined types
 function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{<:AbsNormal}) where {T}
 
-    if hasdocument(node)
-        elm = findfirst(name,node)
-    else
+    # if hasdocument(node)
+    #     elm = findfirst(name,node)
+    # else
         elm = findfirstlocal(name,node)
-    end
+    # end
 
     if isnothing(elm) # return nothing if nothing is found
         return nothing
@@ -185,11 +177,11 @@ end
 
 @transform function findcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:String} # for strings
 
-    if hasdocument(node)
-        elmsNode = findall(name, node) # a vector of Node elements
-    else
+    # if hasdocument(node)
+    #     elmsNode = findall(name, node) # a vector of Node elements
+    # else
         elmsNode = findalllocal(name, node) # a vector of Node elements
-    end
+    # end
 
     if isnothing(elmsNode)  # return nothing if nothing is found
         return nothing
@@ -218,11 +210,11 @@ end
 # Number,Bool
 @transform function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{Number,Bool}}
 
-    if hasdocument(node)
-        elmsNode = findall(name, node) # a vector of Node elements
-    else
+    # if hasdocument(node)
+    #     elmsNode = findall(name, node) # a vector of Node elements
+    # else
         elmsNode = findalllocal(name, node) # a vector of Node elements
-    end
+    # end
 
     if isnothing(elmsNode) # return nothing if nothing is found
         return nothing
@@ -251,11 +243,11 @@ end
 # for defined types
 function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T}
 
-    if hasdocument(node)
-        elmsNode = findall(name, node) # a vector of Node elements
-    else
+    # if hasdocument(node)
+    #     elmsNode = findall(name, node) # a vector of Node elements
+    # else
         elmsNode = findalllocal(name, node) # a vector of Node elements
-    end
+    # end
 
     if isnothing(elmsNode) # return nothing if nothing is found
         return nothing

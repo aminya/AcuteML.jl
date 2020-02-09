@@ -19,16 +19,11 @@
       </person>
     </university>
     """)
-    # extract Doc
 
-    D = Doc(xml)
-
-    # extract University
-
-    U = D.university
+    # extract University (root of the document)
+    U = University(xml)
 
     @test U.name == "Julia University"
-
 
     # extract Person
 

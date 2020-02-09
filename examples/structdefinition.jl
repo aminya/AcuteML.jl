@@ -10,13 +10,9 @@
     id::Int64, a"~"
 end
 
-@aml mutable struct University "university"
+@aml mutable struct University doc"university"
     name, a"university-name"
     people::Vector{Person}, "person"
-end
-
-@aml mutable struct Doc "xml"
-    university::University, "~"
 end
 
 # Value Checking Functions

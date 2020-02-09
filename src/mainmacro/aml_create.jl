@@ -84,7 +84,7 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
             error("Invalid usage of @aml")
         end
         ################################################################
-        docOrElmconst = :( aml = docOrElmInit($docOrElmType, $amlName) )
+        docOrElmconst = :( aml = init_docorelm($docOrElmType, $amlName) )
 
         typeDefinition =:($expr)
 

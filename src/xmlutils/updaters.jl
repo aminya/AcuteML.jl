@@ -3,13 +3,7 @@ export updatecontent!
 # Updaters
 ################################################################
 # Documents
-function updatecontent!(value, name::String, doc::Document, argAmlType::Type{<:AbsNormal})
-    name = "//"* name
-    updatecontent!(value, name, root(doc), argAmlType)
-end
-
-# For attributes search in the root
-function updatecontent!(value, name::String, doc::Document, argAmlType::Type{AbsAttribute})
+function updatecontent!(value, name::String, doc::Document, argAmlType::Type{<:AbsNode})
     updatecontent!(value, name, root(doc), argAmlType)
 end
 ################################################################
