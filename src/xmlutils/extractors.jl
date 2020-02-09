@@ -74,6 +74,8 @@ Index is a String of an Integer e.g. "2". If indexstr is empty (`""`) it returns
 function parse_textindex(indexstr::String)
     if indexstr == ""
         index = 1
+    elseif indexstr == "end"
+        index = "end"
     else
         indexExpr = Meta.parse(indexstr)
         indexExpr isa Integer || error("give index as an Integer e.g. \"2\"")
@@ -99,6 +101,18 @@ function findtextlocal(index::Integer, node::Node)
                 out = child
                 break
             end
+        end
+    end
+    return out
+end
+function findtextlocal(index::String, node::Node)
+    if index != "end"
+        error("index should be \"end\"")
+    end
+    out = nothing # return nothing if nothing is found
+    for child in eachnode(node)
+        if istext(child)
+            out = child
         end
     end
     return out
