@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · AcuteML.jl</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">AcuteML.jl</span></div><form class="docs-search" action="search.html"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li class="is-active"><a class="tocitem" href="index.html">Home</a><ul class="internal"><li><a class="tocitem" href="#Acute-Markup-Language-1"><span>Acute Markup Language</span></a></li><li class="toplevel"><a class="tocitem" href="#Installation-1"><span>Installation</span></a></li><li class="toplevel"><a class="tocitem" href="#Usage-1"><span>Usage</span></a></li><li class="toplevel"><a class="tocitem" href="#Main-macro-and-I/O-1"><span>Main macro and I/O</span></a></li></ul></li><li><a class="tocitem" href="valueChecking.html">Value Checking</a></li><li><a class="tocitem" href="supportedValueTypes.html">Supported Value Types</a></li><li><a class="tocitem" href="extraConstructors.html">Extra Contructors</a></li><li><a class="tocitem" href="customValueTypes.html">Custom Value Types</a></li><li><a class="tocitem" href="customConstructors.html">Custom Contructors - AcuteML Backend</a></li><li><a class="tocitem" href="templating.html">Templating</a></li><li><a class="tocitem" href="SyntaxReference.html">Syntax Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href="index.html">Home</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href="index.html">Home</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/aminya/AcuteML.jl/blob/master/docs/src/index.md#L" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="AcuteML-1"><a class="docs-heading-anchor" href="#AcuteML-1">AcuteML</a><a class="docs-heading-anchor-permalink" href="#AcuteML-1" title="Permalink"></a></h1><h2 id="Acute-Markup-Language-1"><a class="docs-heading-anchor" href="#Acute-Markup-Language-1">Acute Markup Language</a><a class="docs-heading-anchor-permalink" href="#Acute-Markup-Language-1" title="Permalink"></a></h2><p>AcuteML is an Acute Markup Language (AML) for Web/XML development in Julia.</p><ul><li><p>It automatically creates or extracts HTML/XML files from Julia types!</p></li><li><p>It also has a general templating engine, which can be used for any type of documents.</p></li></ul><h1 id="Installation-1"><a class="docs-heading-anchor" href="#Installation-1">Installation</a><a class="docs-heading-anchor-permalink" href="#Installation-1" title="Permalink"></a></h1><p>Add the package</p><pre><code class="language-julia">using Pkg
-Pkg.add(&quot;AcuteML&quot;)</code></pre><h1 id="Usage-1"><a class="docs-heading-anchor" href="#Usage-1">Usage</a><a class="docs-heading-anchor-permalink" href="#Usage-1" title="Permalink"></a></h1><p>Use the package:</p><pre><code class="language-julia">using AcuteML</code></pre><h1 id="Main-macro-and-I/O-1"><a class="docs-heading-anchor" href="#Main-macro-and-I/O-1">Main macro and I/O</a><a class="docs-heading-anchor-permalink" href="#Main-macro-and-I/O-1" title="Permalink"></a></h1><article class="docstring"><header><a class="docstring-binding" id="AcuteML.@aml" href="#AcuteML.@aml"><code>AcuteML.@aml</code></a> — <span class="docstring-category">Macro</span></header><section><div><p>@aml</p><p><strong>Type Definition</strong></p><p>Use <code>@aml</code> macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.</p><p><strong>Document Definition</strong></p><ul><li>Use <code>&quot;html&quot;</code> or <code>&quot;xml&quot;</code> to define a HTML or XML document:</li></ul><pre><code class="language-julia">@aml mutable struct Doc &quot;xml&quot;
+Pkg.add(&quot;AcuteML&quot;)</code></pre><h1 id="Usage-1"><a class="docs-heading-anchor" href="#Usage-1">Usage</a><a class="docs-heading-anchor-permalink" href="#Usage-1" title="Permalink"></a></h1><p>Use the package:</p><pre><code class="language-julia">using AcuteML</code></pre><h1 id="Main-macro-and-I/O-1"><a class="docs-heading-anchor" href="#Main-macro-and-I/O-1">Main macro and I/O</a><a class="docs-heading-anchor-permalink" href="#Main-macro-and-I/O-1" title="Permalink"></a></h1><article class="docstring"><header><a class="docstring-binding" id="AcuteML.@aml" href="#AcuteML.@aml"><code>AcuteML.@aml</code></a> — <span class="docstring-category">Macro</span></header><section><div><p>@aml</p><p><strong>Type Definition</strong></p><p>Use <code>@aml</code> macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.</p><p><strong>Document Definition</strong></p><ul><li>Use doc literal before the root name to define a HTML or XML document. For HTML documents root should always be &quot;html&quot;.</li></ul><pre><code class="language-julia">@aml mutable struct Doc doc&quot;xml_root&quot;
 # add fields (elements) here
-end</code></pre><pre><code class="language-julia">@aml mutable struct Web &quot;html&quot;
+end</code></pre><pre><code class="language-julia">@aml mutable struct Web doc&quot;html&quot;
 # add fields (elements) here
 end</code></pre><p><strong>Nodes (Elements) Definition</strong></p><ul><li>Specify the html/xml struct name as a string after the struct name after a space</li></ul><pre><code class="language-julia">@aml mutable struct Person &quot;person&quot;
 # add fields (elements) here
@@ -25,14 +25,11 @@ end</code></pre><hr/><p><strong>Example - Struct Definition</strong></p><p>First
     id::Int64, a&quot;~&quot;
 end
 
-@aml mutable struct University &quot;university&quot;
+@aml mutable struct University doc&quot;university&quot;
     name, a&quot;university-name&quot;
     people::Vector{Person}, &quot;person&quot;
 end
 
-@aml mutable struct Doc &quot;xml&quot;
-    university::University, &quot;~&quot;
-end
 </code></pre><pre><code class="language-julia"># Value Checking Functions
 GPAcheck(x) = x &lt;= 4.5 &amp;&amp; x &gt;= 0
 
@@ -53,9 +50,7 @@ P2 = Person(age=18, field=&quot;Computer Engineering&quot;, GPA=4, courses=[&quo
 
 U = University(name=&quot;Julia University&quot;, people=[P1, P2])
 
-D = Doc(university = U)
-
-D.university.people[2].GPA=4.2 # mutability support after Doc creation
+U.people[2].GPA=4.2 # mutability support after Doc creation
 </code></pre><pre><code class="language-julia"># An example that doesn&#39;t meet the criteria function for GPA because GPA is more than 4.5
 P3 = Person(age=99, field=&quot;Macro Wizard&quot;, GPA=10, courses=[&quot;Julia Magic&quot;], id = 3)
 julia&gt;
@@ -69,23 +64,6 @@ GPA doesn&#39;t meet criteria function</code></pre><pre><code class="language-ht
 &lt;/person&gt;
 
 julia&gt; pprint(U) # or print(U.aml)
-&lt;university university-name=&quot;Julia University&quot;&gt;
-  &lt;person id=&quot;1&quot;&gt;
-    &lt;age&gt;24&lt;/age&gt;
-    &lt;study-field&gt;Mechanical Engineering&lt;/study-field&gt;
-    &lt;GPA&gt;4.5&lt;/GPA&gt;
-    &lt;taken-courses&gt;Artificial Intelligence&lt;/taken-courses&gt;
-    &lt;taken-courses&gt;Robotics&lt;/taken-courses&gt;
-  &lt;/person&gt;
-  &lt;person id=&quot;2&quot;&gt;
-    &lt;age&gt;18&lt;/age&gt;
-    &lt;study-field&gt;Computer Engineering&lt;/study-field&gt;
-    &lt;GPA&gt;4.2&lt;/GPA&gt;
-    &lt;taken-courses&gt;Julia&lt;/taken-courses&gt;
-  &lt;/person&gt;
-&lt;/university&gt;
-
-julia&gt; pprint(D) # or print(D.aml)
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;university university-name=&quot;Julia University&quot;&gt;
   &lt;person id=&quot;1&quot;&gt;
@@ -150,19 +128,15 @@ xml = parsexml(&quot;&quot;&quot;
 &lt;/university&gt;
 &quot;&quot;&quot;)
 
-# extract Doc
-D = Doc(xml) # StructName(xml) like Doc(xml) extracts the data and stores them in proper format
+# extract University
+U = University(xml) # StructName(xml) extracts the data and stores them in proper format
 
 # Now you can access all of the data by calling the fieldnames
-
-# extract University
-U = D.university
 
 julia&gt;U.name
 &quot;Julia University&quot;
 
 # extract Person
-
 P1 = U.people[1]
 
 julia&gt;P1.age
@@ -178,4 +152,4 @@ julia&gt;P1.courses
 [&quot;Artificial Intelligence&quot;, &quot;Robotics&quot;]
 
 julia&gt;P1.id
-1</code></pre></div></section></article></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="valueChecking.html">Value Checking »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Sunday 9 February 2020 15:03">Sunday 9 February 2020</span>. Using Julia version 1.3.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+1</code></pre></div></section></article></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="valueChecking.html">Value Checking »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Sunday 9 February 2020 20:44">Sunday 9 February 2020</span>. Using Julia version 1.3.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
