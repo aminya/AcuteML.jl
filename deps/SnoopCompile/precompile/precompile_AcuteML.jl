@@ -1,6 +1,6 @@
 function _precompile_()
     ccall(:jl_generating_output, Cint, ()) == 1 || return nothing
-    isdefined(AcuteML, Symbol("#8#17")) && precompile(Tuple{getfield(AcuteML, Symbol("#8#17")),Nothing})
+    isdefined(AcuteML, Symbol("#10#19")) && precompile(Tuple{getfield(AcuteML, Symbol("#10#19")),Nothing})
     precompile(Tuple{Core.kwftype(typeof(AcuteML.render2file)),NamedTuple{(:id, :age, :field, :GPA, :courses),Tuple{Int64,Int64,String,Float64,Array{String,1}}},typeof(render2file),String,Bool})
     precompile(Tuple{typeof(AcuteML.aml_create),Expr,Array{Union{Expr, Symbol},1},Array{Any,1},Array{Union{Missing, Expr, Symbol, Type},1},Array{Union{Expr, Symbol},1},Array{Union{Missing, String},1},Array{Union{Missing, Function, Symbol},1},Array{Type,1},String,Type{T} where T,Array{Union{Missing, Function, Symbol},0},Bool,Symbol})
     precompile(Tuple{typeof(AcuteML.aml_parse),Expr})
