@@ -15,6 +15,18 @@ end
 ################################################################
 # Literal Macros
 ################################################################
+# Document
+macro doc_str(s)
+    docOrElmType = AbsDocument
+    return docOrElmType, s
+end
+
+# Empty (self-closing)
+macro sc_str(s)
+    docOrElmType = AbsEmpty
+    return docOrElmType, s
+end
+################################################################
 # attribute
 macro a_str(s)
     argAmlType = AbsAttribute
