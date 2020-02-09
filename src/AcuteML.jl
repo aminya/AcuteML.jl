@@ -161,6 +161,7 @@ using AcuteML
     courses::Vector{String}, "taken-courses"
     professors::UN{DataFrame} = nothing, "table"
     id::Int64, att"~"
+    comment::UN{String} = nothing, txt"end"
 end
 
 @aml mutable struct University doc"university"
@@ -175,7 +176,7 @@ end
 # Value Checking Functions
 GPAcheck(x) = x <= 4.5 && x >= 0
 
-function courseCheck(age, field, GPA, courses, id)
+function courseCheck(age, field, GPA, courses, professors, id, comment)
 
     if field == "Mechanical Engineering"
         relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
@@ -196,7 +197,7 @@ After we defined the structs, we can create instances of them by passing our dat
 
 ```julia
 
-P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
+P1 = Person(age=24, field="Mechanical Engineering", courses = ["Artificial Intelligence", "Robotics"], id = 1, comment = "He is a genius")
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
 
 U = University(name="Julia University", people=[P1, P2])
@@ -220,6 +221,7 @@ julia> pprint(P1) # or print(P1.aml)
   <GPA>4.5</GPA>
   <taken-courses>Artificial Intelligence</taken-courses>
   <taken-courses>Robotics</taken-courses>
+  He is a genius
 </person>
 
 julia> pprint(U) # or print(U.aml)
@@ -231,6 +233,7 @@ julia> pprint(U) # or print(U.aml)
     <GPA>4.5</GPA>
     <taken-courses>Artificial Intelligence</taken-courses>
     <taken-courses>Robotics</taken-courses>
+    He is a genius
   </person>
   <person id="2">
     <age>18</age>
@@ -295,6 +298,7 @@ xml = parsexml(\"\"\"
     <GPA>4.5</GPA>
     <taken-courses>Artificial Intelligence</taken-courses>
     <taken-courses>Robotics</taken-courses>
+    He is a genius
   </person>
   <person id="2">
     <age>18</age>
@@ -330,6 +334,9 @@ julia>P1.courses
 
 julia>P1.id
 1
+
+julia> P1.comment
+"He is a genius"
 ```
 """
 macro aml(expr)

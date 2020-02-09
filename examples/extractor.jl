@@ -10,6 +10,7 @@ xml = parsexml("""
     <GPA>4.5</GPA>
     <taken-courses>Artificial Intelligence</taken-courses>
     <taken-courses>Robotics</taken-courses>
+    He is a genius
   </person>
   <person id="2">
     <age>18</age>
@@ -31,6 +32,7 @@ U.name # Julia University
 
 P1 = U.people[1]
 
+P1.comment
 P1.age # 24
 P1.field # Mechanical Engineering
 P1.GPA # 4.5
