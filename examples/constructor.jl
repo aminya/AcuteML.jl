@@ -17,10 +17,7 @@ P1.GPA=5.0
 
 U = University(name="Julia University", people=[P1, P2])
 
-D = Doc(university = U)
-
-D.university.people[2].GPA=4.2 # mutability support after Doc creation
-
+U.people[2].GPA=4.2 # mutability support after Doc creation
 
 pprint(P1) # or print(P1.aml)
 #=
@@ -44,25 +41,6 @@ pprint(P2) # or print(P2.aml)
 =#
 
 pprint(U) # or print(U.aml)
-#=
-<university university-name="Julia University">
-  <person id="1">
-    <age>24</age>
-    <study-field>Mechanical Engineering</study-field>
-    <GPA>4.5</GPA>
-    <taken-courses>Artificial Intelligence</taken-courses>
-    <taken-courses>Robotics</taken-courses>
-  </person>
-  <person id="2">
-    <age>18</age>
-    <study-field>Computer Engineering</study-field>
-    <GPA>4.2</GPA>
-    <taken-courses>Julia</taken-courses>
-  </person>
-</university>
-=#
-
-pprint(D) # or print(D.aml)
 #=
 <?xml version="1.0" encoding="UTF-8"?>
 <university university-name="Julia University">
