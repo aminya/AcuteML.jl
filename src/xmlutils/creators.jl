@@ -63,9 +63,18 @@ function addelm!(aml::Node, name::String, value::String, argAmlType::Type{AbsAtt
     end
 end
 
-function addelm!(aml::Node, name::String, value::String, argAmlType::Type{AbsText})
-    if !isnothing(value) # do nothing if value is nothing
-        link!(aml, TextNode(value))
+function addelm!(aml::Node, indexstr::String, value::String, argAmlType::Type{AbsText})
+    index = parse_textindex(indexstr)
+    if index < length(elements(aml))
+        desired_node = elements(aml)[index]
+        if !isnothing(value) # do nothing if value is nothing
+            linkprev!(desired_node, TextNode(value))
+        end
+    else
+        desired_node = elements(aml)[end]
+        if !isnothing(value) # do nothing if value is nothing
+            linknext!(desired_node, TextNode(value))
+        end
     end
 end
 
@@ -83,8 +92,18 @@ function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribut
 end
 
 function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsText}) where {T<:Union{Number, Bool}}
-    if !isnothing(value) # do nothing if value is nothing
-        link!(aml, TextNode(string(value)))
+function addelm!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbsText}) where {T<:Union{Number, Bool}}
+    index = parse_textindex(indexstr)
+    if index < length(elements(aml))
+        desired_node = elements(aml)[index]
+        if !isnothing(value) # do nothing if value is nothing
+            linkprev!(desired_node, TextNode(string(value)))
+        end
+    else
+        desired_node = elements(aml)[end]
+        if !isnothing(value) # do nothing if value is nothing
+            linknext!(desired_node, TextNode(string(value)))
+        end
     end
 end
 
@@ -119,18 +138,38 @@ function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribut
     end
 end
 
-function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsText}) where {T}
-    if hasfield(T, :aml)
-        link!(aml, TextNode(value.aml))
+function addelm!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbsText}) where {T}
+    index = parse_textindex(indexstr)
+    if index < length(elements(aml))
 
-    elseif Tables.istable(value)
-        link!(aml, TextNode(amlTable(value)))
+        desired_node = elements(aml)[index]
+        if hasfield(T, :aml)
+            linkprev!(desired_node, TextNode(value.aml))
 
-    elseif hasmethod(aml, Tuple{T})
-        link!(aml, TextNode(aml(value)))
+        elseif Tables.istable(value)
+            linkprev!(desired_node, TextNode(amlTable(value)))
+
+        elseif hasmethod(aml, Tuple{T})
+            linkprev!(desired_node, TextNode(aml(value)))
+
+        else
+            linkprev!(desired_node, TextNode(string(value)))
+        end
 
     else
-        link!(aml, TextNode(string(value)))
+        desired_node = elements(aml)[end]
+        if hasfield(T, :aml)
+            linknext!(desired_node, TextNode(value.aml))
+
+        elseif Tables.istable(value)
+            linknext!(desired_node, TextNode(amlTable(value)))
+
+        elseif hasmethod(aml, Tuple{T})
+            linknext!(desired_node, TextNode(aml(value)))
+
+        else
+            linknext!(desired_node, TextNode(string(value)))
+        end
     end
 end
 
