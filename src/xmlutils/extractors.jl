@@ -120,6 +120,26 @@ function parse_textindices(indicesstr::String)
     return indices
 end
 
+"""
+    findvecttextlocal(indices, node)
+
+finds the text node at positions given by indices.
+
+faster than `findvecttext()`
+"""
+function findvecttextlocal(indices::Colon, node::Node)
+    out = Node[]
+    for child in eachnode(node)
+        if istext(child)
+            push!(out, child)
+        end
+    end
+    if !isempty(out)
+        return out
+    else # return nothing if nothing is found
+        return nothing
+    end
+end
 
         iText = 0
         out = nothing # return nothing if nothing is found
