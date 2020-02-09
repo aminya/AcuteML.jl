@@ -91,7 +91,6 @@ function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribut
     end
 end
 
-function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsText}) where {T<:Union{Number, Bool}}
 function addelm!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbsText}) where {T<:Union{Number, Bool}}
     index = parse_textindex(indexstr)
     if index < length(elements(aml))
@@ -180,6 +179,16 @@ end
 ################################################################
 
 # Vector
-@transform function addelm!(aml::Node, name::String, value::Vector, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+allsubtypes_butAbsText(t) = setdiff(allsubtypes(AbsDocOrNode), [AbsText])
+
+@transform function addelm!(aml::Node, name::String, value::Vector, argAmlType::Type{allsubtypes_butAbsText(AbsDocOrNode)})
     foreach(x-> addelm!(aml, name, x, argAmlType), value)
+end
+
+function addelm!(aml::Node, indicesstr::String, value::Vector, argAmlType::Type{AbsText})
+    indices = parse_textindices(indicesstr)
+    if indices isa Colon
+        indices = 1:length(elements(aml))
+    end
+    foreach((x, i)-> addelm!(aml, string(i), x, argAmlType), zip(value, indices))
 end
