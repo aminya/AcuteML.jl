@@ -63,6 +63,12 @@ function addelm!(aml::Node, name::String, value::String, argAmlType::Type{AbsAtt
     end
 end
 
+function addelm!(aml::Node, name::String, value::String, argAmlType::Type{AbsText})
+    if !isnothing(value) # do nothing if value is nothing
+        link!(aml, TextNode(value))
+    end
+end
+
 # Number, Bool
 @transform function addelm!(aml::Node, name::String, value::T, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Union{Number, Bool}}
     if !isnothing(value) # do nothing if value is nothing
@@ -73,6 +79,12 @@ end
 function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribute}) where {T<:Union{Number, Bool}}
     if !isnothing(value) # do nothing if value is nothing
         link!(aml, AttributeNode(name, string(value)))
+    end
+end
+
+function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsText}) where {T<:Union{Number, Bool}}
+    if !isnothing(value) # do nothing if value is nothing
+        link!(aml, TextNode(string(value)))
     end
 end
 
@@ -106,6 +118,22 @@ function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribut
         link!(aml, AttributeNode(name, string(value)))
     end
 end
+
+function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsText}) where {T}
+    if hasfield(T, :aml)
+        link!(aml, TextNode(value.aml))
+
+    elseif Tables.istable(value)
+        link!(aml, TextNode(amlTable(value)))
+
+    elseif hasmethod(aml, Tuple{T})
+        link!(aml, TextNode(aml(value)))
+
+    else
+        link!(aml, TextNode(string(value)))
+    end
+end
+
 
 @transform function addelm!(aml::Node, name::String, value::Nothing, argAmlType::Type{allsubtypes(AbsDocOrNode)})
     # do nothing
