@@ -38,7 +38,7 @@ end
 
 findalllocal with ignoring namespaces. It considers element.name for returning the elements
 
-Much faster than EzXML.findfirst
+Much faster than EzXML.findall
 """
 function findalllocal(name::String, node::Node)
     out = Node[]
@@ -216,6 +216,22 @@ function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{AbsAtt
         return elm
     end
 
+end
+
+function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{AbsText}) where {T}
+    elm = findtextlocal(name, node)
+
+    if isnothing(elm) # return nothing if nothing is found
+        return nothing
+    else
+        # TODO: better specialized method detection
+        # https://julialang.slack.com/archives/C6A044SQH/p1578442480438100
+        if hasmethod(T, Tuple{String}) &&  Core.Compiler.return_type(T, Tuple{Node})=== Union{}
+            return T(elm.content)
+        else
+            return T(elm)
+        end
+    end
 end
 
 # Union with Nothing
