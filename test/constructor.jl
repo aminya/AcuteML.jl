@@ -15,6 +15,7 @@
       <GPA>4.5</GPA>
       <taken-courses>Artificial Intelligence</taken-courses>
       <taken-courses>Robotics</taken-courses>
+      He is a genius
     </person>
     """)
 
@@ -36,6 +37,7 @@
         <GPA>4.5</GPA>
         <taken-courses>Artificial Intelligence</taken-courses>
         <taken-courses>Robotics</taken-courses>
+        He is a genius
       </person>
       <person id="2">
         <age>18</age>
