@@ -22,7 +22,7 @@ macro doc_str(s)
 end
 
 # Empty (self-closing)
-macro sc_str(s)
+macro empty_str(s)
     docOrElmType = AbsEmpty
     return docOrElmType, s
 end

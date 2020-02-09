@@ -61,12 +61,12 @@ function aml_parse(expr::Expr)
             docOrElmType = AbsNormal
 
         ################################################################
-        # Literal Struct name - sc"aml name"
+        # Literal Struct name - empty"aml name"
         elseif isa(ei, Tuple)
             ################################################################
             # Struct aml
             ########################
-            # Literal only  sc"aml name"
+            # Literal only  empty"aml name"
             if isa(ei, Tuple{Type,String})
 
                 amlFun[1]=missing # function
@@ -110,7 +110,7 @@ function aml_parse(expr::Expr)
                 argExpr.args[i] =  nothing # removing "aml name" from expr args
 
             ########################
-            # Literal and Struct Function - sc"aml name", F
+            # Literal and Struct Function - empty"aml name", F
             elseif isa(ei.args[1], Tuple)  && isa(ei.args[2], Union{Symbol,Function})
 
                 amlFun[1]=ei.args[2] # function

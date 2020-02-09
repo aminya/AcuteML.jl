@@ -123,7 +123,7 @@ funds::UN{String}, "financial-funds"   # optional, but you should pass nothing m
 ### Empty Elements (Self-Closing) Definition
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
 ```julia
-@aml struct rest sc"~"
+@aml struct rest empty"~"
 end
 ```
 -------------------------------------------------------
