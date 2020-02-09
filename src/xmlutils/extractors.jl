@@ -214,9 +214,9 @@ function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAt
     end
 end
 
-function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsText}) where{T<:String} # for strings
-    elm = findtextlocal(name, node)
-
+function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{AbsText}) where{T<:String} # for strings
+    index = parse_textindex(indexstr)
+    elm = findtextlocal(index, node)
     if isnothing(elm) # return nothing if nothing is found
         return nothing
     else
@@ -252,9 +252,9 @@ function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAt
     end
 end
 
-function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsText}) where {T<:Union{Number,Bool}}
-    elm = findtextlocal(name, node)
-
+function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:Union{Number,Bool}}
+    index = parse_textindex(indexstr)
+    elm = findtextlocal(index, node)
     if isnothing(elm) # return nothing if nothing is found
         return nothing
     else
@@ -299,9 +299,9 @@ function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{AbsAtt
 
 end
 
-function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{AbsText}) where {T}
-    elm = findtextlocal(name, node)
-
+function findcontent(::Type{T}, indexstr::String,node::Node, argAmlType::Type{AbsText}) where {T}
+    index = parse_textindex(indexstr)
+    elm = findtextlocal(index, node)
     if isnothing(elm) # return nothing if nothing is found
         return nothing
     else
