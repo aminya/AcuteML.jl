@@ -53,6 +53,19 @@ function findalllocal(name::String, node::Node)
         return nothing
     end
 end
+function findtext(indexstr::String, node::Node)
+    if indexstr !== "all"
+        index = eval(Meta.parse(indexstr))
+
+        xpath = "text()[position() = $index]"
+        out = findfirst(xpath, node)
+    else
+        error("not yet supported")
+    end
+    return out
+end
+
+"""
 ################################################################
 # Single extraction
 """
