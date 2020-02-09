@@ -360,6 +360,20 @@ function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::T
     end
 end
 
+function findcontent(::Type{Vector{T}}, indicesstr::String, node::Node, argAmlType::Type{AbsText}) where{T<:String} # for strings
+    indices = parse_textindices(indicesstr)
+    elmsNode = findvecttextlocal(indices, node)
+    if isnothing(elmsNode)  # return nothing if nothing is found
+        return nothing
+    else
+        elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+        for (i, elm) in enumerate(elmsNode)
+            elmsType[i]=elm.content
+        end
+        return elmsType
+    end
+end
+
 # Number,Bool
 @transform function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{Number,Bool}}
 
@@ -392,6 +406,21 @@ function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::T
         elmsNode = nothing
     end
 end
+
+function findcontent(::Type{Vector{T}},  indicesstr::String, node::Node, argAmlType::Type{AbsText}) where{T<:Union{Number,Bool}}
+    indices = parse_textindices(indicesstr)
+    elmsNode = findvecttextlocal(indices, node)
+    if isnothing(elmsNode) # return nothing if nothing is found
+        return nothing
+    else
+        elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+        for (i, elm) in enumerate(elmsNode)
+            elmsType[i]=parse(T, elm.content)
+        end
+        return elmsType
+    end
+end
+
 
 # for defined types
 function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T}
@@ -445,6 +474,27 @@ function findcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Ty
         return elmsType
     end
 
+end
+
+function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbsText}) where{T}
+    indices = parse_textindices(indicesstr)
+    elmsNode = findvecttextlocal(indices, node)
+    if isnothing(elmsNode) # return nothing if nothing is found
+        return nothing
+    else
+        if hasmethod(T, Tuple{String}) && Core.Compiler.return_type(T, Tuple{Node}) === Union{}
+            elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+            for (i, elm) in enumerate(elmsNode)
+                elmsType[i]=T(elm.content)
+            end
+        else
+            elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
+            for (i, elm) in enumerate(elmsNode)
+                elmsType[i]=T(elm)
+            end
+        end
+        return elmsType
+    end
 end
 
 # Union with Nothing
