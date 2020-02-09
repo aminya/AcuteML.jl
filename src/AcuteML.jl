@@ -2,11 +2,13 @@ module AcuteML
 
 import EzXML.Node
 
-# missing julia functions for old versions
-if VERSION < v"1.2.0"
-    hasfield(::Type{T}, name::Symbol) where T  = Core.Compiler.fieldindex(T, name, false) > 0
-    if VERSION < v"1.1.0"
-        isnothing(x) = x === nothing
+function  __init__()
+    # missing julia functions for old versions
+    if VERSION < v"1.2.0"
+        hasfield(::Type{T}, name::Symbol) where T  = Core.Compiler.fieldindex(T, name, false) > 0
+        if VERSION < v"1.1.0"
+            isnothing(x) = x === nothing
+        end
     end
 end
 
