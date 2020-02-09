@@ -49,13 +49,9 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
             argVarsCall[i] = :(str.$argVarsI)
             argVarsCallI = argVarsCall[i]
             ##########################
-
-            argParsedTypeI = arg_typeparse(argTypesI)
-            ##########################
-
             hasCheckFunction = !ismissing(argFunsI)
 
-            inputargs = (argParsedTypeI, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+            inputargs = (hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
 
             argconst[i]=arg_const(inputargs...)
 
