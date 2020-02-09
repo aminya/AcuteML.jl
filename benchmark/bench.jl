@@ -88,16 +88,20 @@ P1, P2, U, D = creation();
 
 #=
 Benchmark Result
+------------------------
+V 0.6
+9.099 μs (92 allocations: 11.34 KiB)
+16.800 μs (72 allocations: 11.58 KiB)
+474.400 μs (348 allocations: 22.61 KiB)
 
 ------------------------------
-New type system
-
+V0.5
 9.200 μs (93 allocations: 11.36 KiB)
 19.799 μs (72 allocations: 11.58 KiB)
 489.401 μs (348 allocations: 22.61 KiB
 
 -------------------------------------
-Old Type System
+V 0.4
 
 9.999 μs (92 allocations: 11.34 KiB)
 20.900 μs (72 allocations: 11.58 KiB)
