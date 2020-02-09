@@ -15,9 +15,7 @@ Functions to use for custom html/xml extractor:
 Use these functions, to make a method that gets the `aml::Node` and calculates and returns all of the fields.
 
 Functions to support mutability:
-- [updatefirstcontent!](@ref): updates first element content. It also converts any type to string. element is given as string.
-- [updateallcontent!](@ref): finds all the elements with the address of string in the node, and updates the content
-
+- [updatecontent!](@ref): Finds all the elements with the address of string in the node, and updates the content.
 
 # Example:
 In this example we define `Identity` with custom constructors:
