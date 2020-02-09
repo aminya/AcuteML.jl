@@ -1,53 +1,26 @@
-export updateallcontent!, updatefirstcontent!
+export updatecontent!
 ################################################################
 # Updaters
 ################################################################
 # Documents
-function updatefirstcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNormal}) where {T}
+function updatecontent(value::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNormal}) where {T}
     name = '/'* name
-    updatefirstcontent(T, name, root(doc), argAmlType)
-end
-
-function updatefirstcontent(name::String, doc::Document, argAmlType::Type{<:AbsNormal})
-    name = '/'* name
-    updatefirstcontent(String, name, root(doc), argAmlType)
-end
-
-function updateallcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNormal}) where {T}
-    name = '/'* name
-    updateallcontent(T, name, root(doc), argAmlType)
-end
-
-function updateallcontent(name::String, doc::Document, argAmlType::Type{<:AbsNormal})
-    name = '/'* name
-    updateallcontent(Vector{String}, name, root(doc), argAmlType)
+    updatecontent(value, name, root(doc), argAmlType)
 end
 
 # For attributes search in the root
-function updatefirstcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{AbsAttribute}) where {T}
-    updatefirstcontent(T, name, root(doc), argAmlType)
-end
-
-function updatefirstcontent(name::String, doc::Document, argAmlType::Type{AbsAttribute})
-    updatefirstcontent(String, name, root(doc), argAmlType)
-end
-
-function updateallcontent(::Type{T},  name::String, doc::Document, argAmlType::Type{AbsAttribute}) where {T}
-    updateallcontent(T, name, root(doc), argAmlType)
-end
-
-function updateallcontent(name::String, doc::Document, argAmlType::Type{AbsAttribute})
-    updateallcontent(Vector{String}, name, root(doc), argAmlType)
+function updatecontent(value::Type{T}, name::String, doc::Document, argAmlType::Type{AbsAttribute}) where {T}
+    updatecontent(value, name, root(doc), argAmlType)
 end
 ################################################################
 # Nodes
 # Single Updater
 """
-    updatefirstcontent(value, string, node, argAmlType)
+    updatecontent(value, element::String, node, argAmlType)
 
-Updates first element content. It also converts any type to string. element is given as string.
+Finds all the elements with the address of string in the node, and updates the content.
 """
-@transform function updatefirstcontent!(value::T, s::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
+@transform function updatecontent!(value::T, s::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
     if hasdocument(node)
         elm = findfirst(s, node)
     else
@@ -61,7 +34,7 @@ Updates first element content. It also converts any type to string. element is g
     end
 end
 
-function updatefirstcontent!(value::T, s::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
+function updatecontent!(value::T, s::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
     if haskey(node, s)
         node[s] = value
 
@@ -71,7 +44,7 @@ function updatefirstcontent!(value::T, s::String, node::Node, argAmlType::Type{A
 end
 
 # Defined types
-function updatefirstcontent!(value::T, s::String,node::Node, argAmlType::Type{<:AbsNormal}) where {T}
+function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{<:AbsNormal}) where {T}
     if hasdocument(node)
         elm = findfirst(s,node)
     else
@@ -90,7 +63,7 @@ function updatefirstcontent!(value::T, s::String,node::Node, argAmlType::Type{<:
     end
 end
 
-function updatefirstcontent!(value::T, s::String,node::Node, argAmlType::Type{AbsAttribute}) where {T}
+function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{AbsAttribute}) where {T}
     if haskey(node, s)
         elm = node[s]
         unlink!(elm)
@@ -102,7 +75,7 @@ function updatefirstcontent!(value::T, s::String,node::Node, argAmlType::Type{Ab
 end
 
 # Nothing Alone
-@transform function updatefirstcontent!(value::Nothing, s::String,node::Node, argAmlType::Type{allsubtypes(AbsNormal)})
+@transform function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{allsubtypes(AbsNormal)})
     if hasdocument(node)
         elm = findfirst(s,node)
     else
@@ -116,7 +89,7 @@ end
     end
 end
 
-function updatefirstcontent!(value::Nothing, s::String,node::Node, argAmlType::Type{AbsAttribute})
+function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{AbsAttribute})
     if haskey(node, s)
         elm = node[s]
         unlink!(elm)
@@ -127,12 +100,8 @@ function updatefirstcontent!(value::Nothing, s::String,node::Node, argAmlType::T
 end
 ################################################################
 # Vector update
-"""
-    updateallcontent!(value, string, node, argAmlType)
 
-Finds all the elements with the address of string in the node, and updates the content
-"""
-@transform function updateallcontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
+@transform function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
     if hasdocument(node)
         elmsNode = findall(s, node) # a vector of Node elements
     else
@@ -148,7 +117,7 @@ Finds all the elements with the address of string in the node, and updates the c
     end
 end
 
-function updateallcontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
+function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
     if haskey(node, s)
         elmsNode = node[s]
         for (i, elm) in enumerate(elmsNode)
@@ -160,7 +129,7 @@ function updateallcontent!(value::Vector{T}, s::String, node::Node, argAmlType::
 end
 
 # for defined types and nothing
-function updateallcontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T}
+function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T}
 
     if typeof(node) == Document || hasdocument(node)
         elmsNode = findall(s, node) # a vector of Node elements
@@ -189,7 +158,7 @@ function updateallcontent!(value::Vector{T}, s::String, node::Node, argAmlType::
 end
 
 
-function updateallcontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{AbsAttribute}) where{T}
+function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{AbsAttribute}) where{T}
     if haskey(node, s)
         elmsNode = node[s]
     else # error if nothing is found
