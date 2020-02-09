@@ -11,8 +11,7 @@ Functions to use for custom html/xml constructor:
 Use these functions, to make a method that calculates the `aml` inside the function and returns all of the fields.
 
 Functions to use for custom html/xml extractor:
-- [findfirstcontent](@ref) : to extract single elements
-- [findallcontent](@ref) : to extract multiple elements (vector)
+- [findcontent](@ref) : to extract elements
 Use these functions, to make a method that gets the `aml::Node` and calculates and returns all of the fields.
 
 Functions to support mutability:
@@ -53,9 +52,9 @@ end
 
 function Identity(;aml)
 
-        pitch = findfirstcontent(Pitch, "pitch", aml, AbsNormal)
-        rest = findfirstcontent(Rest, "rest", aml, AbsNormal)
-        unpitched = findfirstcontent(Unpitched, "unpitched", aml, AbsNormal)
+        pitch = findcontent(Pitch, "pitch", aml, AbsNormal)
+        rest = findcontent(Rest, "rest", aml, AbsNormal)
+        unpitched = findcontent(Unpitched, "unpitched", aml, AbsNormal)
 
         return Identity(pitch, rest, unpitched, aml)
 end
