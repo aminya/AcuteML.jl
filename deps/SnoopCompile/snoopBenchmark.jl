@@ -2,12 +2,12 @@ using SnoopCompile
 
 println("loading infer benchmark")
 
-@snoopiBench "AcuteML" using AcuteML
+@snoopi_bench "AcuteML" using AcuteML
 
 
 println("examples infer benchmark")
 
-@snoopiBench "AcuteML" begin
+@snoopi_bench "AcuteML" begin
     using AcuteML
 
     # Use runtests.jl
@@ -20,4 +20,4 @@ println("examples infer benchmark")
 end
 
 
-# @snoopiBench "AcuteML"
+# @snoopi_bench "AcuteML"

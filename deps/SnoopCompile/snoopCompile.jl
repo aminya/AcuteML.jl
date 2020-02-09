@@ -1,6 +1,6 @@
 using SnoopCompile
 
-@snoopiBot "AcuteML" begin
+@snoopi_bot "AcuteML" begin
     using AcuteML
 
     # Use runtests.jl
