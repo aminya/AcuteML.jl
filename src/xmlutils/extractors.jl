@@ -141,22 +141,22 @@ function findvecttextlocal(indices::Colon, node::Node)
     end
 end
 
-        iText = 0
-        out = nothing # return nothing if nothing is found
-        for child in eachnode(node)
-            if istext(child)
-                iText +=1
-                if iText == index
-                    out = child
-                    break
-                end
+function findvecttextlocal(indices::AbstractVector, node::Node)
+    out = Node[]
+    iText = 0
+    for child in eachnode(node)
+        if istext(child)
+            iText +=1
+            if iText in indices
+                push!(out, child)
             end
         end
-        return out
-    else
-        error("not yet supported")
     end
-    return out
+    if !isempty(out)
+        return out
+    else # return nothing if nothing is found
+        return nothing
+    end
 end
 ################################################################
 # Documents
