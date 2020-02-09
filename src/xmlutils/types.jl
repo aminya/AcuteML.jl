@@ -12,7 +12,7 @@ abstract type AbsHtml <: AbsDocument end
 # Nodes
 abstract type AbsNormal <: AbsNode end
 abstract type AbsAttribute <: AbsNode end
-abstract type AbsText <: AbsDocOrNode end
+abstract type AbsText <: AbsNode end
 
 abstract type AbsEmpty <: AbsNormal end
 
