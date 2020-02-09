@@ -53,6 +53,7 @@ function findalllocal(name::String, node::Node)
         return nothing
     end
 end
+
 function findtext(indexstr::String, node::Node)
     if indexstr !== "all"
         index = eval(Meta.parse(indexstr))
@@ -66,6 +67,29 @@ function findtext(indexstr::String, node::Node)
 end
 
 """
+faster than `findtext()`
+"""
+function findtextlocal(indexstr::String, node::Node)
+    if indexstr !== "all"
+        index = eval(Meta.parse(indexstr))
+
+        iText = 0
+        out = nothing # return nothing if nothing is found
+        for child in eachnode(node)
+            if istext(child)
+                iText +=1
+                if iText == index
+                    out = child
+                    break
+                end
+            end
+        end
+        return out
+    else
+        error("not yet supported")
+    end
+    return out
+end
 ################################################################
 # Single extraction
 """
