@@ -86,9 +86,9 @@ Benchmark Result
 -------------------------------------
 V 0.7
 
-10.699 μs (108 allocations: 11.61 KiB)
-5.300 μs (73 allocations: 11.36 KiB)
-263.100 μs (371 allocations: 23.11 KiB)
+11.299 μs (108 allocations: 11.61 KiB)
+5.267 μs (73 allocations: 11.36 KiB)
+261.400 μs (371 allocations: 23.11 KiB)   
 
 -------------------------------------
 V 0.6

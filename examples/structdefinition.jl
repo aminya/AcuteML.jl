@@ -8,6 +8,7 @@
     courses::Vector{String}, "taken-courses"
     professors::UN{DataFrame} = nothing, "table"
     id::Int64, att"~"
+    comment::UN{String} = nothing, txt"end"
 end
 
 @aml mutable struct University doc"university"
@@ -18,7 +19,7 @@ end
 # Value Checking Functions
 GPAcheck(x) = x <= 4.5 && x >= 0
 
-function courseCheck(age, field, GPA, courses, professors, id)
+function courseCheck(age, field, GPA, courses, professors, id, comment)
 
     if field == "Mechanical Engineering"
         relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]

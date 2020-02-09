@@ -21,7 +21,7 @@ export @aml
 # types
 export Node, Document
 # literals
-export @doc_str, @sc_str, @a_str
+export @doc_str, @empty_str, @att_str, @txt_str
 ################################################################
 """
   @aml
@@ -67,7 +67,7 @@ age::UInt, "~"
 ```
 
 ### Attributes
-* If the value is going to be an attribute put `a` before its name
+* If the value is going to be an attribute put `att` before its name
 ```julia
 id::Int64, att"~"
 ```
@@ -120,6 +120,22 @@ residence::UN{String}=nothing, "residence-stay" # optional with nothing as defau
 funds::UN{String}, "financial-funds"   # optional, but you should pass nothing manually in construction
 ```
 
+### Text Nodes
+If the value is going to be in a Text node:
+- use `txt"index"` for non-vector field type, which `index` is an Integer that shows the positon of text node. If you give `txt""` it considers it like `txt"1"`.
+
+```julia
+textnode_single:String, txt"2"
+```
+
+- use `txt"indices"` for vector field type, which `indices` is an array index that shows the positons of the text nodes. If you give `txt""` it considers it like `txt"[:]"`
+
+```julia
+textnode_vector::Vector{String}, txt"[2:3]"
+```
+
+Note that the vector Text nodes should only be used as the last field of a struct (because possible positons for text node should be known). Alternatively, you can make non-vector separate fields with correct position in the struct definition.
+
 ### Empty Elements (Self-Closing) Definition
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
 ```julia
@@ -145,6 +161,7 @@ using AcuteML
     courses::Vector{String}, "taken-courses"
     professors::UN{DataFrame} = nothing, "table"
     id::Int64, att"~"
+    comment::UN{String} = nothing, txt"end"
 end
 
 @aml mutable struct University doc"university"
@@ -159,7 +176,7 @@ end
 # Value Checking Functions
 GPAcheck(x) = x <= 4.5 && x >= 0
 
-function courseCheck(age, field, GPA, courses, id)
+function courseCheck(age, field, GPA, courses, professors, id, comment)
 
     if field == "Mechanical Engineering"
         relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
@@ -180,7 +197,7 @@ After we defined the structs, we can create instances of them by passing our dat
 
 ```julia
 
-P1 = Person(age=24, field="Mechanical Engineering", courses=["Artificial Intelligence", "Robotics"], id = 1)
+P1 = Person(age=24, field="Mechanical Engineering", courses = ["Artificial Intelligence", "Robotics"], id = 1, comment = "He is a genius")
 P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
 
 U = University(name="Julia University", people=[P1, P2])
@@ -204,6 +221,7 @@ julia> pprint(P1) # or print(P1.aml)
   <GPA>4.5</GPA>
   <taken-courses>Artificial Intelligence</taken-courses>
   <taken-courses>Robotics</taken-courses>
+  He is a genius
 </person>
 
 julia> pprint(U) # or print(U.aml)
@@ -215,6 +233,7 @@ julia> pprint(U) # or print(U.aml)
     <GPA>4.5</GPA>
     <taken-courses>Artificial Intelligence</taken-courses>
     <taken-courses>Robotics</taken-courses>
+    He is a genius
   </person>
   <person id="2">
     <age>18</age>
@@ -279,6 +298,7 @@ xml = parsexml(\"\"\"
     <GPA>4.5</GPA>
     <taken-courses>Artificial Intelligence</taken-courses>
     <taken-courses>Robotics</taken-courses>
+    He is a genius
   </person>
   <person id="2">
     <age>18</age>
@@ -314,6 +334,9 @@ julia>P1.courses
 
 julia>P1.id
 1
+
+julia> P1.comment
+"He is a genius"
 ```
 """
 macro aml(expr)

@@ -37,6 +37,16 @@ function updatecontent!(value::T, s::String, node::Node, argAmlType::Type{AbsAtt
     end
 end
 
+function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type{AbsText}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
+    index = parse_textindex(indexstr)
+    elm = findtextlocal(index, node)
+    if isnothing(elm) # return nothing if nothing is found
+        return error("field not found in aml")
+    else
+        elm.content = value
+    end
+end
+
 # Defined types
 function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{<:AbsNormal}) where {T}
     # if hasdocument(node)
@@ -68,6 +78,21 @@ function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{AbsAttr
     end
 end
 
+function updatecontent!(value::T, indexstr::String,node::Node, argAmlType::Type{AbsText}) where {T}
+    index = parse_textindex(indexstr)
+    elm = findtextlocal(index, node)
+    if isnothing(elm) # error if nothing is found
+        return error("field not found in aml")
+    else
+        if hasmethod(string, Tuple{T})
+            elm.content = string(value)
+        else
+            unlink!(elm)
+            link!(node, value.aml)
+        end
+    end
+end
+
 # Nothing Alone
 @transform function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{allsubtypes(AbsNormal)})
     # if hasdocument(node)
@@ -90,6 +115,16 @@ function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{A
 
     else # error if nothing is found
         return error("field not found in aml")
+    end
+end
+
+function updatecontent!(value::Nothing, indexstr::String,node::Node, argAmlType::Type{AbsText})
+    index = parse_textindex(indexstr)
+    elm = findtextlocal(index, node)
+    if isnothing(elm) # error if nothing is found
+        return error("field not found in aml")
+    else
+        unlink!(elm)
     end
 end
 ################################################################
@@ -119,6 +154,18 @@ function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Typ
         end
     else # error if nothing is found
         return error("field not found in aml")
+    end
+end
+
+function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAmlType::Type{AbsText}) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
+    indices = parse_textindices(indicesstr)
+    elmsNode = findvecttextlocal(indices, node)
+    if isnothing(elmsNode) # error if nothing is found
+        return error("field not found in aml")
+    else
+        for (i, elm) in enumerate(elmsNode)
+            elm.content = value[i]
+        end
     end
 end
 
@@ -174,4 +221,26 @@ function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Typ
             end
         end
     end
+end
+
+function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAmlType::Type{AbsText}) where{T}
+    indices = parse_textindices(indicesstr)
+    elmsNode = findvecttextlocal(indices, node)
+    if isnothing(elmsNode) # error if nothing is found
+        return error("field not found in aml")
+    else
+        for (i, elm) in enumerate(elmsNode)
+            if isnothing(value[i])
+                unlink!(elm)
+            else
+                if hasmethod(string, Tuple{T})
+                    elm.content = string(value[i])
+                else
+                    unlink!(elm)
+                    link!(node, value[i].aml)
+                end
+            end
+        end
+    end
+
 end
