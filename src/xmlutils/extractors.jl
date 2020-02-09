@@ -3,24 +3,12 @@ export findcontent, findalllocal, findfirstlocal
 # Extractors
 ################################################################
 # Documents
-function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNormal}) where {T}
-    name = "//"* name
+function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNode}) where {T}
     findcontent(T, name, root(doc), argAmlType)
 end
 
 # if no type is provided consider it to be Vector{Union{String, Nothing}}
-function findcontent(name::String, doc::Document, argAmlType::Type{<:AbsNormal})
-    name = "//"* name
-    findcontent(Vector{Union{String, Nothing}}, name, root(doc), argAmlType)
-end
-
-# For attributes search in the root
-function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{AbsAttribute}) where {T}
-    findcontent(T, name, root(doc), argAmlType)
-end
-
-# if no type is provided consider it to be Vector{Union{String, Nothing}}
-function findcontent(name::String, doc::Document, argAmlType::Type{AbsAttribute})
+function findcontent(name::String, doc::Document, argAmlType::Type{<:AbsNode})
     findcontent(Vector{Union{String, Nothing}}, name, root(doc), argAmlType)
 end
 ################################################################
