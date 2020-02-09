@@ -89,7 +89,7 @@ findfirstcontent("instrument-name",node, AbsNormal)
 findfirstcontent(UInt8,"midi-channel",node, AbsNormal)
 ```
 """
-function findfirstcontent(::Type{T},  name::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T<:String} # for strings
+@transform function findfirstcontent(::Type{T},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:String} # for strings
 
     if hasdocument(node)
         elm = findfirst(name,node)
@@ -117,10 +117,12 @@ end
 
 
 # if no type is provided consider it to be string
-findfirstcontent( name::String,node::Node, argAmlType::Type{<:AbsDocOrNode}) = findfirstcontent(Union{String, Nothing}, name, node, argAmlType) # Union!!!
+@transform function findfirstcontent(name::String,node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+    return findfirstcontent(Union{String, Nothing}, name, node, argAmlType) # Union!!!
+end
 
 # Number,Bool
-function findfirstcontent(::Type{T}, name::String, node::Node, argAmlType::Type{<:AbsNormal}) where {T<:Union{Number,Bool}}
+@transform function findfirstcontent(::Type{T}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Union{Number,Bool}}
 
     if hasdocument(node)
         elm = findfirst(name,node)
@@ -186,18 +188,14 @@ function findfirstcontent(::Type{T}, name::String,node::Node, argAmlType::Type{A
 end
 
 # Union with Nothing
-findfirstcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{<:AbsDocOrNode}) where {T} = findfirstcontent(T, name, node, argAmlType)
-
-findfirstcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{<:AbsNormal}) where {T} = findfirstcontent(T, name, node, argAmlType)
-
-findfirstcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T} = findfirstcontent(T, name, node, argAmlType)
+@transform function findfirstcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)}) where {T}
+    return findfirstcontent(T, name, node, argAmlType)
+end
 
 # Nothing Alone
-findfirstcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{<:AbsDocOrNode}) = nothing
-
-findfirstcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{<:AbsNormal}) = nothing
-
-findfirstcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{AbsAttribute}) = nothing
+@transform function findfirstcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+    return nothing
+end
 
 ################################################################
 # Vector extraction
@@ -209,7 +207,7 @@ Finds all the elements with the address of string in the node, and converts the 
 findallcontent(UInt8,"midi-channel", node, AbsNormal)
 ```
 """
-function findallcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T<:String} # for strings
+@transform function findallcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:String} # for strings
 
     if hasdocument(node)
         elmsNode = findall(name, node) # a vector of Node elements
@@ -240,11 +238,14 @@ function findallcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType
         elmsNode = nothing
     end
 end
+
 # if no type is provided consider it to be string
-findallcontent(name::String, node::Node, argAmlType::Type{<:AbsDocOrNode}) = findallcontent(Vector{Union{String, Nothing}},name, node, argAmlType)
+@transform function findallcontent(name::String, node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+    return findallcontent(Vector{Union{String, Nothing}},name, node, argAmlType)
+end
 
 # Number,Bool
-function findallcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T<:Union{Number,Bool}}
+@transform function findallcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{Number,Bool}}
 
     if hasdocument(node)
         elmsNode = findall(name, node) # a vector of Node elements
@@ -329,26 +330,18 @@ function findallcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType:
     end
 
 end
+
 # Union with Nothing
-findallcontent(::Type{Vector{UN{T}}}, name::String,node::Node, argAmlType::Type{<:AbsDocOrNode}) where {T} = findallcontent(Vector{T},name,node, argAmlType)
-
-findallcontent(::Type{Vector{UN{T}}}, name::String,node::Node, argAmlType::Type{<:AbsNormal}) where {T} = findallcontent(Vector{T},name,node, argAmlType)
-
-
-findallcontent(::Type{Vector{UN{T}}}, name::String,node::Node, argAmlType::Type{AbsAttribute}) where {T} = findallcontent(Vector{T},name,node, argAmlType)
-
+@transform function findallcontent(::Type{Vector{UN{T}}}, name::String,node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)}) where {T}
+    return findallcontent(Vector{T},name,node, argAmlType)
+end
 
 # Nothing Alone
-findallcontent(::Type{Vector{Nothing}}, name::String,node::Node, argAmlType::Type{<:AbsDocOrNode}) = nothing
-
-findallcontent(::Type{Vector{Nothing}}, name::String,node::Node, argAmlType::Type{<:AbsNormal}) = nothing
-
-findallcontent(::Type{Vector{Nothing}}, name::String,node::Node, argAmlType::Type{AbsAttribute}) = nothing
-
+@transform function findallcontent(::Type{Vector{Nothing}}, name::String,node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+    return nothing
+end
 
 # vector of Any - consider it to be string
-findallcontent(::Type{Vector{Any}}, name::String,node::Node, argAmlType::Type{<:AbsDocOrNode}) = findallcontent(Vector{String},name,node, argAmlType)
-
-findallcontent(::Type{Vector{Any}}, name::String,node::Node, argAmlType::Type{<:AbsNormal}) = findallcontent(Vector{String},name,node, argAmlType)
-
-findallcontent(::Type{Vector{Any}}, name::String,node::Node, argAmlType::Type{<:AbsAttribute}) = findallcontent(Vector{String},name,node, argAmlType)
+@transform function findallcontent(::Type{Vector{Any}}, name::String,node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+    return findallcontent(Vector{String},name,node, argAmlType)
+end
