@@ -1,6 +1,6 @@
 using SnoopCompile
 
-@snoopi_bot "AcuteML" begin
+@snoopi_bot BotConfig("AcuteML", blacklist = ["Person", "University", "Doc"]) begin
     using AcuteML
 
     # Use runtests.jl
