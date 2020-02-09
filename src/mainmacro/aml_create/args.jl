@@ -53,22 +53,6 @@ end
 """
 Each argument extractor
 """
-function arg_ext(argParsedTypeI::Type{<:AbstractVector}, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
-    if !hasCheckFunction
-        argextI=:($argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
-    else
-        argextI=quote
-
-            $argVarsI = findallcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI)
-
-            if !isnothing($argVarsI) && !(($(esc(argFunsI)))($argVarsI))
-                error("$($argNamesI) doesn't meet criteria function")
-            end
-        end
-    end
-    return argextI
-end
-
 function arg_ext(argParsedTypeI, hasCheckFunction::Bool, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
     if !hasCheckFunction
         argextI=:($argVarsI = findcontent($(esc(argTypesI)), $argNamesI, aml, $argAmlTypesI))
