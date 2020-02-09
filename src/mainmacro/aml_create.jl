@@ -51,17 +51,18 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
             ##########################
 
             argParsedTypeI = arg_typeparse(argTypesI)
-            
             ##########################
 
             hasCheckFunction = !ismissing(argFunsI)
 
-            argconst[i]=arg_const(argParsedTypeI, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+            inputargs = (argParsedTypeI, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
 
-            argext[i]=arg_ext(argParsedTypeI, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+            argconst[i]=arg_const(inputargs...)
+
+            argext[i]=arg_ext(inputargs...)
 
             if mutability
-                argmutability[i] = arg_mutability(argParsedTypeI, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+                argmutability[i] = arg_mutability(inputargs...)
             end
 
         end # endfor
