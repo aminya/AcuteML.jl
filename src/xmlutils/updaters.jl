@@ -37,9 +37,9 @@ function updatecontent!(value::T, s::String, node::Node, argAmlType::Type{AbsAtt
     end
 end
 
-function updatecontent!(value::T, s::String, node::Node, argAmlType::Type{AbsText}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
-    elm = findtextlocal(name, node)
-
+function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type{AbsText}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
+    index = parse_textindex(indexstr)
+    elm = findtextlocal(index, node)
     if isnothing(elm) # return nothing if nothing is found
         return error("field not found in aml")
     else
@@ -78,9 +78,9 @@ function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{AbsAttr
     end
 end
 
-function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{AbsText}) where {T}
-    elm = findtextlocal(name, node)
-
+function updatecontent!(value::T, indexstr::String,node::Node, argAmlType::Type{AbsText}) where {T}
+    index = parse_textindex(indexstr)
+    elm = findtextlocal(index, node)
     if isnothing(elm) # error if nothing is found
         return error("field not found in aml")
     else
@@ -118,9 +118,9 @@ function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{A
     end
 end
 
-function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{AbsText})
-    elm = findtextlocal(name, node)
-
+function updatecontent!(value::Nothing, indexstr::String,node::Node, argAmlType::Type{AbsText})
+    index = parse_textindex(indexstr)
+    elm = findtextlocal(index, node)
     if isnothing(elm) # error if nothing is found
         return error("field not found in aml")
     else
