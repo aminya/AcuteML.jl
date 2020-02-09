@@ -7,19 +7,15 @@ Notice that if you don't use `@aml`, you should include `aml::Node` as one of yo
 
 Functions to use for custom html/xml constructor:
 - [docOrElmInit](@ref): function to initialize the aml
-- [addelementOne!](@ref) : to add single elements
-- [addelementVect!](@ref) : to add multiple elements (vector)
+- [addelm!](@ref) : to add elements (single or a vector of elements)
 Use these functions, to make a method that calculates the `aml` inside the function and returns all of the fields.
 
 Functions to use for custom html/xml extractor:
-- [findfirstcontent](@ref) : to extract single elements
-- [findallcontent](@ref) : to extract multiple elements (vector)
+- [findcontent](@ref) : to extract elements
 Use these functions, to make a method that gets the `aml::Node` and calculates and returns all of the fields.
 
 Functions to support mutability:
-- [updatefirstcontent!](@ref): updates first element content. It also converts any type to string. element is given as string.
-- [updateallcontent!](@ref): finds all the elements with the address of string in the node, and updates the content
-
+- [updatecontent!](@ref): Finds all the elements with the address of string in the node, and updates the content.
 
 # Example:
 In this example we define `Identity` with custom constructors:
@@ -40,11 +36,11 @@ function Identity(;pitch = nothing, rest = nothing, unpitched = nothing)
     aml = docOrElmInit(AbsNormal, "identity")
 
     if pitch != nothing
-        addelementOne!(aml, "pitch", pitch, AbsNormal)
+        addelm!(aml, "pitch", pitch, AbsNormal)
     elseif rest != nothing
-        addelementOne!(aml, "rest", rest, AbsNormal)
+        addelm!(aml, "rest", rest, AbsNormal)
     elseif unpitched != nothing
-        addelementOne!(aml, "unpitched", unpitched, AbsNormal)
+        addelm!(aml, "unpitched", unpitched, AbsNormal)
     else
         error("one of the pitch, rest or unpitched should be given")
     end
@@ -54,9 +50,9 @@ end
 
 function Identity(;aml)
 
-        pitch = findfirstcontent(Pitch, "pitch", aml, AbsNormal)
-        rest = findfirstcontent(Rest, "rest", aml, AbsNormal)
-        unpitched = findfirstcontent(Unpitched, "unpitched", aml, AbsNormal)
+        pitch = findcontent(Pitch, "pitch", aml, AbsNormal)
+        rest = findcontent(Rest, "rest", aml, AbsNormal)
+        unpitched = findcontent(Unpitched, "unpitched", aml, AbsNormal)
 
         return Identity(pitch, rest, unpitched, aml)
 end

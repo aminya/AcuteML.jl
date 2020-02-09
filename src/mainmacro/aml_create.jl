@@ -48,26 +48,17 @@ function aml_create(expr::Expr, argParams, argDefVal, argTypes, argVars, argName
             # call Expr - For mutability
             argVarsCall[i] = :(str.$argVarsI)
             argVarsCallI = argVarsCall[i]
-
-            # Vector
-            if (isa(argTypesI, Expr) && argTypesI.args[1] == :Vector) || (!isa(argTypesI, Union{Symbol, Expr}) && argTypesI <: Array)
-
-                isVector = true
             ##########################
-            # Non Vector
-            elseif isa(argTypesI, Symbol) || (isa(argTypesI, Expr) && argTypesI.args[1] == :Union ) || (isa(argTypesI, Expr) && argTypesI.args[1] == :UN) || !(argTypesI <: Array)
-
-                isVector = false
-            end
-
             hasCheckFunction = !ismissing(argFunsI)
 
-            argconst[i]=arg_const(isVector, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+            inputargs = (hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
 
-            argext[i]=arg_ext(isVector, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+            argconst[i]=arg_const(inputargs...)
+
+            argext[i]=arg_ext(inputargs...)
 
             if mutability
-                argmutability[i] = arg_mutability(isVector, hasCheckFunction, argTypesI, argVarsI, argNamesI, argAmlTypesI, argFunsI, argSymI, argVarsCallI)
+                argmutability[i] = arg_mutability(inputargs...)
             end
 
         end # endfor
