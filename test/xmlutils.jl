@@ -1,10 +1,10 @@
 using AcuteML, Test
 @testset "xmlutils" begin
 
-    nsc = docOrElmInit(AbsEmpty, "some")
+    nsc = init_docorelm(AbsEmpty, "some")
 
     @testset "Node" begin
-        n = docOrElmInit(AbsNormal, "a")
+        n = init_docorelm(AbsNormal, "a")
         ################################################################
         addelm!(n, "normalString", "val", AbsNormal)
         @test "val" == findcontent(String, "normalString", n, AbsNormal)
@@ -81,7 +81,7 @@ using AcuteML, Test
     end
 
     @testset "Html Document" begin
-        dhtml = docOrElmInit(AbsHtml, "html")
+        dhtml = init_docorelm(AbsHtml, "html")
 
         addelm!(dhtml, "normalString", "val", AbsNormal)
         @test "val" == findcontent(String, "normalString", dhtml, AbsNormal)
@@ -158,10 +158,10 @@ using AcuteML, Test
     end
 
     @testset "XML Document" begin
-        dxml = docOrElmInit(AbsXml, "xml")
+        dxml = init_docorelm(AbsXml, "xml")
 
         import EzXML: setroot!
-        setroot!(dxml, docOrElmInit(AbsNormal, "node"))
+        setroot!(dxml, init_docorelm(AbsNormal, "node"))
 
         addelm!(dxml, "normalString", "val", AbsNormal)
         @test "val" == findcontent(String, "normalString", dxml, AbsNormal)

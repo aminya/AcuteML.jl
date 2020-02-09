@@ -3,7 +3,7 @@ import EzXML: Document, Node
 
 import Tables
 
-export docOrElmInit, UN
+export init_docorelm, UN
 ################################################################
 UN{T}= Union{T, Nothing}
 ################################################################
