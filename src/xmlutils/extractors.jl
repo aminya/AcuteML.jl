@@ -2,17 +2,7 @@ export findcontent, findalllocal, findfirstlocal
 ################################################################
 # Extractors
 ################################################################
-# Documents
-function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNode}) where {T}
-    findcontent(T, name, root(doc), argAmlType)
-end
-
-# if no type is provided consider it to be Vector{Union{String, Nothing}}
-function findcontent(name::String, doc::Document, argAmlType::Type{<:AbsNode})
-    findcontent(Vector{Union{String, Nothing}}, name, root(doc), argAmlType)
-end
-################################################################
-# Nodes
+# Searchers Utils
 ################################################################
 # Local searchers (no namespace)
 """
@@ -90,6 +80,19 @@ function findtextlocal(indexstr::String, node::Node)
     end
     return out
 end
+################################################################
+# Documents
+################################################################
+function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNode}) where {T}
+    findcontent(T, name, root(doc), argAmlType)
+end
+
+# if no type is provided consider it to be Vector{Union{String, Nothing}}
+function findcontent(name::String, doc::Document, argAmlType::Type{<:AbsNode})
+    findcontent(Vector{Union{String, Nothing}}, name, root(doc), argAmlType)
+end
+################################################################
+# Nodes
 ################################################################
 # Single extraction
 """
