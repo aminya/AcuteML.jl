@@ -21,7 +21,7 @@ export @aml
 # types
 export Node, Document
 # literals
-export @doc_str, @sc_str, @a_str
+export @doc_str, @empty_str, @att_str, @text_str
 ################################################################
 """
   @aml

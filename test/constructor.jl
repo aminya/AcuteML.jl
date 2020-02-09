@@ -1,6 +1,6 @@
 @testset "constructor" begin
 
-    P1 = Person(age=24, field="Mechanical Engineering", courses = ["Artificial Intelligence", "Robotics"], id = 1)
+    P1 = Person(age=24, field="Mechanical Engineering", courses = ["Artificial Intelligence", "Robotics"], id = 1, comment = "He is a genius")
 
     P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id = 2)
 
