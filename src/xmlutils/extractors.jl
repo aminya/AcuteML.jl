@@ -1,4 +1,4 @@
-export findalllocal, findfirstlocal, findcontent
+export findcontent, findalllocal, findfirstlocal
 ################################################################
 # Extractors
 ################################################################
@@ -64,10 +64,15 @@ end
 ################################################################
 # Single extraction
 """
-    findcontent(element, node, argAmlType)
-    findcontent(type, element,node, argAmlType)
 
-Returns first element content. It also convert to the desired format by passing type. element is given as string.
+    findcontent(type, element::String, node, argAmlType)
+
+Finds all the elements with the address of string in the node and converts to the passed type.
+
+    findcontent(element::String, node, argAmlType)
+
+If no type is provided consider it to be Vector{Union{String, Nothing}}
+
 ```julia
 findcontent("instrument-name",node, AbsNormal)
 findcontent(UInt8,"midi-channel",node, AbsNormal)
@@ -177,14 +182,7 @@ end
 
 ################################################################
 # Vector extraction
-"""
-    findcontent(type, string, node, argAmlType)
 
-Finds all the elements with the address of string in the node, and converts the elements to Type object.
-```julia
-findcontent(UInt8,"midi-channel", node, AbsNormal)
-```
-"""
 @transform function findcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:String} # for strings
 
     if hasdocument(node)
