@@ -76,14 +76,14 @@ function arg_mutability(argParsedTypeI, hasCheckFunction::Bool, argTypesI, argVa
     if !hasCheckFunction
         argmutabilityI = quote
             if name == $argSymI
-                updatefirstcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
+                updatecontent!(value, $argNamesI, str.aml, $argAmlTypesI)
             end
         end
     else
         argmutabilityI = quote
             if name == $argSymI
                 if !isnothing($(argVarsCallI)) && ($(esc(argFunsI)))($(argVarsCallI))
-                    updatefirstcontent!(value, $argNamesI, str.aml, $argAmlTypesI)
+                    updatecontent!(value, $argNamesI, str.aml, $argAmlTypesI)
                 else
                     error("$($argNamesI) doesn't meet criteria function")
                 end
