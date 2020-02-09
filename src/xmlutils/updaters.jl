@@ -117,6 +117,16 @@ function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{A
         return error("field not found in aml")
     end
 end
+
+function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{AbsText})
+    elm = findtextlocal(name, node)
+
+    if isnothing(elm) # error if nothing is found
+        return error("field not found in aml")
+    else
+        unlink!(elm)
+    end
+end
 ################################################################
 # Vector update
 
