@@ -33,6 +33,12 @@ macro a_str(s)
     return argAmlType, s
 end
 ################################################################
+# text node
+macro t_str(s)
+    argAmlType = AbsText
+    return argAmlType, s
+end
+################################################################
 # # namespace
 # macro ns_str(s)
 #     argAmlType = 18
