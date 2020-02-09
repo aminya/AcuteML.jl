@@ -83,11 +83,27 @@ function parse_textindex(indexstr::String)
 end
 
 """
+    findtextlocal(index::Integer, node)
+
+finds the text node at position given by index.
+
 faster than `findtext()`
 """
-function findtextlocal(indexstr::String, node::Node)
-    if indexstr !== "all"
-        index = eval(Meta.parse(indexstr))
+function findtextlocal(index::Integer, node::Node)
+    iText = 0
+    out = nothing # return nothing if nothing is found
+    for child in eachnode(node)
+        if istext(child)
+            iText +=1
+            if iText == index
+                out = child
+                break
+            end
+        end
+    end
+    return out
+end
+
 
         iText = 0
         out = nothing # return nothing if nothing is found
