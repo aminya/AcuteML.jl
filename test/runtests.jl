@@ -13,15 +13,10 @@ stripall(x::String) = replace(x, r"\s|\n"=>"")
     id::Int64, a"~"
 end
 
-@aml mutable struct University "university"
+@aml mutable struct University doc"university"
     name, a"university-name"
     people::Vector{Person}, "person"
 end
-
-@aml mutable struct Doc "xml"
-    university::University, "~"
-end
-
 
 # Value Checking Functions
 GPAcheck(x) = x <= 4.5 && x >= 0
