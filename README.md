@@ -48,14 +48,11 @@ using AcuteML
     id::Int64, a"~"
 end
 
-@aml mutable struct University "university"
+@aml mutable struct University doc"university"
     name, a"university-name"
     people::Vector{Person}, "person"
 end
 
-@aml mutable struct Doc "xml"
-    university::University, "~"
-end
 
 ```
 
@@ -89,9 +86,7 @@ P2 = Person(age=18, field="Computer Engineering", GPA=4, courses=["Julia"], id =
 
 U = University(name="Julia University", people=[P1, P2])
 
-D = Doc(university = U)
-
-D.university.people[2].GPA=4.2 # mutability support after Doc creation
+U.people[2].GPA=4.2 # mutability support after Doc creation
 
 ```
 
@@ -113,23 +108,6 @@ julia> pprint(P1) # or print(P1.aml)
 </person>
 
 julia> pprint(U) # or print(U.aml)
-<university university-name="Julia University">
-  <person id="1">
-    <age>24</age>
-    <study-field>Mechanical Engineering</study-field>
-    <GPA>4.5</GPA>
-    <taken-courses>Artificial Intelligence</taken-courses>
-    <taken-courses>Robotics</taken-courses>
-  </person>
-  <person id="2">
-    <age>18</age>
-    <study-field>Computer Engineering</study-field>
-    <GPA>4.2</GPA>
-    <taken-courses>Julia</taken-courses>
-  </person>
-</university>
-
-julia> pprint(D) # or print(D.aml)
 <?xml version="1.0" encoding="UTF-8"?>
 <university university-name="Julia University">
   <person id="1">
@@ -212,19 +190,15 @@ xml = parsexml("""
 </university>
 """)
 
-# extract Doc
-D = Doc(xml) # StructName(xml) like Doc(xml) extracts the data and stores them in proper format
+# extract University
+U = University(xml) # StructName(xml) extracts the data and stores them in proper format
 
 # Now you can access all of the data by calling the fieldnames
-
-# extract University
-U = D.university
 
 julia>U.name
 "Julia University"
 
 # extract Person
-
 P1 = U.people[1]
 
 julia>P1.age
