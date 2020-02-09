@@ -134,6 +134,8 @@ funds::UN{String}, "financial-funds"   # optional, but you should pass nothing m
     textnode_vector::Vector{String}, text"[2:3]"
     ```
 
+Note that the vector Text nodes can only be used in extraction. For creation, you need to make separate fields with correct position in the struct definition.
+
 ### Empty Elements (Self-Closing) Definition
 * Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
 ```julia
