@@ -37,6 +37,16 @@ function updatecontent!(value::T, s::String, node::Node, argAmlType::Type{AbsAtt
     end
 end
 
+function updatecontent!(value::T, s::String, node::Node, argAmlType::Type{AbsText}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
+    elm = findtextlocal(name, node)
+
+    if isnothing(elm) # return nothing if nothing is found
+        return error("field not found in aml")
+    else
+        elm.content = value
+    end
+end
+
 # Defined types
 function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{<:AbsNormal}) where {T}
     # if hasdocument(node)
