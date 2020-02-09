@@ -8,9 +8,10 @@ function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:
     findcontent(T, name, root(doc), argAmlType)
 end
 
+# if no type is provided consider it to be Vector{Union{String, Nothing}}
 function findcontent(name::String, doc::Document, argAmlType::Type{<:AbsNormal})
     name = "//"* name
-    findcontent(Vector{String}, name, root(doc), argAmlType)
+    findcontent(Vector{Union{String, Nothing}}, name, root(doc), argAmlType)
 end
 
 # For attributes search in the root
@@ -18,8 +19,9 @@ function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{Ab
     findcontent(T, name, root(doc), argAmlType)
 end
 
+# if no type is provided consider it to be Vector{Union{String, Nothing}}
 function findcontent(name::String, doc::Document, argAmlType::Type{AbsAttribute})
-    findcontent(Vector{String}, name, root(doc), argAmlType)
+    findcontent(Vector{Union{String, Nothing}}, name, root(doc), argAmlType)
 end
 ################################################################
 # Nodes
@@ -215,11 +217,6 @@ function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::T
     end
 end
 
-# if no type is provided consider it to be string
-@transform function findcontent(name::String, node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
-    return findcontent(Vector{Union{String, Nothing}},name, node, argAmlType)
-end
-
 # Number,Bool
 @transform function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{Number,Bool}}
 
@@ -320,4 +317,9 @@ end
 # vector of Any - consider it to be string
 @transform function findcontent(::Type{Vector{Any}}, name::String,node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
     return findcontent(Vector{String},name,node, argAmlType)
+end
+
+# if no type is provided consider it to be Vector{Union{String, Nothing}}
+@transform function findcontent(name::String, node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+    return findcontent(Vector{Union{String, Nothing}},name, node, argAmlType)
 end
