@@ -20,16 +20,12 @@ xml = parsexml("""
 </university>
 """)
 
-# extract Doc
-D = Doc(xml) # StructName(xml) like Doc(xml) extracts the data and stores them in proper format
+# extract University
+U = University(xml) # StructName(xml) extracts the data and stores them in proper format
 
 # Now you can access all of the data by calling the fieldnames
 
-# extract University
-U = D.university
-
 U.name # Julia University
-
 
 # extract Person
 
