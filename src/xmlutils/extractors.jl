@@ -171,6 +171,15 @@ function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAt
     end
 end
 
+function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsText}) where {T<:Union{Number,Bool}}
+    elm = findtextlocal(name, node)
+
+    if isnothing(elm) # return nothing if nothing is found
+        return nothing
+    else
+        return parse(T, elm.content)
+    end
+end
 
 # for defined types
 function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{<:AbsNormal}) where {T}
