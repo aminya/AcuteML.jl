@@ -78,6 +78,21 @@ function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{AbsAttr
     end
 end
 
+function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{AbsText}) where {T}
+    elm = findtextlocal(name, node)
+
+    if isnothing(elm) # error if nothing is found
+        return error("field not found in aml")
+    else
+        if hasmethod(string, Tuple{T})
+            elm.content = string(value)
+        else
+            unlink!(elm)
+            link!(node, value.aml)
+        end
+    end
+end
+
 # Nothing Alone
 @transform function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{allsubtypes(AbsNormal)})
     # if hasdocument(node)
