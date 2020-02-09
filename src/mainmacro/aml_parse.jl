@@ -1,3 +1,5 @@
+include("aml_parse/literals.jl")
+
 """
 @aml parser function
 """
@@ -56,7 +58,7 @@ function aml_parse(expr::Expr)
             end
 
             argExpr.args[i] =  nothing # removing "aml name" from expr args
-            docOrElmType = aml_dispatch(AbsDocOrNode, amlName) # decided based on name
+            docOrElmType = AbsNormal
 
         ################################################################
         # Literal Struct name - sc"aml name"
@@ -81,6 +83,7 @@ function aml_parse(expr::Expr)
                 end
 
                 docOrElmType = ei[1]
+                docOrElmType = aml_dispatch(docOrElmType, amlName)
 
                 argExpr.args[i] =  nothing # removing "aml name" from expr args
             end
@@ -103,7 +106,7 @@ function aml_parse(expr::Expr)
                     amlName = ei.args[1] # Type aml name
                 end
 
-                docOrElmType = aml_dispatch(AbsDocOrNode, amlName) # decided based on name
+                docOrElmType = AbsNormal
                 argExpr.args[i] =  nothing # removing "aml name" from expr args
 
             ########################
@@ -124,6 +127,8 @@ function aml_parse(expr::Expr)
                 end
 
                 docOrElmType = ei.args[1][1]
+                docOrElmType = aml_dispatch(docOrElmType, amlName)
+
                 argExpr.args[i] =  nothing # removing "aml name" from expr args
         ################################################################
         # Arguments
