@@ -45,8 +45,16 @@ function findalllocal(name::String, node::Node)
 end
 
 function findtext(indexstr::String, node::Node)
-    if indexstr !== "all"
+    if indexstr == ""
+        index = 1
+    else
         index = eval(Meta.parse(indexstr))
+    end
+    xpath = "text()[position() = $index]"
+    out = findfirst(xpath, node)
+    return out
+end
+
 
         xpath = "text()[position() = $index]"
         out = findfirst(xpath, node)
