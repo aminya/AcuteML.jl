@@ -5,9 +5,8 @@
 
 ```@autodocs
 Modules = [AcuteML]
-Pages   = ["AcuteML.jl"]
+Pages   = ["AcuteML.jl","io.jl"]
 ```
-
 
 # Templating
 
@@ -16,9 +15,16 @@ Modules = [AcuteML]
 Pages   = ["templating.jl"]
 ```
 
-# Backend utilities
+# Macro Backend
 
 ```@autodocs
 Modules = [AcuteML]
-Pages   = ["xmlutils.jl", "types.jl", "initializer.jl", "creators.jl", "extractors.jl", "updaters.jl"]
+Pages   = ["aml_create.jl", "aml_parse.jl", "aml.jl", "args.jl", "literals.jl"]
+```
+
+# XML/HTML utilities
+
+```@autodocs
+Modules = [AcuteML]
+Pages   = ["xmlutils.jl", "types.jl", "initializer.jl", "creators.jl", "extractors.jl", "updaters.jl", "amlDict.jl", "amlTables.jl","amlTypesSupport.jl"]
 ```
