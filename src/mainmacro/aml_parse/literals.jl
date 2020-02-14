@@ -1,3 +1,5 @@
+# literals
+export @doc_str, @empty_str, @att_str, @txt_str
 ################################################################
 function aml_dispatch(docOrElmType::Type{AbsDocument}, name::String)
     if name == "html"

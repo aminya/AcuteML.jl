@@ -16,10 +16,9 @@ include("templating.jl")
 
 # main macro
 export @aml
-# types
+# XML types
 export Node, Document
-# literals
-export @doc_str, @empty_str, @att_str, @txt_str
+
 ################################################################
 """
   @aml
