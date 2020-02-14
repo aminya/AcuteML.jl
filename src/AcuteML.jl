@@ -3,15 +3,13 @@ module AcuteML
 import EzXML.Node
 
 # aml macro
+include("types.jl")
 include("xmlutils.jl")
 include("mainmacro/aml_parse.jl")
 include("mainmacro/aml_create.jl")
 
 # io
 include("io.jl")
-
-# DataTypesSupport
-include("amlTypesSupport.jl")
 
 # templating
 include("templating.jl")

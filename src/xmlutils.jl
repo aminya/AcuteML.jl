@@ -7,7 +7,9 @@ export init_docorelm, UN
 ################################################################
 UN{T}= Union{T, Nothing}
 ################################################################
-include("xmlutils/types.jl")
+# DataTypesSupport
+include("xmlutils/amlTypesSupport.jl")
+################################################################
 include("xmlutils/initializer.jl")
 include("xmlutils/creators.jl")
 include("xmlutils/extractors.jl")
