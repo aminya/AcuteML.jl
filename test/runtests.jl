@@ -35,7 +35,7 @@ function check_course(age, field, GPA, courses, professors, id, comment)
     return any(in.(courses, Ref(relevant)))
 end
 
-include("constructor.jl")
+include("creator.jl")
 include("extractor.jl")
 include("tables.jl")
 include("xmlutils.jl")

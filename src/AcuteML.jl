@@ -188,7 +188,7 @@ end
 ```
 -------------------------------------------------------
 
-# Example - Constructor
+# Example - Creator
 
 After we defined the structs, we can create instances of them by passing our data to the fields:
 

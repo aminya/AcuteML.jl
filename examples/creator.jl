@@ -1,6 +1,6 @@
 # see exmaples.jl first
 
-# Constructor
+# Creator
 
 P1 = Person(age=24, field="Mechanical Engineering", courses = ["Artificial Intelligence", "Robotics"], id = 1, comment = "He is a genius")
 
