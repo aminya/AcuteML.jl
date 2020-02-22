@@ -5,8 +5,8 @@ import EzXML.Node
 # aml macro
 include("types.jl")
 include("xmlutils.jl")
-include("mainmacro/aml_parse.jl")
-include("mainmacro/aml_create.jl")
+include("@aml/@aml_parse.jl")
+include("@aml/@aml_create.jl")
 
 # io
 include("io.jl")
@@ -101,7 +101,7 @@ GPA::Float64, "~", GPAcheck
 
 * To define any restrictions for multiple values of a struct, define a function that gets all the variables and checks a criteria and returns Bool, and put its name after a `,` after the struct name:
 ```julia
-@aml mutable struct Person "person", courseCheck
+@aml mutable struct Person "person", check_course
 # ...
 end
 ```
@@ -151,7 +151,7 @@ using AcuteML
 # Types definition
 
 # Person Type
-@aml mutable struct Person "person", courseCheck
+@aml mutable struct Person "person", check_course
     age::UInt64, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
@@ -173,7 +173,7 @@ end
 # Value Checking Functions
 GPAcheck(x) = x <= 4.5 && x >= 0
 
-function courseCheck(age, field, GPA, courses, professors, id, comment)
+function check_course(age, field, GPA, courses, professors, id, comment)
 
     if field == "Mechanical Engineering"
         relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
@@ -344,10 +344,10 @@ macro aml(expr)
     if expr isa Expr && expr.head == :struct
 
         # expr.args[3] # arguments
-        # argParams.args # empty
-        expr.args[3], argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T = aml_parse(expr)
+        # args_param.args # empty
+        expr.args[3], args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, T = aml_parse(expr)
 
-        out = aml_create(expr, argParams, argDefVal, argTypes, argVars, argNames, argFuns, argAmlTypes, amlName, docOrElmType, amlFun, mutability, T)
+        out = aml_create(expr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, T)
 
     # elseif expr isa Expr && expr.head == :tuple
     #     amlTypesSupport(expr)

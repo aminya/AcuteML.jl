@@ -1,17 +1,17 @@
 # literals
 export @doc_str, @empty_str, @att_str, @txt_str
 ################################################################
-function aml_dispatch(docOrElmType::Type{AbsDocument}, name::String)
+function aml_dispatch(struct_nodetype::Type{AbsDocument}, name::String)
     if name == "html"
-        docOrElmType = AbsHtml
+        struct_nodetype = AbsHtml
     else
-        docOrElmType = AbsXml
+        struct_nodetype = AbsXml
     end
-    return docOrElmType
+    return struct_nodetype
 end
 
-function aml_dispatch(docOrElmType, name::String) # itself
-    return docOrElmType
+function aml_dispatch(struct_nodetype, name::String) # itself
+    return struct_nodetype
 end
 
 ################################################################
@@ -19,14 +19,14 @@ end
 ################################################################
 # Document
 macro doc_str(s)
-    docOrElmType = AbsDocument
-    return docOrElmType, s
+    struct_nodetype = AbsDocument
+    return struct_nodetype, s
 end
 
 # Empty (self-closing)
 macro empty_str(s)
-    docOrElmType = AbsEmpty
-    return docOrElmType, s
+    struct_nodetype = AbsEmpty
+    return struct_nodetype, s
 end
 ################################################################
 # attribute

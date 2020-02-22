@@ -4,7 +4,7 @@ import EzXML: Document, Node
 ################################################################
 import Tables
 # DataTypesSupport
-include("xmlutils/amlTypesSupport.jl")
+include("xmlutils/aml_type_support.jl")
 ################################################################
 include("xmlutils/initializer.jl")
 include("xmlutils/creators.jl")
