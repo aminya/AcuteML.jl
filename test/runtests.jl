@@ -4,7 +4,7 @@ using Test, Suppressor, DataFrames
 stripall(x::String) = replace(x, r"\s|\n"=>"")
 
 # Type Definition
-@aml mutable struct Person "person", courseCheck
+@aml mutable struct Person "person", check_course
     age::UInt64, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
@@ -22,7 +22,7 @@ end
 # Value Checking Functions
 GPAcheck(x) = x <= 4.5 && x >= 0
 
-function courseCheck(age, field, GPA, courses, professors, id, comment)
+function check_course(age, field, GPA, courses, professors, id, comment)
 
     if field == "Mechanical Engineering"
         relevant = ["Artificial Intelligence", "Robotics", "Machine Design"]
