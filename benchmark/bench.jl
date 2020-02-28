@@ -83,12 +83,18 @@ P1, P2, U = creation();
 
 #=
 Benchmark Result
+V 0.8.2
+
+9.800 μs (100 allocations: 3.41 KiB)
+4.057 μs (66 allocations: 3.17 KiB)
+275.499 μs (356 allocations: 14.53 KiB)
+
 -------------------------------------
 V 0.7
 
 11.299 μs (108 allocations: 11.61 KiB)
 5.267 μs (73 allocations: 11.36 KiB)
-261.400 μs (371 allocations: 23.11 KiB)   
+261.400 μs (371 allocations: 23.11 KiB)
 
 -------------------------------------
 V 0.6
