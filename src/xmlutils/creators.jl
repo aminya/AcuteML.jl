@@ -51,19 +51,19 @@ end
 # Nodes
 ################################################################
 # String
-@transform function addelm!(aml::Node, name::String, value::String, argAmlType::Type{allsubtypes(AbsNormal)})
+@transform function addelm!(aml::Node, name::String,value::AbstractString, argAmlType::Type{allsubtypes(AbsNormal)})
     if !isnothing(value) # do nothing if value is nothing
         addelement!(aml, name, value)
     end
 end
 
-function addelm!(aml::Node, name::String, value::String, argAmlType::Type{AbsAttribute})
+function addelm!(aml::Node, name::String,value::AbstractString, argAmlType::Type{AbsAttribute})
     if !isnothing(value) # do nothing if value is nothing
         link!(aml, AttributeNode(name, value))
     end
 end
 
-function addelm!(aml::Node, indexstr::String, value::String, argAmlType::Type{AbsText})
+function addelm!(aml::Node, indexstr::String,value::AbstractString, argAmlType::Type{AbsText})
     index = parse_textindex(indexstr)
     if index < length(elements(aml))
         desired_node = elements(aml)[index]
@@ -78,20 +78,20 @@ function addelm!(aml::Node, indexstr::String, value::String, argAmlType::Type{Ab
     end
 end
 
-# Number, Bool
-@transform function addelm!(aml::Node, name::String, value::T, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Union{Number, Bool}}
+# Number  (and also Bool <:Number)
+@transform function addelm!(aml::Node, name::String, value::Number, argAmlType::Type{allsubtypes(AbsNormal)})
     if !isnothing(value) # do nothing if value is nothing
         addelement!(aml, name, string(value))
     end
 end
 
-function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribute}) where {T<:Union{Number, Bool}}
+function addelm!(aml::Node, name::String, value::Number, argAmlType::Type{AbsAttribute})
     if !isnothing(value) # do nothing if value is nothing
         link!(aml, AttributeNode(name, string(value)))
     end
 end
 
-function addelm!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbsText}) where {T<:Union{Number, Bool}}
+function addelm!(aml::Node, indexstr::String, value::Number, argAmlType::Type{AbsText})
     index = parse_textindex(indexstr)
     if index < length(elements(aml))
         desired_node = elements(aml)[index]

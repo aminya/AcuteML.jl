@@ -10,24 +10,52 @@ AcuteML is an Acute Markup Language (AML) for Web/XML development in Julia.
 
 * It also has a general templating engine, which can be used for any type of documents.
 
-# Installation
+# Installation and Usage
 Add the package
 ```julia
 using Pkg
 Pkg.add("AcuteML")
 ```
-# Usage
 Use the package:
 ```julia
 using AcuteML
 ```
-
 # Documentation
 Click on the badge: [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AcuteML.jl/dev)
 
 See [Type Definition](https://aminya.github.io/AcuteML.jl/dev/#Main-macro-and-I/O-1) for a comprehensive introduction to syntax. You can use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
 
+# Example - Simple
+```julia
+using AcuteML
+
+@aml mutable struct body "~"
+    h1, "~"
+    p::Vector{String}, "~"
+end
+
+@aml mutable struct html doc"html"
+    body::body, "~"
+end
+
+b = body(h1 = "My heading", p = ["Paragraph1", "Paragraph2"])
+d = html(body = b)
+```
+```html
+julia> pprint(d)
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>      
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+  <body>
+    <h1>My heading</h1>
+    <p>Paragraph1</p>
+    <p>Paragraph2</p>
+  </body>
+</html>
+```
+
 -----------------------------------------------
+More advanced Examples are given in the following:
 
 # Example - Struct Definition
 

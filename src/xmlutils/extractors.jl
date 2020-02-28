@@ -31,7 +31,7 @@ findcontent("instrument-name",node, AbsNormal)
 findcontent(UInt8,"midi-channel",node, AbsNormal)
 ```
 """
-@transform function findcontent(::Type{T},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:String} # for strings
+@transform function findcontent(::Type{T},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:AbstractString}  # Strings
 
     # if hasdocument(node)
     #     elm = findfirst(name,node)
@@ -46,7 +46,7 @@ findcontent(UInt8,"midi-channel",node, AbsNormal)
     end
 end
 
-function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:String} # for strings
+function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:AbstractString}
     if haskey(node, name)
         elm = node[name]
         return elm
@@ -57,7 +57,7 @@ function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAt
     end
 end
 
-function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{AbsText}) where{T<:String} # for strings
+function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:AbstractString}
     index = parse_textindex(indexstr)
     elm = findtextlocal(index, node)
     if isnothing(elm) # return nothing if nothing is found
@@ -67,8 +67,8 @@ function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{A
     end
 end
 
-# Number,Bool
-@transform function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Union{Number,Bool}}
+# Number  (and also Bool <:Number)
+@transform function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Number}
 
     # if hasdocument(node)
     #     elm = findfirst(name,node)
@@ -84,7 +84,7 @@ end
 
 end
 
-function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:Union{Number,Bool}}
+function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:Number}
     if haskey(node, name)
         elm = parse(T, node[name])
         return elm
@@ -95,7 +95,7 @@ function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAt
     end
 end
 
-function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:Union{Number,Bool}}
+function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:Number}
     index = parse_textindex(indexstr)
     elm = findtextlocal(index, node)
     if isnothing(elm) # return nothing if nothing is found
@@ -171,7 +171,8 @@ end
 ################################################################
 # Vector extraction
 
-@transform function findcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:String} # for strings
+# String
+@transform function findcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:AbstractString}
 
     # if hasdocument(node)
     #     elmsNode = findall(name, node) # a vector of Node elements
@@ -190,7 +191,7 @@ end
     end
 end
 
-function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:String} # for strings
+function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:AbstractString}
     if haskey(node, name)
         elmsNode = node[name]
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
@@ -203,7 +204,7 @@ function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::T
     end
 end
 
-function findcontent(::Type{Vector{T}}, indicesstr::String, node::Node, argAmlType::Type{AbsText}) where{T<:String} # for strings
+function findcontent(::Type{Vector{T}}, indicesstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:AbstractString}
     indices = parse_textindices(indicesstr)
     elmsNode = findvecttextlocal(indices, node)
     if isnothing(elmsNode)  # return nothing if nothing is found
@@ -217,8 +218,8 @@ function findcontent(::Type{Vector{T}}, indicesstr::String, node::Node, argAmlTy
     end
 end
 
-# Number,Bool
-@transform function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{Number,Bool}}
+# Number  (and also Bool <:Number)
+@transform function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Number}
 
     # if hasdocument(node)
     #     elmsNode = findall(name, node) # a vector of Node elements
@@ -237,7 +238,7 @@ end
     end
 end
 
-function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:Union{Number,Bool}}
+function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:Number}
     if haskey(node, name)
         elmsNode = parse(T, node[name])
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
@@ -250,7 +251,7 @@ function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::T
     end
 end
 
-function findcontent(::Type{Vector{T}},  indicesstr::String, node::Node, argAmlType::Type{AbsText}) where{T<:Union{Number,Bool}}
+function findcontent(::Type{Vector{T}},  indicesstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:Number}
     indices = parse_textindices(indicesstr)
     elmsNode = findvecttextlocal(indices, node)
     if isnothing(elmsNode) # return nothing if nothing is found
