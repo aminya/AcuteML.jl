@@ -141,6 +141,37 @@ end
 ```
 -------------------------------------------------------
 
+# Example - Simple
+```julia
+using AcuteML
+
+@aml mutable struct body "~"
+    h1, "~"
+    p::Vector{String}, "~"
+end
+
+@aml mutable struct html doc"html"
+    body::body, "~"
+end
+
+b = body(h1 = "My heading", p = ["Paragraph1", "Paragraph2"])
+d = html(body = b)
+```
+
+```html
+julia> pprint(d)
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+  <body>
+    <h1>My heading</h1>
+    <p>Paragraph1</p>
+    <p>Paragraph2</p>
+  </body>
+ </html>
+```
+-------------------------------------------------------
+
 # Example - Struct Definition
 
 First, we define the structs using `@aml` to store the data in:
