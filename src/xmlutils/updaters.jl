@@ -9,16 +9,18 @@ end
 ################################################################
 # Nodes
 # Single Updater
+
+# for String, Number and bool
 """
     updatecontent!(value, element::String, node, argAmlType)
 
 Finds all the elements with the address of string in the node, and updates the content.
 """
-@transform function updatecontent!(value::T, s::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
+@transform function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Union{AbstractString, Number}}
     # if hasdocument(node)
-    #     elm = findfirst(s, node)
+    #     elm = findfirst(name, node)
     # else
-        elm = findfirstlocal(s, node)
+        elm = findfirstlocal(name, node)
     # end
 
     if isnothing(elm) # error if nothing is found
@@ -28,16 +30,16 @@ Finds all the elements with the address of string in the node, and updates the c
     end
 end
 
-function updatecontent!(value::T, s::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
-    if haskey(node, s)
-        node[s] = value
+function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:Union{AbstractString, Number}}
+    if haskey(node, name)
+        node[name] = value
 
     else # error if nothing is found
         return error("field not found in aml")
     end
 end
 
-function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type{AbsText}) where{T<:Union{String, Number, Bool}} # for strings, number and bool
+function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:Union{AbstractString, Number}}
     index = parse_textindex(indexstr)
     elm = findtextlocal(index, node)
     if isnothing(elm) # return nothing if nothing is found
@@ -48,11 +50,11 @@ function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type
 end
 
 # Defined types
-function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{<:AbsNormal}) where {T}
+function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{<:AbsNormal}) where {T}
     # if hasdocument(node)
-    #     elm = findfirst(s,node)
+    #     elm = findfirst(name,node)
     # else
-        elm = findfirstlocal(s,node)
+        elm = findfirstlocal(name,node)
     # end
 
     if isnothing(elm) # error if nothing is found
@@ -67,9 +69,9 @@ function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{<:AbsNo
     end
 end
 
-function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{AbsAttribute}) where {T}
-    if haskey(node, s)
-        elm = node[s]
+function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T}
+    if haskey(node, name)
+        elm = node[name]
         unlink!(elm)
         link!(node, value.aml)
 
@@ -78,7 +80,7 @@ function updatecontent!(value::T, s::String,node::Node, argAmlType::Type{AbsAttr
     end
 end
 
-function updatecontent!(value::T, indexstr::String,node::Node, argAmlType::Type{AbsText}) where {T}
+function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type{AbsText}) where {T}
     index = parse_textindex(indexstr)
     elm = findtextlocal(index, node)
     if isnothing(elm) # error if nothing is found
@@ -94,11 +96,11 @@ function updatecontent!(value::T, indexstr::String,node::Node, argAmlType::Type{
 end
 
 # Nothing Alone
-@transform function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{allsubtypes(AbsNormal)})
+@transform function updatecontent!(value::Nothing, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)})
     # if hasdocument(node)
-    #     elm = findfirst(s,node)
+    #     elm = findfirst(name,node)
     # else
-        elm = findfirstlocal(s,node)
+        elm = findfirstlocal(name,node)
     # end
 
     if isnothing(elm) # error if nothing is found
@@ -108,9 +110,9 @@ end
     end
 end
 
-function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{AbsAttribute})
-    if haskey(node, s)
-        elm = node[s]
+function updatecontent!(value::Nothing, name::String,node::Node, argAmlType::Type{AbsAttribute})
+    if haskey(node, name)
+        elm = node[name]
         unlink!(elm)
 
     else # error if nothing is found
@@ -118,7 +120,7 @@ function updatecontent!(value::Nothing, s::String,node::Node, argAmlType::Type{A
     end
 end
 
-function updatecontent!(value::Nothing, indexstr::String,node::Node, argAmlType::Type{AbsText})
+function updatecontent!(value::Nothing, indexstr::String, node::Node, argAmlType::Type{AbsText})
     index = parse_textindex(indexstr)
     elm = findtextlocal(index, node)
     if isnothing(elm) # error if nothing is found
@@ -130,11 +132,11 @@ end
 ################################################################
 # Vector update
 
-@transform function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
+@transform function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Union{AbstractString, Number}}
     # if hasdocument(node)
-    #     elmsNode = findall(s, node) # a vector of Node elements
+    #     elmsNode = findall(name, node) # a vector of Node elements
     # else
-        elmsNode = findalllocal(s, node) # a vector of Node elements
+        elmsNode = findalllocal(name, node) # a vector of Node elements
     # end
 
     if isnothing(elmsNode) # error if nothing is found
@@ -146,9 +148,9 @@ end
     end
 end
 
-function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{AbsAttribute}) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
-    if haskey(node, s)
-        elmsNode = node[s]
+function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:Union{AbstractString, Number}}
+    if haskey(node, name)
+        elmsNode = node[name]
         for (i, elm) in enumerate(elmsNode)
             elm.content = value[i]
         end
@@ -157,7 +159,7 @@ function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Typ
     end
 end
 
-function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAmlType::Type{AbsText}) where{T<:Union{String, Number, Bool}} # for stringsm numbers, and bool
+function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:Union{AbstractString, Number}}
     indices = parse_textindices(indicesstr)
     elmsNode = findvecttextlocal(indices, node)
     if isnothing(elmsNode) # error if nothing is found
@@ -170,12 +172,12 @@ function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAml
 end
 
 # for defined types and nothing
-function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T}
+function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T}
 
     # if hasdocument(node)
-    #     elmsNode = findall(s, node) # a vector of Node elements
+    #     elmsNode = findall(name, node) # a vector of Node elements
     # else
-        elmsNode = findalllocal(s, node) # a vector of Node elements
+        elmsNode = findalllocal(name, node) # a vector of Node elements
     # end
 
     if isnothing(elmsNode) # error if nothing is found
@@ -198,9 +200,9 @@ function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Typ
 end
 
 
-function updatecontent!(value::Vector{T}, s::String, node::Node, argAmlType::Type{AbsAttribute}) where{T}
-    if haskey(node, s)
-        elmsNode = node[s]
+function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where{T}
+    if haskey(node, name)
+        elmsNode = node[name]
     else # error if nothing is found
         return error("field not found in aml")
     end
@@ -246,6 +248,6 @@ function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAml
 end
 ################################################################
 # Dict Updating
-function updatecontent!(value::Type{AbstractDict}, s, node, argAmlType)
+function updatecontent!(value::Type{AbstractDict}, name, node, argAmlType)
     throw(MethodError("Dicts are not supported for extraction/updating"))
 end
