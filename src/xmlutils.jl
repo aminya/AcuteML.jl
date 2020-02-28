@@ -8,6 +8,7 @@ include("xmlutils/aml_type_support.jl")
 ################################################################
 include("xmlutils/initializer.jl")
 include("xmlutils/creators.jl")
+include("xmlutils/extractor_utils.jl")
 include("xmlutils/extractors.jl")
 include("xmlutils/updaters.jl")
 ################################################################
