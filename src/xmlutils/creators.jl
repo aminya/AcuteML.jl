@@ -106,7 +106,7 @@ function addelm!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbsText
     end
 end
 
-# Defined
+# Other
 function addelm!(aml::Node, name::String, value::T, argAmlType::Type{<:AbsNormal}) where {T}
     if hasfield(T, :aml)
         link!(aml,value.aml)
@@ -172,23 +172,35 @@ function addelm!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbsText
     end
 end
 
-
+# Nothing
 @transform function addelm!(aml::Node, name::String, value::Nothing, argAmlType::Type{allsubtypes(AbsDocOrNode)})
     # do nothing
 end
 ################################################################
-
 # Vector
+
 allsubtypes_butAbsText(t) = setdiff(allsubtypes(AbsDocOrNode), [AbsText])
 
-@transform function addelm!(aml::Node, name::String, value::Vector, argAmlType::Type{allsubtypes_butAbsText(AbsDocOrNode)})
-    foreach(x-> addelm!(aml, name, x, argAmlType), value)
+@transform function addelm!(aml::Node, name::String, values::Vector, argAmlType::Type{allsubtypes_butAbsText(AbsDocOrNode)})
+    foreach(x-> addelm!(aml, name, x, argAmlType), values)
 end
 
-function addelm!(aml::Node, indicesstr::String, value::Vector, argAmlType::Type{AbsText})
+function addelm!(aml::Node, indicesstr::String, values::Vector, argAmlType::Type{AbsText})
     indices = parse_textindices(indicesstr)
     if indices isa Colon
         indices = 1:length(elements(aml))
     end
-    foreach((x, i)-> addelm!(aml, string(i), x, argAmlType), zip(value, indices))
+    foreach((x, i)-> addelm!(aml, string(i), x, argAmlType), zip(values, indices))
+end
+
+################################################################
+# Dict
+
+@transform function addelm!(aml::Node, name::String, values::AbstractDict, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+    # name is discarded now: actual names are stored in the Dict itself
+    # elements are added directly
+    # for AbsText, v_name is considered as the text index
+    for (v_name, v_value) in values
+        addelm!(aml, v_name, v_value, argAmlType)
+    end
 end
