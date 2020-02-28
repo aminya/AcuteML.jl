@@ -3,7 +3,8 @@ import EzXML: Document, Node
 
 # to prevent EzXML error: https://github.com/bicycle1885/EzXML.jl/pull/125
 function Base.show(io::IO, node::Node)
-    prefix = isdefined(Main, :Node) ? "Node" : "EzXML.Node"
+    # prefix = isdefined(Main, :Node) ? "Node" : "EzXML.Node"
+    prefix = "Node"
     ntype = EzXML.nodetype(node)
     if ntype ∈ (EzXML.ELEMENT_NODE, EzXML.ATTRIBUTE_NODE) && EzXML.hasnodename(node)
         desc = string(repr(ntype), '[', EzXML.nodename(node), ']')
