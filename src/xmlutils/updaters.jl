@@ -244,3 +244,8 @@ function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAml
     end
 
 end
+################################################################
+# Dict Updating
+function updatecontent!(value::Type{AbstractDict}, s, node, argAmlType)
+    throw(MethodError("Dicts are not supported for extraction/updating"))
+end

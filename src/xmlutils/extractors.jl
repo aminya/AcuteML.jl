@@ -359,3 +359,9 @@ end
 @transform function findcontent(name::String, node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
     return findcontent(Vector{Union{String, Nothing}},name, node, argAmlType)
 end
+
+################################################################
+# Dict Extraction
+function findcontent(::Type{AbstractDict}, name, node, argAmlType)
+    throw(MethodError("Dicts are not supported for extraction/updating"))
+end
