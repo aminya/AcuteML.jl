@@ -10,7 +10,7 @@ function get_arg_xmlcreator(has_arg_xmlchecker::Bool, argtype, argvar, argname, 
         arg_creator=:(addelm!(aml, $argname, $argvar, $argliteraltype))
     else
         arg_creator=quote
-            if !isnothing($argvar) && ($(esc(argfunction)))($argvar)
+            if isnothing($argvar) || ($(esc(argfunction)))($argvar)
                 addelm!(aml, $argname, $argvar, $argliteraltype)
             else
                 error("$($argname) doesn't meet criteria function")
@@ -31,7 +31,7 @@ function get_arg_xmlextractor(has_arg_xmlchecker::Bool, argtype, argvar, argname
 
             $argvar = findcontent($(esc(argtype)), $argname, aml, $argliteraltype)
 
-            if !isnothing($argvar) && !(($(esc(argfunction)))($argvar))
+            if !(isnothing($argvar) || !(($(esc(argfunction)))($argvar)))
                 error("$($argname) doesn't meet criteria function")
             end
         end
@@ -52,7 +52,7 @@ function get_arg_xmludpater(has_arg_xmlchecker::Bool, argtype, argvar, argname, 
     else
         arg_updater = quote
             if name == $argsym
-                if !isnothing($(argvarcall)) && ($(esc(argfunction)))($(argvarcall))
+                if isnothing($(argvarcall)) || ($(esc(argfunction)))($(argvarcall))
                     updatecontent!(value, $argname, str.aml, $argliteraltype)
                 else
                     error("$($argname) doesn't meet criteria function")
