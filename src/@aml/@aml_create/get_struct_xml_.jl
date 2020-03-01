@@ -8,7 +8,7 @@ function get_struct_xmlchecker(struct_function, args_var)
     if !ismissing(struct_function[1])
         F=struct_function[1]
         struct_xmlchecker = quote
-            if !( ($(esc(F)))($(args_var...)) )
+            if !( ($(esc(F)))($(esc.(args_var)...)) )
                 error("struct criteria function ($($(esc(F)))) isn't meet")
             end
         end
@@ -20,22 +20,22 @@ end
 ################################################################
 function get_struct_xmlcreator(T, args_param, struct_xmlchecker, node_initializer, args_xmlcreator, args_var)
     struct_xmlcreator = quote
-        function ($(esc(T)))(; $(args_param...))
+        function ($(esc(T)))(; $(esc.(args_param)...))
             $struct_xmlchecker
             $node_initializer
             $(args_xmlcreator...)
-            return ($(esc(T)))($(args_var...), aml)
+            return ($(esc(T)))($(esc.(args_var)...), aml)
         end
     end
     return struct_xmlcreator
 end
 function get_struct_xmlcreator(SQ, P, args_param, struct_xmlchecker, node_initializer, args_xmlcreator, args_var)
     struct_xmlcreator_curly = quote
-        function ($(esc(SQ)))(; $(args_param...)) where {$(esc.(P)...)}
+        function ($(esc(SQ)))(; $(esc.(args_param)...)) where {$(esc.(P)...)}
             $struct_xmlchecker
             $node_initializer
             $(args_xmlcreator...)
-            return ($(esc(SQ)))($(args_var...), aml)
+            return ($(esc(SQ)))($(esc.(args_var)...), aml)
         end
     end
     return struct_xmlcreator_curly
@@ -46,7 +46,7 @@ function get_struct_xmlextractor(T, args_xmlextractor, struct_xmlchecker, args_v
         function ($(esc(T)))(aml::Union{Document, Node})
             $(args_xmlextractor...)
             $struct_xmlchecker
-            return ($(esc(T)))($(args_var...), aml)
+            return ($(esc(T)))($(esc.(args_var)...), aml)
         end
     end
     return struct_xmlextractor
@@ -56,7 +56,7 @@ function get_struct_xmlextractor(SQ, P, args_xmlextractor, struct_xmlchecker, ar
         function ($(esc(SQ)))(aml::Union{Document, Node}) where {$(esc.(P)...)}
             $(args_xmlextractor...)
             $struct_xmlchecker
-            return ($(esc(SQ)))($(args_var...), aml)
+            return ($(esc(SQ)))($(esc.(args_var)...), aml)
         end
     end
     return struct_xmlextractor_curly
