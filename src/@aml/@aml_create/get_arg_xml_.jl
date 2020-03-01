@@ -5,13 +5,14 @@
 Get a argument creator expression
 """
 function get_arg_xmlcreator(has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
+    esc_argvar = esc(argvar)
 
     if !has_arg_xmlchecker
-        arg_creator=:(addelm!(aml, $argname, $argvar, $argliteraltype))
+        arg_creator=:(addelm!(aml, $argname, $esc_argvar, $argliteraltype))
     else
         arg_creator=quote
-            if isnothing($argvar) || ($(esc(argfunction)))($argvar)
-                addelm!(aml, $argname, $argvar, $argliteraltype)
+            if isnothing($esc_argvar) || ($(esc(argfunction)))($esc_argvar)
+                addelm!(aml, $argname, $esc_argvar, $argliteraltype)
             else
                 error("$($argname) doesn't meet criteria function")
             end
@@ -24,14 +25,16 @@ end
 Get a argument extractor expression
 """
 function get_arg_xmlextractor(has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
+    esc_argvar = esc(argvar)
+
     if !has_arg_xmlchecker
-        arg_extractor=:($argvar = findcontent($(esc(argtype)), $argname, aml, $argliteraltype))
+        arg_extractor=:($esc_argvar = findcontent($(esc(argtype)), $argname, aml, $argliteraltype))
     else
         arg_extractor=quote
 
-            $argvar = findcontent($(esc(argtype)), $argname, aml, $argliteraltype)
+            $esc_argvar = findcontent($(esc(argtype)), $argname, aml, $argliteraltype)
 
-            if !isnothing($argvar) && !(($(esc(argfunction)))($argvar))
+            if !isnothing($esc_argvar) && !(($(esc(argfunction)))($esc_argvar))
                 error("$($argname) doesn't meet criteria function")
             end
         end
@@ -43,6 +46,7 @@ end
 Get a argument updater expression
 """
 function get_arg_xmludpater(has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
+
     if !has_arg_xmlchecker
         arg_updater = quote
             if name == $argsym
