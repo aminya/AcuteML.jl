@@ -1,4 +1,4 @@
-export pprint
+export pprint, pwrite
 
 ################################################################
 # I/O
@@ -19,7 +19,8 @@ end
 ################################################################
 """
     pprint(x)
-    pprint(io::IO, x::T)
+    pprint(io, x)
+    pprint(filename, x)
 
 Pretty prints the xml/html content of a aml type. Also, pretty prints a Node or Document type.
 """
@@ -32,3 +33,25 @@ function pprint(x::T) where {T<:Union{Document, Node}}
     println("")
     prettyprint(x)
 end
+
+function pprint(filename::AbstractString, x::T) where {T<:Union{Document, Node}}
+    open(io->pprint(io, x), filename, "w")
+end
+
+function pprint(io::IO, x)
+    println("")
+    prettyprint(io, x.aml)
+end
+
+function pprint(x)
+    println("")
+    prettyprint(x.aml)
+end
+
+function pprint(filename::AbstractString, x)
+    open(io->pprint(io, x.aml), filename, "w")
+end
+
+const pwrite = pprint
+const write = pprint
+const print = pprint
