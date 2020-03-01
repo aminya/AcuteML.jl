@@ -2,17 +2,19 @@ using EzXML, TypeTransform
 import EzXML: Document, Node
 
 # to prevent EzXML error: https://github.com/bicycle1885/EzXML.jl/pull/125
-function Base.show(io::IO, node::Node)
-    # prefix = isdefined(Main, :Node) ? "Node" : "EzXML.Node"
-    prefix = "Node"
-    ntype = EzXML.nodetype(node)
-    if ntype ∈ (EzXML.ELEMENT_NODE, EzXML.ATTRIBUTE_NODE) && EzXML.hasnodename(node)
-        desc = string(repr(ntype), '[', EzXML.nodename(node), ']')
-    else
-        desc = repr(ntype)
-    end
-    print(io, "$(prefix)(<$desc>)")
-end
+# function Base.show(io::IO, node::Node)
+#     # prefix = isdefined(Main, :Node) ? "Node" : "EzXML.Node"
+#     prefix = "Node"
+#     ntype = EzXML.nodetype(node)
+#     if ntype ∈ (EzXML.ELEMENT_NODE, EzXML.ATTRIBUTE_NODE) && EzXML.hasnodename(node)
+#         desc = string(repr(ntype), '[', EzXML.nodename(node), ']')
+#     else
+#         desc = repr(ntype)
+#     end
+#     print(io, "$(prefix)(<$desc>)")
+# end
+Base.unsigned(x::Ptr) = UInt(x)
+Base.signed(x::Ptr) = Int(x)
 
 ################################################################
 import Tables
