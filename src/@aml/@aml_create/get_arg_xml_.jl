@@ -31,7 +31,7 @@ function get_arg_xmlextractor(has_arg_xmlchecker::Bool, argtype, argvar, argname
 
             $argvar = findcontent($(esc(argtype)), $argname, aml, $argliteraltype)
 
-            if !(isnothing($argvar) || !(($(esc(argfunction)))($argvar)))
+            if !isnothing($argvar) && !(($(esc(argfunction)))($argvar))
                 error("$($argname) doesn't meet criteria function")
             end
         end
