@@ -28,7 +28,7 @@ function aml_parse(expr::Expr)
     args_type = Vector{Union{Type, Symbol, Expr}}(undef, argsnum)
     args_name =Vector{Union{Missing,String}}(missing, argsnum)
     args_function = Vector{Union{Missing, Symbol, Function}}(missing, argsnum)
-    args_literaltype = Type[]
+    args_literaltype = Vector{Union{Missing, Type}}(missing, argsnum)
     struct_name = "name"
     struct_nodetype = AbsDocOrNode
     struct_function = Array{Union{Missing, Symbol, Function},0}(missing)
@@ -168,7 +168,7 @@ function aml_parse(expr::Expr)
                 if length(ei.args[2]) == 2 # literal
 
                     argAmlType = ei.args[2][1]
-                    push!(args_literaltype, argAmlType) # literal type
+                    args_literaltype[iArg] = argAmlType # literal type
 
                     ni = ei.args[2][2]
 
@@ -180,7 +180,7 @@ function aml_parse(expr::Expr)
                     end
 
                 else
-                    push!(args_literaltype, AbsNormal) # non-literal
+                    args_literaltype[iArg] = AbsNormal # non-literal
 
                     ni = ei.args[2]
 
@@ -249,7 +249,7 @@ function aml_parse(expr::Expr)
                 if length(ei.args[2].args[2]) == 2 # literal
 
                     argAmlType = ei.args[2].args[2][1]
-                    push!(args_literaltype, argAmlType) # literal type
+                    args_literaltype[iArg] = argAmlType # literal type
 
                     ni = ei.args[2].args[2][2]
 
@@ -261,7 +261,7 @@ function aml_parse(expr::Expr)
                     end
 
                 else
-                    push!(args_literaltype, AbsNormal) # non-literal
+                    args_literaltype[iArg] = AbsNormal # non-literal
 
                     ni = ei.args[2].args[2]
 
