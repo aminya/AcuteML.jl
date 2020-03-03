@@ -24,14 +24,14 @@ function aml_parse(expr::Expr)
 
     args_param = Vector{Union{Expr,Symbol}}(undef, argsnum) # Expr(:parameters)[]
     args_var = Vector{Union{Expr,Symbol}}(undef, argsnum)
-    args_defaultvalue = Vector{Any}(undef, argsnum)
-    args_type = Vector{Union{Missing,Type, Symbol, Expr}}(undef, argsnum)
-    args_name =Vector{Union{Missing,String}}(undef, argsnum)
-    args_function = Vector{Union{Missing, Symbol, Function}}(undef, argsnum)
-    args_literaltype = Type[]
+    args_defaultvalue = Vector{Any}(missing, argsnum)
+    args_type = Vector{Union{Type, Symbol, Expr}}(undef, argsnum)
+    args_name =Vector{Union{Missing,String}}(missing, argsnum)
+    args_function = Vector{Union{Missing, Symbol, Function}}(missing, argsnum)
+    args_literaltype = Vector{Union{Missing, Type}}(missing, argsnum)
     struct_name = "name"
     struct_nodetype = AbsDocOrNode
-    struct_function = Array{Union{Missing, Symbol, Function},0}(undef)
+    struct_function = Array{Union{Missing, Symbol, Function},0}(missing)
 
     for iData = 1:datanum # iterating over arguments of each type argument
 
@@ -44,7 +44,7 @@ function aml_parse(expr::Expr)
         # Single struct name - "aml name"
         if isa(ei, String)
 
-            struct_function[1]=missing # function
+            # struct_function[1]=missing # function
 
             # Self-name checker
             if ei == "~"
@@ -69,7 +69,7 @@ function aml_parse(expr::Expr)
             # Literal only  empty"aml name"
             if isa(ei, Tuple{Type,String})
 
-                struct_function[1]=missing # function
+                # struct_function[1]=missing # function
 
                 # Self-name checker
                 if ei[2] == "~"
@@ -137,7 +137,7 @@ function aml_parse(expr::Expr)
             elseif ei.args[1] isa Union{Symbol,Expr} # var/var::T, "name"
 
                 # Def Value
-                args_defaultvalue[iArg] = missing
+                # args_defaultvalue[iArg] = missing
 
                 # Type Checker
                 lhs = ei.args[1]
@@ -168,7 +168,7 @@ function aml_parse(expr::Expr)
                 if length(ei.args[2]) == 2 # literal
 
                     argAmlType = ei.args[2][1]
-                    push!(args_literaltype, argAmlType) # literal type
+                    args_literaltype[iArg] = argAmlType # literal type
 
                     ni = ei.args[2][2]
 
@@ -180,7 +180,7 @@ function aml_parse(expr::Expr)
                     end
 
                 else
-                    push!(args_literaltype, AbsNormal) # non-literal
+                    args_literaltype[iArg] = AbsNormal # non-literal
 
                     ni = ei.args[2]
 
@@ -198,8 +198,8 @@ function aml_parse(expr::Expr)
                     fun = ei.args[3]   # function
                     args_function[iArg] = fun
 
-                else # function name isn't given
-                    args_function[iArg] =  missing
+                # else # function name isn't given
+                    # args_function[iArg] =  missing
                 end
 
 
@@ -249,7 +249,7 @@ function aml_parse(expr::Expr)
                 if length(ei.args[2].args[2]) == 2 # literal
 
                     argAmlType = ei.args[2].args[2][1]
-                    push!(args_literaltype, argAmlType) # literal type
+                    args_literaltype[iArg] = argAmlType # literal type
 
                     ni = ei.args[2].args[2][2]
 
@@ -261,7 +261,7 @@ function aml_parse(expr::Expr)
                     end
 
                 else
-                    push!(args_literaltype, AbsNormal) # non-literal
+                    args_literaltype[iArg] = AbsNormal # non-literal
 
                     ni = ei.args[2].args[2]
 
@@ -280,8 +280,8 @@ function aml_parse(expr::Expr)
                     fun = ei.args[2].args[3]  # function
                     args_function[iArg] = fun
 
-                else # function name isn't given
-                    args_function[iArg] = missing
+                # else # function name isn't given
+                    # args_function[iArg] = missing
                 end
 
             ########################
@@ -295,8 +295,8 @@ function aml_parse(expr::Expr)
                     defVal = ei.args[2]
 
                     args_defaultvalue[iArg] = defVal
-                    args_name[iArg] = missing # ignored for creating aml
-                    args_function[iArg] =  missing # ignored for creating aml
+                    # args_name[iArg] = missing # ignored for creating aml
+                    # args_function[iArg] =  missing # ignored for creating aml
 
                     var = ei.args[1]
 
@@ -311,8 +311,8 @@ function aml_parse(expr::Expr)
                     defVal = ei.args[2]
 
                     args_defaultvalue[iArg] = defVal
-                    args_name[iArg] = missing # ignored for creating aml
-                    args_function[iArg] = missing # ignored for creating aml
+                    # args_name[iArg] = missing # ignored for creating aml
+                    # args_function[iArg] = missing # ignored for creating aml
 
                     var = lhs.args[1]
                     varType = lhs.args[2] # Type
@@ -337,8 +337,8 @@ function aml_parse(expr::Expr)
 
             # Type Checker
             if ei isa Symbol #  var
-                args_name[iArg] = missing # argument ignored for aml
-                args_function[iArg] =  missing # ignored for creating aml
+                # args_name[iArg] = missing # argument ignored for aml
+                # args_function[iArg] =  missing # ignored for creating aml
 
                 args_type[iArg] = String
 
@@ -348,8 +348,8 @@ function aml_parse(expr::Expr)
                 args_var[iArg] =  var
 
             elseif ei.head == :(::) && ei.args[1] isa Symbol # var::T
-                args_name[iArg] = missing # argument ignored for aml
-                args_function[iArg] =  missing # ignored for creating aml
+                # args_name[iArg] = missing # argument ignored for aml
+                # args_function[iArg] =  missing # ignored for creating aml
 
                 var = ei.args[1]
                 varType = ei.args[2] # Type
