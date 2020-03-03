@@ -29,9 +29,13 @@ function aml_parse(expr::Expr)
     args_name =Vector{Union{Missing,String}}(missing, argsnum)
     args_function = Vector{Union{Missing, Symbol, Function}}(missing, argsnum)
     args_literaltype = Vector{Union{Missing, Type}}(missing, argsnum)
+    args_custom_creator = Vector{Union{Nothing, Expr}}(nothing, argsnum+1) # +1 for the end
+    args_custom_extractor = Vector{Union{Nothing, Expr}}(nothing, argsnum+1)
+    args_custom_updater = Vector{Union{Nothing, Expr}}(nothing, argsnum+1)
     struct_name = "name"
     struct_nodetype = AbsDocOrNode
     struct_function = Array{Union{Missing, Symbol, Function},0}(missing)
+
 
     for iData = 1:datanum # iterating over arguments of each type argument
 
@@ -86,7 +90,23 @@ function aml_parse(expr::Expr)
                 struct_nodetype = aml_dispatch(struct_nodetype, struct_name)
 
                 argsexpr.args[i] =  nothing # removing "aml name" from expr args
+
+            # Custom Code
+            elseif isa(ei, Tuple{Symbol, Expr})
+
+                # Row for code insertion (insert before iArg-th argument)
+                if ei[1] == :creator
+                    args_custom_creator[iArg] = ei[2]
+                elseif ei[1]  == :extractor
+                    args_custom_extractor[iArg] = ei[2]
+                elseif ei[1]  == :updater
+                    args_custom_updater[iArg] = ei[2]
+                end
+
+                argsexpr.args[i] =  nothing # removing custom code macro from expr args
+
             end
+
 
         elseif ei.head == :tuple
             ########################
@@ -201,7 +221,6 @@ function aml_parse(expr::Expr)
                 # else # function name isn't given
                     # args_function[iArg] =  missing
                 end
-
 
 
             end  # end Tuple sub possibilities
@@ -360,7 +379,7 @@ function aml_parse(expr::Expr)
 
             elseif ei.head == :block  # anything else should be evaluated again
                 # can arise with use of @static inside type decl
-                argsexpr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, T = aml_parse(expr)
+                argsexpr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, args_custom_creator, args_custom_extractor, args_custom_updater, T = aml_parse(expr)
             else
                 continue
             end
@@ -382,12 +401,16 @@ function aml_parse(expr::Expr)
         push!(args_var, :content)
         push!(args_defaultvalue, nothing)
         push!(argsexpr.args,:(content::Nothing))
-        # argsexpr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, T = aml_parse(expr)
+        push!(args_custom_creator, missing)
+        push!(args_custom_extractor, missing)
+        push!(args_custom_updater, missing)
+
+        # argsexpr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, args_custom_creator, args_custom_extractor, args_custom_updater, T = aml_parse(expr)
     end
 
     ########################
     # aml::Node adder
     push!(argsexpr.args,:(aml::Union{Document,Node}))
 
-    return argsexpr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, T
+    return argsexpr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, args_custom_creator, args_custom_extractor, args_custom_updater, T
 end
