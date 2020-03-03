@@ -28,7 +28,7 @@ end
 """
 Get a argument extractor expression
 """
-function get_arg_xmlextractor(argcustomextractor, has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall, argcustom)
+function get_arg_xmlextractor(argcustomextractor, has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
     esc_argvar = esc(argvar)
 
     if !has_arg_xmlchecker
@@ -53,7 +53,7 @@ end
 """
 Get a argument updater expression
 """
-function get_arg_xmludpater(argcustomupdater, has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall, argcustom)
+function get_arg_xmludpater(argcustomupdater, has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
 
     if !has_arg_xmlchecker
         arg_updater = quote

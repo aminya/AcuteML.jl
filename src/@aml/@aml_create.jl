@@ -26,6 +26,7 @@ function aml_create(expr::Expr, args_param, args_defaultvalue, args_type, args_v
         amlargs_defaultvalue = args_defaultvalue[isaml_args]
         amlargs_literaltype = args_literaltype[isaml_args]
         amlargs_type  = args_type[isaml_args]
+        push!(isaml_args, false) # separating end
         amlargs_custom_creator = args_custom_creator[isaml_args]
         custom_creator_end = args_custom_creator[end]
         amlargs_custom_extractor = args_custom_extractor[isaml_args]
