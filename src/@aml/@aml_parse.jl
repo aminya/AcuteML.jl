@@ -401,9 +401,9 @@ function aml_parse(expr::Expr)
         push!(args_var, :content)
         push!(args_defaultvalue, nothing)
         push!(argsexpr.args,:(content::Nothing))
-        push!(args_custom_creator, missing)
-        push!(args_custom_extractor, missing)
-        push!(args_custom_updater, missing)
+        push!(args_custom_creator, nothing)
+        push!(args_custom_extractor, nothing)
+        push!(args_custom_updater, nothing)
 
         # argsexpr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, args_custom_creator, args_custom_extractor, args_custom_updater, T = aml_parse(expr)
     end
