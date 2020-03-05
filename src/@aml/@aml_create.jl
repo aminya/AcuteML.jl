@@ -30,9 +30,9 @@ function aml_create(expr::Expr, args_param, args_defaultvalue, args_type, args_v
         amlargs_custom_creator = args_custom_creator[isaml_args]
         custom_creator_end = args_custom_creator[end]
         amlargs_custom_extractor = args_custom_extractor[isaml_args]
-        custom_extractor_end = args_custom_creator[end]
+        custom_extractor_end = args_custom_extractor[end]
         amlargs_custom_updater = args_custom_updater[isaml_args]
-        custom_updater_end = args_custom_creator[end]
+        custom_updater_end = args_custom_updater[end]
 
         amlargs_num = length(amlargs_var)
 
