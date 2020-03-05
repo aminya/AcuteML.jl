@@ -6,7 +6,7 @@ check function for the aml struct
 function get_struct_xmlchecker(struct_function, args_var)
     # aml Function
     if !ismissing(struct_function[1])
-        F=struct_function[1]
+        F = struct_function[1]
         struct_xmlchecker = quote
             if !( ($(esc(F)))($(esc.(args_var)...)) )
                 error("struct criteria function ($($(esc(F)))) isn't meet")
