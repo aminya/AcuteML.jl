@@ -1,4 +1,5 @@
 include("@aml_parse/literals.jl")
+include("@aml_parse/custom_code.jl")
 
 """
 @aml parser function
@@ -16,11 +17,14 @@ function aml_parse(expr::Expr)
 
     argsexpr = expr.args[3] # arguments of the type
 
+    # TODO: optimize and fuse these
     areargs_inds = findall(x->!(isa(x, LineNumberNode)), argsexpr.args)
+    macronum = count(x-> isa(x, Tuple{Symbol, Expr}), argsexpr.args)
 
     data = argsexpr.args[areargs_inds]
+
     datanum = length(areargs_inds)
-    argsnum = datanum - 1
+    argsnum = datanum - (1 + macronum) # 1 for struct name
 
     args_param = Vector{Union{Expr,Symbol}}(undef, argsnum) # Expr(:parameters)[]
     args_var = Vector{Union{Expr,Symbol}}(undef, argsnum)
@@ -36,10 +40,10 @@ function aml_parse(expr::Expr)
     struct_nodetype = AbsDocOrNode
     struct_function = Array{Union{Missing, Symbol, Function},0}(missing)
 
-
+    iMacro = 0
     for iData = 1:datanum # iterating over arguments of each type argument
 
-        iArg = iData-1
+        iArg = iData - (1+ iMacro)
         i = areargs_inds[iData] # used for argsexpr.args[i]
 
         ei = data[iData] # type argument element i
@@ -93,7 +97,7 @@ function aml_parse(expr::Expr)
 
             # Custom Code
             elseif isa(ei, Tuple{Symbol, Expr})
-
+                iMacro += 1
                 # Row for code insertion (insert before iArg-th argument)
                 if ei[1] == :creator
                     args_custom_creator[iArg] = ei[2]
