@@ -1,5 +1,4 @@
-export DocumentOrNode, AbsDocument, AbsNode, AbsXml, AbsHtml, AbsAttribute, AbsNormal, AbsEmpty, AbsIgnore, AbsText, UN
-
+export UN
 UN{T}= Union{T, Nothing}
 
 abstract type DocumentOrNode end
