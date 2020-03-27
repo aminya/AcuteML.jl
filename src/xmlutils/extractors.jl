@@ -159,12 +159,12 @@ function findcontent(::Type{T}, indexstr::String,node::Node, argAmlType::Type{Ab
 end
 
 # Union with Nothing
-@transform function findcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)}) where {T}
+@transform function findcontent(::Type{UN{T}}, name::String, node::Node, argAmlType::Type{allsubtypes(DocumentOrNode)}) where {T}
     return findcontent(T, name, node, argAmlType)
 end
 
 # Nothing Alone
-@transform function findcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+@transform function findcontent(::Type{Nothing}, name::String, node::Node, argAmlType::Type{allsubtypes(DocumentOrNode)})
     return nothing
 end
 
@@ -342,22 +342,22 @@ function findcontent(::Type{Vector{T}}, indicesstr::String, node::Node, argAmlTy
 end
 
 # Union with Nothing
-@transform function findcontent(::Type{Vector{UN{T}}}, name::String,node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)}) where {T}
+@transform function findcontent(::Type{Vector{UN{T}}}, name::String,node::Node, argAmlType::Type{allsubtypes(DocumentOrNode)}) where {T}
     return findcontent(Vector{T},name,node, argAmlType)
 end
 
 # Nothing Alone
-@transform function findcontent(::Type{Vector{Nothing}}, name::String,node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+@transform function findcontent(::Type{Vector{Nothing}}, name::String,node::Node, argAmlType::Type{allsubtypes(DocumentOrNode)})
     return nothing
 end
 
 # vector of Any - consider it to be string
-@transform function findcontent(::Type{Vector{Any}}, name::String,node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+@transform function findcontent(::Type{Vector{Any}}, name::String,node::Node, argAmlType::Type{allsubtypes(DocumentOrNode)})
     return findcontent(Vector{String},name,node, argAmlType)
 end
 
 # if no type is provided consider it to be Vector{Union{String, Nothing}}
-@transform function findcontent(name::String, node::Node, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+@transform function findcontent(name::String, node::Node, argAmlType::Type{allsubtypes(DocumentOrNode)})
     return findcontent(Vector{Union{String, Nothing}},name, node, argAmlType)
 end
 

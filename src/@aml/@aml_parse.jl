@@ -37,7 +37,7 @@ function aml_parse(expr::Expr)
     args_custom_extractor = Vector{Union{Nothing, Expr}}(nothing, argsnum+1)
     args_custom_updater = Vector{Union{Nothing, Expr}}(nothing, argsnum+1)
     struct_name = "name"
-    struct_nodetype = AbsDocOrNode
+    struct_nodetype = DocumentOrNode
     struct_function = Array{Union{Missing, Symbol, Function},0}(missing)
 
     iMacro = 0

@@ -10,7 +10,7 @@ export addelm!
 
 Add one element to a node/document
 """
-function addelm!(aml::Document, name::String, value::T, argAmlType::Type{<:AbsDocOrNode}) where {T}
+function addelm!(aml::Document, name::String, value::T, argAmlType::Type{<:DocumentOrNode}) where {T}
 
     if hasroot(aml)
         amlNode = root(aml)
@@ -24,7 +24,7 @@ function addelm!(aml::Document, name::String, value::T, argAmlType::Type{<:AbsDo
 end
 
 # Nothing
-function addelm!(aml::Document, name::String, value::Nothing, argAmlType::Type{<:AbsDocOrNode})
+function addelm!(aml::Document, name::String, value::Nothing, argAmlType::Type{<:DocumentOrNode})
 # do nothing if value is nothing
 end
 ################################################################
@@ -35,7 +35,7 @@ end
 Add a vector to a node/document
 ```
 """
-function addelm!(aml::Document, name::String, value::Vector, argAmlType::Type{<:AbsDocOrNode})
+function addelm!(aml::Document, name::String, value::Vector, argAmlType::Type{<:DocumentOrNode})
 
     if hasroot(aml)
         amlNode = root(aml)
@@ -173,15 +173,15 @@ function addelm!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbsText
 end
 
 # Nothing
-@transform function addelm!(aml::Node, name::String, value::Nothing, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+@transform function addelm!(aml::Node, name::String, value::Nothing, argAmlType::Type{allsubtypes(DocumentOrNode)})
     # do nothing
 end
 ################################################################
 # Vector
 
-allsubtypes_butAbsText(t) = setdiff(allsubtypes(AbsDocOrNode), [AbsText])
+allsubtypes_butAbsText(t) = setdiff(allsubtypes(DocumentOrNode), [AbsText])
 
-@transform function addelm!(aml::Node, name::String, values::Vector, argAmlType::Type{allsubtypes_butAbsText(AbsDocOrNode)})
+@transform function addelm!(aml::Node, name::String, values::Vector, argAmlType::Type{allsubtypes_butAbsText(DocumentOrNode)})
     foreach(x-> addelm!(aml, name, x, argAmlType), values)
 end
 
@@ -196,7 +196,7 @@ end
 ################################################################
 # Dict
 
-@transform function addelm!(aml::Node, name::String, values::AbstractDict, argAmlType::Type{allsubtypes(AbsDocOrNode)})
+@transform function addelm!(aml::Node, name::String, values::AbstractDict, argAmlType::Type{allsubtypes(DocumentOrNode)})
     # name is discarded now: actual names are stored in the Dict itself
     # elements are added directly
     # for AbsText, v_name is considered as the text index

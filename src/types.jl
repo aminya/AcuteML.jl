@@ -1,11 +1,11 @@
-export AbsDocOrNode, AbsDocument, AbsNode, AbsXml, AbsHtml, AbsAttribute, AbsNormal, AbsEmpty, AbsIgnore, AbsText, UN
+export DocumentOrNode, AbsDocument, AbsNode, AbsXml, AbsHtml, AbsAttribute, AbsNormal, AbsEmpty, AbsIgnore, AbsText, UN
 
 UN{T}= Union{T, Nothing}
 
-abstract type AbsDocOrNode end
+abstract type DocumentOrNode end
 
-abstract type AbsDocument <:AbsDocOrNode end
-abstract type AbsNode <:AbsDocOrNode end
+abstract type AbsDocument <:DocumentOrNode end
+abstract type AbsNode <:DocumentOrNode end
 
 # Documents
 abstract type AbsXml <: AbsDocument end
@@ -19,4 +19,4 @@ abstract type AbsText <: AbsNode end
 abstract type AbsEmpty <: AbsNormal end
 
 # Ignore
-abstract type AbsIgnore <: AbsDocOrNode end
+abstract type AbsIgnore <: DocumentOrNode end
