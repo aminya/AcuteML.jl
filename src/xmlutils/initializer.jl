@@ -28,7 +28,7 @@ function initialize_node(::Type{<:AbstractElement}, struct_name::String)
     return out
 end
 
-function initialize_node(::Type{AbsText}, struct_name::String)
+function initialize_node(::Type{AbstractText}, struct_name::String)
     out = TextNode(struct_name) # text node
     return out
 end

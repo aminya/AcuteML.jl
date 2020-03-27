@@ -63,7 +63,7 @@ function addelm!(aml::Node, name::String,value::AbstractString, argAmlType::Type
     end
 end
 
-function addelm!(aml::Node, indexstr::String,value::AbstractString, argAmlType::Type{AbsText})
+function addelm!(aml::Node, indexstr::String,value::AbstractString, argAmlType::Type{AbstractText})
     index = parse_textindex(indexstr)
     if index < length(elements(aml))
         desired_node = elements(aml)[index]
@@ -91,7 +91,7 @@ function addelm!(aml::Node, name::String, value::Number, argAmlType::Type{Abstra
     end
 end
 
-function addelm!(aml::Node, indexstr::String, value::Number, argAmlType::Type{AbsText})
+function addelm!(aml::Node, indexstr::String, value::Number, argAmlType::Type{AbstractText})
     index = parse_textindex(indexstr)
     if index < length(elements(aml))
         desired_node = elements(aml)[index]
@@ -137,7 +137,7 @@ function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbstractAtt
     end
 end
 
-function addelm!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbsText}) where {T}
+function addelm!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbstractText}) where {T}
     index = parse_textindex(indexstr)
     if index < length(elements(aml))
 
@@ -179,13 +179,13 @@ end
 ################################################################
 # Vector
 
-allsubtypes_butAbsText(t) = setdiff(allsubtypes(DocumentOrNode), [AbsText])
+allsubtypes_butAbstractText(t) = setdiff(allsubtypes(DocumentOrNode), [AbstractText])
 
-@transform function addelm!(aml::Node, name::String, values::Vector, argAmlType::Type{allsubtypes_butAbsText(DocumentOrNode)})
+@transform function addelm!(aml::Node, name::String, values::Vector, argAmlType::Type{allsubtypes_butAbstractText(DocumentOrNode)})
     foreach(x-> addelm!(aml, name, x, argAmlType), values)
 end
 
-function addelm!(aml::Node, indicesstr::String, values::Vector, argAmlType::Type{AbsText})
+function addelm!(aml::Node, indicesstr::String, values::Vector, argAmlType::Type{AbstractText})
     indices = parse_textindices(indicesstr)
     if indices isa Colon
         indices = 1:length(elements(aml))
@@ -199,7 +199,7 @@ end
 @transform function addelm!(aml::Node, name::String, values::AbstractDict, argAmlType::Type{allsubtypes(DocumentOrNode)})
     # name is discarded now: actual names are stored in the Dict itself
     # elements are added directly
-    # for AbsText, v_name is considered as the text index
+    # for AbstractText, v_name is considered as the text index
     for (v_name, v_value) in values
         addelm!(aml, v_name, v_value, argAmlType)
     end

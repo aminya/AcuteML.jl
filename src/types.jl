@@ -13,7 +13,7 @@ abstract type AbstractHTML <: AbstractDocument end
 # Nodes
 abstract type AbstractElement <: AbstractNode end
 abstract type AbstractAttribute <: AbstractNode end
-abstract type AbsText <: AbstractNode end
+abstract type AbstractText <: AbstractNode end
 
 abstract type AbstractEmpty <: AbstractElement end
 

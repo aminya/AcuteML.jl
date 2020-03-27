@@ -37,7 +37,7 @@ end
 ################################################################
 # text node
 macro txt_str(s)
-    argAmlType = AbsText
+    argAmlType = AbstractText
     return argAmlType, s
 end
 ################################################################

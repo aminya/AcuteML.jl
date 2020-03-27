@@ -39,7 +39,7 @@ function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{Abs
     end
 end
 
-function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:Union{AbstractString, Number}}
+function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type{AbstractText}) where {T<:Union{AbstractString, Number}}
     index = parse_textindex(indexstr)
     elm = findtextlocal(index, node)
     if isnothing(elm) # return nothing if nothing is found
@@ -80,7 +80,7 @@ function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{Abs
     end
 end
 
-function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type{AbsText}) where {T}
+function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type{AbstractText}) where {T}
     index = parse_textindex(indexstr)
     elm = findtextlocal(index, node)
     if isnothing(elm) # error if nothing is found
@@ -120,7 +120,7 @@ function updatecontent!(value::Nothing, name::String,node::Node, argAmlType::Typ
     end
 end
 
-function updatecontent!(value::Nothing, indexstr::String, node::Node, argAmlType::Type{AbsText})
+function updatecontent!(value::Nothing, indexstr::String, node::Node, argAmlType::Type{AbstractText})
     index = parse_textindex(indexstr)
     elm = findtextlocal(index, node)
     if isnothing(elm) # error if nothing is found
@@ -159,7 +159,7 @@ function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::
     end
 end
 
-function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:Union{AbstractString, Number}}
+function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAmlType::Type{AbstractText}) where {T<:Union{AbstractString, Number}}
     indices = parse_textindices(indicesstr)
     elmsNode = findvecttextlocal(indices, node)
     if isnothing(elmsNode) # error if nothing is found
@@ -225,7 +225,7 @@ function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::
     end
 end
 
-function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAmlType::Type{AbsText}) where{T}
+function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAmlType::Type{AbstractText}) where{T}
     indices = parse_textindices(indicesstr)
     elmsNode = findvecttextlocal(indices, node)
     if isnothing(elmsNode) # error if nothing is found

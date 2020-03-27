@@ -57,7 +57,7 @@ function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{Abstr
     end
 end
 
-function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:AbstractString}
+function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{AbstractText}) where {T<:AbstractString}
     index = parse_textindex(indexstr)
     elm = findtextlocal(index, node)
     if isnothing(elm) # return nothing if nothing is found
@@ -95,7 +95,7 @@ function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{Abstr
     end
 end
 
-function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:Number}
+function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{AbstractText}) where {T<:Number}
     index = parse_textindex(indexstr)
     elm = findtextlocal(index, node)
     if isnothing(elm) # return nothing if nothing is found
@@ -142,7 +142,7 @@ function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{Abstra
 
 end
 
-function findcontent(::Type{T}, indexstr::String,node::Node, argAmlType::Type{AbsText}) where {T}
+function findcontent(::Type{T}, indexstr::String,node::Node, argAmlType::Type{AbstractText}) where {T}
     index = parse_textindex(indexstr)
     elm = findtextlocal(index, node)
     if isnothing(elm) # return nothing if nothing is found
@@ -204,7 +204,7 @@ function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::T
     end
 end
 
-function findcontent(::Type{Vector{T}}, indicesstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:AbstractString}
+function findcontent(::Type{Vector{T}}, indicesstr::String, node::Node, argAmlType::Type{AbstractText}) where {T<:AbstractString}
     indices = parse_textindices(indicesstr)
     elmsNode = findvecttextlocal(indices, node)
     if isnothing(elmsNode)  # return nothing if nothing is found
@@ -251,7 +251,7 @@ function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::T
     end
 end
 
-function findcontent(::Type{Vector{T}},  indicesstr::String, node::Node, argAmlType::Type{AbsText}) where {T<:Number}
+function findcontent(::Type{Vector{T}},  indicesstr::String, node::Node, argAmlType::Type{AbstractText}) where {T<:Number}
     indices = parse_textindices(indicesstr)
     elmsNode = findvecttextlocal(indices, node)
     if isnothing(elmsNode) # return nothing if nothing is found
@@ -320,7 +320,7 @@ function findcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Ty
 
 end
 
-function findcontent(::Type{Vector{T}}, indicesstr::String, node::Node, argAmlType::Type{AbsText}) where{T}
+function findcontent(::Type{Vector{T}}, indicesstr::String, node::Node, argAmlType::Type{AbstractText}) where{T}
     indices = parse_textindices(indicesstr)
     elmsNode = findvecttextlocal(indices, node)
     if isnothing(elmsNode) # return nothing if nothing is found
