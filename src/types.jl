@@ -7,7 +7,7 @@ abstract type AbstractDocument <:DocumentOrNode end
 abstract type AbstractNode <:DocumentOrNode end
 
 # Documents
-abstract type AbsXml <: AbstractDocument end
+abstract type AbstractXML <: AbstractDocument end
 abstract type AbsHtml <: AbstractDocument end
 
 # Nodes

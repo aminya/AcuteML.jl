@@ -16,7 +16,7 @@ function initialize_node(::Type{AbsHtml}, struct_name::String = "html")
     return out
 end
 
-function initialize_node(::Type{AbsXml}, struct_name::String = "xml_root")
+function initialize_node(::Type{AbstractXML}, struct_name::String = "xml_root")
     out = XMLDocument() # version 1
     xmlNode = ElementNode(struct_name)
     setroot!(out, xmlNode) # adding html node

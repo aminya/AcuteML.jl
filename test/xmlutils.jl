@@ -158,7 +158,7 @@ using AcuteML, Test
     end
 
     @testset "XML Document" begin
-        dxml = initialize_node(AbsXml, "xml")
+        dxml = initialize_node(AbstractXML, "xml")
 
         import EzXML: setroot!
         setroot!(dxml, initialize_node(AbsNormal, "node"))

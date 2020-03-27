@@ -5,7 +5,7 @@ function aml_dispatch(struct_nodetype::Type{AbstractDocument}, name::String)
     if name == "html"
         struct_nodetype = AbsHtml
     else
-        struct_nodetype = AbsXml
+        struct_nodetype = AbstractXML
     end
     return struct_nodetype
 end
