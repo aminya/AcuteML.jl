@@ -10,13 +10,13 @@ function get_arg_xmlcreator(argcustomcreator, has_arg_xmlchecker::Bool, argtype,
     if !has_arg_xmlchecker
         arg_creator = quote
             $(esc(argcustomcreator))
-            addelm!(aml, $argname, $esc_argvar, $argliteraltype)
+            appendchild!(aml, $argname, $esc_argvar, $argliteraltype)
         end
     else
         arg_creator=quote
             $(esc(argcustomcreator))
             if isnothing($esc_argvar) || ($(esc(argfunction)))($esc_argvar)
-                addelm!(aml, $argname, $esc_argvar, $argliteraltype)
+                appendchild!(aml, $argname, $esc_argvar, $argliteraltype)
             else
                 error("$($argname) doesn't meet criteria function")
             end

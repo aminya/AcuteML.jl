@@ -119,7 +119,7 @@ Notice that if you don't use `@aml`, you should include `aml::Node` as one of yo
 
 Functions to use for custom html/xml constructor:
 - [initialize_node](@ref): function to initialize the aml
-- [addelm!](@ref) : to add elements (single or a vector of elements)
+- [appendchild!](@ref) : to add elements (single or a vector of elements)
 Use these functions, to make a method that calculates the `aml` inside the function and returns all of the fields.
 
 Functions to use for custom html/xml extractor:
@@ -148,11 +148,11 @@ function Identity(;pitch = nothing, rest = nothing, unpitched = nothing)
     aml = initialize_node(AbsNormal, "identity")
 
     if pitch != nothing
-        addelm!(aml, "pitch", pitch, AbsNormal)
+        appendchild!(aml, "pitch", pitch, AbsNormal)
     elseif rest != nothing
-        addelm!(aml, "rest", rest, AbsNormal)
+        appendchild!(aml, "rest", rest, AbsNormal)
     elseif unpitched != nothing
-        addelm!(aml, "unpitched", unpitched, AbsNormal)
+        appendchild!(aml, "unpitched", unpitched, AbsNormal)
     else
         error("one of the pitch, rest or unpitched should be given")
     end
