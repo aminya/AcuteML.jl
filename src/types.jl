@@ -18,4 +18,4 @@ abstract type AbsText <: AbstractNode end
 abstract type AbstractEmpty <: AbstractElement end
 
 # Ignore
-abstract type AbsIgnore <: DocumentOrNode end
+abstract type AbstractIgnore <: DocumentOrNode end

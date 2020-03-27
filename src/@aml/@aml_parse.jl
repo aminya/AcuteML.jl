@@ -400,7 +400,7 @@ function aml_parse(expr::Expr)
         push!(args_name, "content") # argument ignored for aml
         push!(args_type, Nothing)
         push!(args_function,missing)
-        push!(args_literaltype, AbsIgnore)
+        push!(args_literaltype, AbstractIgnore)
         push!(args_param, Expr(:kw, :content, nothing))
         push!(args_var, :content)
         push!(args_defaultvalue, nothing)
