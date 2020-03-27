@@ -4,13 +4,17 @@
 """
 Get a argument creator expression
 """
-function get_arg_xmlcreator(has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
+function get_arg_xmlcreator(argcustomcreator, has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
     esc_argvar = esc(argvar)
 
     if !has_arg_xmlchecker
-        arg_creator=:(addelm!(aml, $argname, $esc_argvar, $argliteraltype))
+        arg_creator = quote
+            $(esc(argcustomcreator))
+            addelm!(aml, $argname, $esc_argvar, $argliteraltype)
+        end
     else
         arg_creator=quote
+            $(esc(argcustomcreator))
             if isnothing($esc_argvar) || ($(esc(argfunction)))($esc_argvar)
                 addelm!(aml, $argname, $esc_argvar, $argliteraltype)
             else
@@ -24,13 +28,17 @@ end
 """
 Get a argument extractor expression
 """
-function get_arg_xmlextractor(has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
+function get_arg_xmlextractor(argcustomextractor, has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
     esc_argvar = esc(argvar)
 
     if !has_arg_xmlchecker
-        arg_extractor=:($esc_argvar = findcontent($(esc(argtype)), $argname, aml, $argliteraltype))
+        arg_extractor=quote
+            $(esc(argcustomextractor))
+            $esc_argvar = findcontent($(esc(argtype)), $argname, aml, $argliteraltype)
+        end
     else
         arg_extractor=quote
+            $(esc(argcustomextractor))
 
             $esc_argvar = findcontent($(esc(argtype)), $argname, aml, $argliteraltype)
 
@@ -45,16 +53,20 @@ end
 """
 Get a argument updater expression
 """
-function get_arg_xmludpater(has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
+function get_arg_xmludpater(argcustomupdater, has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
 
     if !has_arg_xmlchecker
         arg_updater = quote
+            $(esc(argcustomupdater))
+
             if name == $argsym
                 updatecontent!(value, $argname, str.aml, $argliteraltype)
             end
         end
     else
         arg_updater = quote
+            $(esc(argcustomupdater))
+
             if name == $argsym
                 if isnothing($(argvarcall)) || ($(esc(argfunction)))($(argvarcall))
                     updatecontent!(value, $argname, str.aml, $argliteraltype)

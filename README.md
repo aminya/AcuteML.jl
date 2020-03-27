@@ -18,10 +18,22 @@ Pkg.add("AcuteML")
 ```julia
 using AcuteML
 ```
+
 # Documentation
 Click on the badge: [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AcuteML.jl/dev)
 
 See [Type Definition](https://aminya.github.io/AcuteML.jl/dev/#Main-macro-and-I/O-1) for a comprehensive introduction to syntax. You can use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
+
+# Readme Content
+- [Installation and Usage](#installation-and-usage)
+- [Documentation](#documentation)
+- [Example - Simple](#example---simple)
+- [Example - Struct Definition](#example---struct-definition)
+- [Example - Creator](#example---creator)
+- [Example - Extractor](#example---extractor)
+- [Templating](#templating)
+- [Example - Template Rendering using Functions](#example---template-rendering-using-functions)
+- [Example - Template Rendering using Files](#example---template-rendering-using-files)
 
 # Example - Simple
 ```julia
@@ -41,7 +53,7 @@ d = html(body = b)
 ```
 ```html
 julia> pprint(d)
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>      
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
   <body>

@@ -376,9 +376,9 @@ macro aml(expr)
 
         # expr.args[3] # arguments
         # args_param.args # empty
-        expr.args[3], args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, T = aml_parse(expr)
+        expr.args[3], args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, args_custom_creator, args_custom_extractor, args_custom_updater, T = aml_parse(expr)
 
-        out = aml_create(expr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, T)
+        out = aml_create(expr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, args_custom_creator, args_custom_extractor, args_custom_updater, T)
 
     # elseif expr isa Expr && expr.head == :tuple
     #     amlTypesSupport(expr)
