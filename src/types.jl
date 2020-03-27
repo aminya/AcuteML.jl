@@ -15,7 +15,7 @@ abstract type AbstractElement <: AbstractNode end
 abstract type AbstractAttribute <: AbstractNode end
 abstract type AbsText <: AbstractNode end
 
-abstract type AbsEmpty <: AbstractElement end
+abstract type AbstractEmpty <: AbstractElement end
 
 # Ignore
 abstract type AbsIgnore <: DocumentOrNode end

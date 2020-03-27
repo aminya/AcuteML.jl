@@ -25,7 +25,7 @@ end
 
 # Empty (self-closing)
 macro empty_str(s)
-    struct_nodetype = AbsEmpty
+    struct_nodetype = AbstractEmpty
     return struct_nodetype, s
 end
 ################################################################

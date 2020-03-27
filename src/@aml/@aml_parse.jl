@@ -395,7 +395,7 @@ function aml_parse(expr::Expr)
 
     ########################
     # self closing tags checker
-    if  struct_nodetype == AbsEmpty
+    if  struct_nodetype == AbstractEmpty
         # add a field with nothing type
         push!(args_name, "content") # argument ignored for aml
         push!(args_type, Nothing)

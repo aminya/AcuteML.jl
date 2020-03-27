@@ -1,7 +1,7 @@
 using AcuteML, Test
 @testset "xmlutils" begin
 
-    nsc = initialize_node(AbsEmpty, "some")
+    nsc = initialize_node(AbstractEmpty, "some")
 
     @testset "Node" begin
         n = initialize_node(AbstractElement, "a")
