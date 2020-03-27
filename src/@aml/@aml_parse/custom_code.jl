@@ -80,7 +80,7 @@ In the following example `log` is filled automatically (which doesn't have an as
     # add custom code to the end of extractor function
     @extractor begin
         if GPA > 4.0
-            log = "A genius with a GPA of $GPA is found" # setting fields using @extractor only changes the field and not the xml code
+            log = "A genius with a GPA of \$GPA is found" # setting fields using @extractor only changes the field and not the xml code
         end
     end
 end
