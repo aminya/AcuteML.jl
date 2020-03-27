@@ -51,7 +51,7 @@ end
 # Nodes
 ################################################################
 # String
-@transform function addelm!(aml::Node, name::String,value::AbstractString, argAmlType::Type{allsubtypes(AbsNormal)})
+@transform function addelm!(aml::Node, name::String,value::AbstractString, argAmlType::Type{allsubtypes(AbstractElement)})
     if !isnothing(value) # do nothing if value is nothing
         addelement!(aml, name, value)
     end
@@ -79,7 +79,7 @@ function addelm!(aml::Node, indexstr::String,value::AbstractString, argAmlType::
 end
 
 # Number  (and also Bool <:Number)
-@transform function addelm!(aml::Node, name::String, value::Number, argAmlType::Type{allsubtypes(AbsNormal)})
+@transform function addelm!(aml::Node, name::String, value::Number, argAmlType::Type{allsubtypes(AbstractElement)})
     if !isnothing(value) # do nothing if value is nothing
         addelement!(aml, name, string(value))
     end
@@ -107,7 +107,7 @@ function addelm!(aml::Node, indexstr::String, value::Number, argAmlType::Type{Ab
 end
 
 # Other
-function addelm!(aml::Node, name::String, value::T, argAmlType::Type{<:AbsNormal}) where {T}
+function addelm!(aml::Node, name::String, value::T, argAmlType::Type{<:AbstractElement}) where {T}
     if hasfield(T, :aml)
         link!(aml,value.aml)
 

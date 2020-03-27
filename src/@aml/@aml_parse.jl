@@ -66,7 +66,7 @@ function aml_parse(expr::Expr)
             end
 
             argsexpr.args[i] =  nothing # removing "aml name" from expr args
-            struct_nodetype = AbsNormal
+            struct_nodetype = AbstractElement
 
         ################################################################
         # Literal Struct name - empty"aml name"
@@ -130,7 +130,7 @@ function aml_parse(expr::Expr)
                     struct_name = ei.args[1] # Type aml name
                 end
 
-                struct_nodetype = AbsNormal
+                struct_nodetype = AbstractElement
                 argsexpr.args[i] =  nothing # removing "aml name" from expr args
 
             ########################
@@ -204,7 +204,7 @@ function aml_parse(expr::Expr)
                     end
 
                 else
-                    args_literaltype[iArg] = AbsNormal # non-literal
+                    args_literaltype[iArg] = AbstractElement # non-literal
 
                     ni = ei.args[2]
 
@@ -284,7 +284,7 @@ function aml_parse(expr::Expr)
                     end
 
                 else
-                    args_literaltype[iArg] = AbsNormal # non-literal
+                    args_literaltype[iArg] = AbstractElement # non-literal
 
                     ni = ei.args[2].args[2]
 

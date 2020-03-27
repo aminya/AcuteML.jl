@@ -16,7 +16,7 @@ end
 
 Finds all the elements with the address of string in the node, and updates the content.
 """
-@transform function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Union{AbstractString, Number}}
+@transform function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{allsubtypes(AbstractElement)}) where {T<:Union{AbstractString, Number}}
     # if hasdocument(node)
     #     elm = findfirst(name, node)
     # else
@@ -50,7 +50,7 @@ function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type
 end
 
 # Defined types
-function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{<:AbsNormal}) where {T}
+function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{<:AbstractElement}) where {T}
     # if hasdocument(node)
     #     elm = findfirst(name,node)
     # else
@@ -96,7 +96,7 @@ function updatecontent!(value::T, indexstr::String, node::Node, argAmlType::Type
 end
 
 # Nothing Alone
-@transform function updatecontent!(value::Nothing, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)})
+@transform function updatecontent!(value::Nothing, name::String, node::Node, argAmlType::Type{allsubtypes(AbstractElement)})
     # if hasdocument(node)
     #     elm = findfirst(name,node)
     # else
@@ -132,7 +132,7 @@ end
 ################################################################
 # Vector update
 
-@transform function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Union{AbstractString, Number}}
+@transform function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{allsubtypes(AbstractElement)}) where {T<:Union{AbstractString, Number}}
     # if hasdocument(node)
     #     elmsNode = findall(name, node) # a vector of Node elements
     # else
@@ -172,7 +172,7 @@ function updatecontent!(value::Vector{T}, indicesstr::String, node::Node, argAml
 end
 
 # for defined types and nothing
-function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T}
+function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{<:AbstractElement}) where{T}
 
     # if hasdocument(node)
     #     elmsNode = findall(name, node) # a vector of Node elements

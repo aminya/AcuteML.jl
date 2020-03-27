@@ -27,11 +27,11 @@ Finds all the elements with the address of string in the node and converts to th
 If no type is provided consider it to be Vector{Union{String, Nothing}}
 
 ```julia
-findcontent("instrument-name",node, AbsNormal)
-findcontent(UInt8,"midi-channel",node, AbsNormal)
+findcontent("instrument-name",node, AbstractElement)
+findcontent(UInt8,"midi-channel",node, AbstractElement)
 ```
 """
-@transform function findcontent(::Type{T},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:AbstractString}  # Strings
+@transform function findcontent(::Type{T},  name::String, node::Node, argAmlType::Type{allsubtypes(AbstractElement)}) where {T<:AbstractString}  # Strings
 
     # if hasdocument(node)
     #     elm = findfirst(name,node)
@@ -68,7 +68,7 @@ function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{A
 end
 
 # Number  (and also Bool <:Number)
-@transform function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Number}
+@transform function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{allsubtypes(AbstractElement)}) where {T<:Number}
 
     # if hasdocument(node)
     #     elm = findfirst(name,node)
@@ -106,7 +106,7 @@ function findcontent(::Type{T}, indexstr::String, node::Node, argAmlType::Type{A
 end
 
 # for defined types
-function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{<:AbsNormal}) where {T}
+function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{<:AbstractElement}) where {T}
 
     # if hasdocument(node)
     #     elm = findfirst(name,node)
@@ -172,7 +172,7 @@ end
 # Vector extraction
 
 # String
-@transform function findcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:AbstractString}
+@transform function findcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Type{allsubtypes(AbstractElement)}) where {T<:AbstractString}
 
     # if hasdocument(node)
     #     elmsNode = findall(name, node) # a vector of Node elements
@@ -219,7 +219,7 @@ function findcontent(::Type{Vector{T}}, indicesstr::String, node::Node, argAmlTy
 end
 
 # Number  (and also Bool <:Number)
-@transform function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{allsubtypes(AbsNormal)}) where {T<:Number}
+@transform function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{allsubtypes(AbstractElement)}) where {T<:Number}
 
     # if hasdocument(node)
     #     elmsNode = findall(name, node) # a vector of Node elements
@@ -267,7 +267,7 @@ end
 
 
 # for defined types
-function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{<:AbsNormal}) where{T}
+function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{<:AbstractElement}) where{T}
 
     # if hasdocument(node)
     #     elmsNode = findall(name, node) # a vector of Node elements

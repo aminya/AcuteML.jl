@@ -11,11 +11,11 @@ abstract type AbstractXML <: AbstractDocument end
 abstract type AbstractHTML <: AbstractDocument end
 
 # Nodes
-abstract type AbsNormal <: AbstractNode end
+abstract type AbstractElement <: AbstractNode end
 abstract type AbsAttribute <: AbstractNode end
 abstract type AbsText <: AbstractNode end
 
-abstract type AbsEmpty <: AbsNormal end
+abstract type AbsEmpty <: AbstractElement end
 
 # Ignore
 abstract type AbsIgnore <: DocumentOrNode end

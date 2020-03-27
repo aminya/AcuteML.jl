@@ -145,14 +145,14 @@ function Identity(;pitch = nothing, rest = nothing, unpitched = nothing)
 
     # This constructor only allows one the fields to exist - similar to choice element in XS
 
-    aml = initialize_node(AbsNormal, "identity")
+    aml = initialize_node(AbstractElement, "identity")
 
     if pitch != nothing
-        addelm!(aml, "pitch", pitch, AbsNormal)
+        addelm!(aml, "pitch", pitch, AbstractElement)
     elseif rest != nothing
-        addelm!(aml, "rest", rest, AbsNormal)
+        addelm!(aml, "rest", rest, AbstractElement)
     elseif unpitched != nothing
-        addelm!(aml, "unpitched", unpitched, AbsNormal)
+        addelm!(aml, "unpitched", unpitched, AbstractElement)
     else
         error("one of the pitch, rest or unpitched should be given")
     end
@@ -162,9 +162,9 @@ end
 
 function Identity(;aml)
 
-        pitch = findcontent(Pitch, "pitch", aml, AbsNormal)
-        rest = findcontent(Rest, "rest", aml, AbsNormal)
-        unpitched = findcontent(Unpitched, "unpitched", aml, AbsNormal)
+        pitch = findcontent(Pitch, "pitch", aml, AbstractElement)
+        rest = findcontent(Rest, "rest", aml, AbstractElement)
+        unpitched = findcontent(Unpitched, "unpitched", aml, AbstractElement)
 
         return Identity(pitch, rest, unpitched, aml)
 end

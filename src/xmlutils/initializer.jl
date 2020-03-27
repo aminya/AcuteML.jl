@@ -23,7 +23,7 @@ function initialize_node(::Type{AbstractXML}, struct_name::String = "xml_root")
     return out
 end
 
-function initialize_node(::Type{<:AbsNormal}, struct_name::String)
+function initialize_node(::Type{<:AbstractElement}, struct_name::String)
     out = ElementNode(struct_name) # element node
     return out
 end
