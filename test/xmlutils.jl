@@ -81,7 +81,7 @@ using AcuteML, Test
     end
 
     @testset "Html Document" begin
-        dhtml = initialize_node(AbsHtml, "html")
+        dhtml = initialize_node(AbstractHTML, "html")
 
         addelm!(dhtml, "normalString", "val", AbsNormal)
         @test "val" == findcontent(String, "normalString", dhtml, AbsNormal)

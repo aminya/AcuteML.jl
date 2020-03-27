@@ -3,7 +3,7 @@ export @doc_str, @empty_str, @att_str, @txt_str
 ################################################################
 function aml_dispatch(struct_nodetype::Type{AbstractDocument}, name::String)
     if name == "html"
-        struct_nodetype = AbsHtml
+        struct_nodetype = AbstractHTML
     else
         struct_nodetype = AbstractXML
     end

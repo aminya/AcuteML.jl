@@ -9,7 +9,7 @@ export initialize_node
 
 Function to initialize the aml
 """
-function initialize_node(::Type{AbsHtml}, struct_name::String = "html")
+function initialize_node(::Type{AbstractHTML}, struct_name::String = "html")
     out = HTMLDocument() # no URI and external id
     htmlNode = ElementNode(struct_name)
     setroot!(out, htmlNode) # adding html node
