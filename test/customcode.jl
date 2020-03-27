@@ -18,10 +18,10 @@
     name::String, "~"
     GPA::Float64, "~"
     IQ::UN{String} = nothing, att"~" # default to nothing, but filled automatically by first @cretor macro
-    # add custom code to the end of extractor function
 
     log::UN{String} = nothing, "~"
 
+    # add custom code to the end of extractor function
     @extractor begin
         if GPA > 4.0
             log = "A genius with a GPA of $GPA is found" # setting fields using @extractor only changes the field and not the xml code

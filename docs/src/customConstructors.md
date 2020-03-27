@@ -2,6 +2,25 @@
 
 ## Adding Custom code to the structures
 
+AcuteML introduces three `@creator`, `@extractor`, and `@updater` macros to be used inside `@aml` definition. The location of the macros specifies their location in the function. For example, putting `@creator` at the begining, adds the code to begining of creator function.
+
+
+- Put `@creator` inside `@aml` to add a custom code to the creator function (DOM creation when the struct is instanciated).
+
+  This macro only affects creation (not extraction/updating), but can be used in combination with other macros.
+
+- Put `@extractor` inside `@aml` to add a custom code to the extractor function (DOM parsing when a html/xml text is used for instanciation of a struct).
+
+  This macro only affects creation (not creation/updating), but can be used in combination with other macros.
+
+  Be careful that setting struct fields using `@extractor` only changes the struct field and not the xml code.
+
+- Put `@updater` inside `@aml` to add a custom code to the updater function (DOM updating after instanciation of a struct).
+
+  This macro only affects updating (not creation/extraction), but can be used in combination with other macros.
+
+In the following example `IQ` and `average` are calculated automatically. Also, in the following example `log` is filled automatically (which doesn't have an associated xml element).
+
 ```julia
 using AcuteML
 # Definition
