@@ -1,4 +1,5 @@
-export findcontent
+export findcontent, getelement, getelements, getElementByID, getElementsByTag
+
 ################################################################
 # Extractors
 ################################################################
@@ -366,3 +367,10 @@ end
 function findcontent(::Type{AbstractDict}, name, node, argAmlType)
     throw(MethodError("Dicts are not supported for extraction/updating"))
 end
+################################################################
+
+# Aliases
+const getelements = findall
+const getelement = findfirst
+const getElementByID = getelement
+const getElementsByTag = getelements
