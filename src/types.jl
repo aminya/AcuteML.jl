@@ -3,12 +3,12 @@ UN{T}= Union{T, Nothing}
 
 abstract type DocumentOrNode end
 
-abstract type AbsDocument <:DocumentOrNode end
+abstract type AbstractDocument <:DocumentOrNode end
 abstract type AbstractNode <:DocumentOrNode end
 
 # Documents
-abstract type AbsXml <: AbsDocument end
-abstract type AbsHtml <: AbsDocument end
+abstract type AbsXml <: AbstractDocument end
+abstract type AbsHtml <: AbstractDocument end
 
 # Nodes
 abstract type AbsNormal <: AbstractNode end

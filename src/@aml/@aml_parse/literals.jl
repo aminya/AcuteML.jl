@@ -1,7 +1,7 @@
 # literals
 export @doc_str, @empty_str, @att_str, @txt_str
 ################################################################
-function aml_dispatch(struct_nodetype::Type{AbsDocument}, name::String)
+function aml_dispatch(struct_nodetype::Type{AbstractDocument}, name::String)
     if name == "html"
         struct_nodetype = AbsHtml
     else
@@ -19,7 +19,7 @@ end
 ################################################################
 # Document
 macro doc_str(s)
-    struct_nodetype = AbsDocument
+    struct_nodetype = AbstractDocument
     return struct_nodetype, s
 end
 
