@@ -31,7 +31,7 @@ end
 ################################################################
 # attribute
 macro att_str(s)
-    argAmlType = AbsAttribute
+    argAmlType = AbstractAttribute
     return argAmlType, s
 end
 ################################################################

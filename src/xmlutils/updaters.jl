@@ -30,7 +30,7 @@ Finds all the elements with the address of string in the node, and updates the c
     end
 end
 
-function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:Union{AbstractString, Number}}
+function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{AbstractAttribute}) where {T<:Union{AbstractString, Number}}
     if haskey(node, name)
         node[name] = value
 
@@ -69,7 +69,7 @@ function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{<:A
     end
 end
 
-function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T}
+function updatecontent!(value::T, name::String, node::Node, argAmlType::Type{AbstractAttribute}) where {T}
     if haskey(node, name)
         elm = node[name]
         unlink!(elm)
@@ -110,7 +110,7 @@ end
     end
 end
 
-function updatecontent!(value::Nothing, name::String,node::Node, argAmlType::Type{AbsAttribute})
+function updatecontent!(value::Nothing, name::String,node::Node, argAmlType::Type{AbstractAttribute})
     if haskey(node, name)
         elm = node[name]
         unlink!(elm)
@@ -148,7 +148,7 @@ end
     end
 end
 
-function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:Union{AbstractString, Number}}
+function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{AbstractAttribute}) where {T<:Union{AbstractString, Number}}
     if haskey(node, name)
         elmsNode = node[name]
         for (i, elm) in enumerate(elmsNode)
@@ -200,7 +200,7 @@ function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::
 end
 
 
-function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where{T}
+function updatecontent!(value::Vector{T}, name::String, node::Node, argAmlType::Type{AbstractAttribute}) where{T}
     if haskey(node, name)
         elmsNode = node[name]
     else # error if nothing is found

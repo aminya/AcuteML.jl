@@ -57,7 +57,7 @@ end
     end
 end
 
-function addelm!(aml::Node, name::String,value::AbstractString, argAmlType::Type{AbsAttribute})
+function addelm!(aml::Node, name::String,value::AbstractString, argAmlType::Type{AbstractAttribute})
     if !isnothing(value) # do nothing if value is nothing
         link!(aml, AttributeNode(name, value))
     end
@@ -85,7 +85,7 @@ end
     end
 end
 
-function addelm!(aml::Node, name::String, value::Number, argAmlType::Type{AbsAttribute})
+function addelm!(aml::Node, name::String, value::Number, argAmlType::Type{AbstractAttribute})
     if !isnothing(value) # do nothing if value is nothing
         link!(aml, AttributeNode(name, string(value)))
     end
@@ -122,7 +122,7 @@ function addelm!(aml::Node, name::String, value::T, argAmlType::Type{<:AbstractE
     end
 end
 
-function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribute}) where {T}
+function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbstractAttribute}) where {T}
     if hasfield(T, :aml)
         link!(aml, AttributeNode(name, value.aml))
 

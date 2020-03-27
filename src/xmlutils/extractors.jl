@@ -46,7 +46,7 @@ findcontent(UInt8,"midi-channel",node, AbstractElement)
     end
 end
 
-function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:AbstractString}
+function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbstractAttribute}) where {T<:AbstractString}
     if haskey(node, name)
         elm = node[name]
         return elm
@@ -84,7 +84,7 @@ end
 
 end
 
-function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:Number}
+function findcontent(::Type{T}, name::String, node::Node, argAmlType::Type{AbstractAttribute}) where {T<:Number}
     if haskey(node, name)
         elm = parse(T, node[name])
         return elm
@@ -129,7 +129,7 @@ function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{<:Abst
 end
 
 
-function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{AbsAttribute}) where {T}
+function findcontent(::Type{T}, name::String,node::Node, argAmlType::Type{AbstractAttribute}) where {T}
 
     if haskey(node, name)
         elm = node[name]
@@ -191,7 +191,7 @@ end
     end
 end
 
-function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:AbstractString}
+function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbstractAttribute}) where {T<:AbstractString}
     if haskey(node, name)
         elmsNode = node[name]
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
@@ -238,7 +238,7 @@ end
     end
 end
 
-function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbsAttribute}) where {T<:Number}
+function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::Type{AbstractAttribute}) where {T<:Number}
     if haskey(node, name)
         elmsNode = parse(T, node[name])
         elmsType = Vector{T}(undef, length(elmsNode)) # a vector of Type elements
@@ -293,7 +293,7 @@ function findcontent(::Type{Vector{T}},  name::String, node::Node, argAmlType::T
     end
 
 end
-function findcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Type{AbsAttribute}) where{T}
+function findcontent(::Type{Vector{T}}, name::String, node::Node, argAmlType::Type{AbstractAttribute}) where{T}
 
     if haskey(node, name)
         elmsNode = node[name]

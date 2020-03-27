@@ -13,10 +13,10 @@ using AcuteML, Test
         updatecontent!("val2", "normalString", n, AbstractElement)
         @test "val2" == findcontent(String, "normalString", n, AbstractElement)
 
-        addelm!(n, "attString", "val", AbsAttribute)
-        @test "val" == findcontent(String, "attString", n, AbsAttribute)
-        updatecontent!("val2", "attString", n, AbsAttribute)
-        @test "val2" == findcontent(String, "attString", n, AbsAttribute)
+        addelm!(n, "attString", "val", AbstractAttribute)
+        @test "val" == findcontent(String, "attString", n, AbstractAttribute)
+        updatecontent!("val2", "attString", n, AbstractAttribute)
+        @test "val2" == findcontent(String, "attString", n, AbstractAttribute)
 
         using Dates
         addelm!(n, "Date", Date(2013,7,1), AbstractElement)
@@ -41,12 +41,12 @@ using AcuteML, Test
         # updatecontent!( DataFrame(course = ["Artificial Intelligence", "Robotics2"], professor = ["Prof. A", "Prof. B"] ),"DataFrame", n, AbstractElement)
         # @test_skip  DataFrame(course = ["Artificial Intelligence", "Robotics2"], professor = ["Prof. A", "Prof. B"] ) ==  findcontent(DataFrame, "DataFrame", n, AbstractElement)
 
-        addelm!(n, "Nothing", nothing, AbsAttribute)
-        @test nothing == findcontent(Nothing, "Nothing", n, AbsAttribute)
-        @test nothing == findcontent(Union{Nothing,String}, "Nothing", n, AbsAttribute)
+        addelm!(n, "Nothing", nothing, AbstractAttribute)
+        @test nothing == findcontent(Nothing, "Nothing", n, AbstractAttribute)
+        @test nothing == findcontent(Union{Nothing,String}, "Nothing", n, AbstractAttribute)
 
-        # updatecontent!(nothing, "Nothing", n, AbsAttribute)
-        # @test nothing == findcontent(Nothing, "Nothing", n, AbsAttribute)
+        # updatecontent!(nothing, "Nothing", n, AbstractAttribute)
+        # @test nothing == findcontent(Nothing, "Nothing", n, AbstractAttribute)
 
         ################################################################
         addelm!(n, "stringVect", ["aa", "bb"], AbstractElement)
@@ -90,10 +90,10 @@ using AcuteML, Test
         updatecontent!("val2", "normalString", dhtml, AbstractElement)
         @test "val2" == findcontent(String, "normalString", dhtml, AbstractElement)
 
-        addelm!(dhtml, "attString", "val", AbsAttribute)
-        @test "val" == findcontent(String, "attString", dhtml, AbsAttribute)
-        updatecontent!("val2", "attString", dhtml, AbsAttribute)
-        @test "val2" == findcontent(String, "attString", dhtml, AbsAttribute)
+        addelm!(dhtml, "attString", "val", AbstractAttribute)
+        @test "val" == findcontent(String, "attString", dhtml, AbstractAttribute)
+        updatecontent!("val2", "attString", dhtml, AbstractAttribute)
+        @test "val2" == findcontent(String, "attString", dhtml, AbstractAttribute)
 
         using Dates
         addelm!(dhtml, "Date", Date(2013,7,1), AbstractElement)
@@ -118,12 +118,12 @@ using AcuteML, Test
         # updatecontent!( DataFrame(course = ["Artificial Intelligence", "Robotics2"], professor = ["Prof. A", "Prof. B"] ),"DataFrame", dhtml, AbstractElement)
         # @test_skip  DataFrame(course = ["Artificial Intelligence", "Robotics2"], professor = ["Prof. A", "Prof. B"] ) ==  findcontent(DataFrame, "DataFrame", dhtml, AbstractElement)
 
-        addelm!(dhtml, "Nothing", nothing, AbsAttribute)
-        @test nothing == findcontent(Nothing, "Nothing", dhtml, AbsAttribute)
-        @test nothing == findcontent(Union{Nothing,String}, "Nothing", dhtml, AbsAttribute)
+        addelm!(dhtml, "Nothing", nothing, AbstractAttribute)
+        @test nothing == findcontent(Nothing, "Nothing", dhtml, AbstractAttribute)
+        @test nothing == findcontent(Union{Nothing,String}, "Nothing", dhtml, AbstractAttribute)
 
-        # updatecontent!(nothing, "Nothing", dhtml, AbsAttribute)
-        # @test nothing == findcontent(Nothing, "Nothing", dhtml, AbsAttribute)
+        # updatecontent!(nothing, "Nothing", dhtml, AbstractAttribute)
+        # @test nothing == findcontent(Nothing, "Nothing", dhtml, AbstractAttribute)
 
         ################################################################
         addelm!(dhtml, "stringVect", ["aa", "bb"], AbstractElement)
@@ -170,10 +170,10 @@ using AcuteML, Test
         updatecontent!("val2", "normalString", dxml, AbstractElement)
         @test "val2" == findcontent(String, "normalString", dxml, AbstractElement)
 
-        addelm!(dxml, "attString", "val", AbsAttribute)
-        @test "val" == findcontent(String, "attString", dxml, AbsAttribute)
-        updatecontent!("val2", "attString", dxml, AbsAttribute)
-        @test "val2" == findcontent(String, "attString", dxml, AbsAttribute)
+        addelm!(dxml, "attString", "val", AbstractAttribute)
+        @test "val" == findcontent(String, "attString", dxml, AbstractAttribute)
+        updatecontent!("val2", "attString", dxml, AbstractAttribute)
+        @test "val2" == findcontent(String, "attString", dxml, AbstractAttribute)
 
         using Dates
         addelm!(dxml, "Date", Date(2013,7,1), AbstractElement)
@@ -198,12 +198,12 @@ using AcuteML, Test
         # updatecontent!( DataFrame(course = ["Artificial Intelligence", "Robotics2"], professor = ["Prof. A", "Prof. B"] ),"DataFrame", dxml, AbstractElement)
         # @test_skip  DataFrame(course = ["Artificial Intelligence", "Robotics2"], professor = ["Prof. A", "Prof. B"] ) ==  findcontent(DataFrame, "DataFrame", dxml, AbstractElement)
 
-        addelm!(dxml, "Nothing", nothing, AbsAttribute)
-        @test nothing == findcontent(Nothing, "Nothing", dxml, AbsAttribute)
-        @test nothing == findcontent(Union{Nothing,String}, "Nothing", dxml, AbsAttribute)
+        addelm!(dxml, "Nothing", nothing, AbstractAttribute)
+        @test nothing == findcontent(Nothing, "Nothing", dxml, AbstractAttribute)
+        @test nothing == findcontent(Union{Nothing,String}, "Nothing", dxml, AbstractAttribute)
 
-        # updatecontent!(nothing, "Nothing", dxml, AbsAttribute)
-        # @test nothing == findcontent(Nothing, "Nothing", dxml, AbsAttribute)
+        # updatecontent!(nothing, "Nothing", dxml, AbstractAttribute)
+        # @test nothing == findcontent(Nothing, "Nothing", dxml, AbstractAttribute)
 
         ################################################################
         addelm!(dxml, "stringVect", ["aa", "bb"], AbstractElement)
