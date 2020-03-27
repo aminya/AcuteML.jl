@@ -4,12 +4,12 @@ export findcontent
 ################################################################
 # Documents
 ################################################################
-function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbsNode}) where {T}
+function findcontent(::Type{T}, name::String, doc::Document, argAmlType::Type{<:AbstractNode}) where {T}
     findcontent(T, name, root(doc), argAmlType)
 end
 
 # if no type is provided consider it to be Vector{Union{String, Nothing}}
-function findcontent(name::String, doc::Document, argAmlType::Type{<:AbsNode})
+function findcontent(name::String, doc::Document, argAmlType::Type{<:AbstractNode})
     findcontent(Vector{Union{String, Nothing}}, name, root(doc), argAmlType)
 end
 ################################################################

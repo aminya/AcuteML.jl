@@ -3,7 +3,7 @@ export updatecontent!
 # Updaters
 ################################################################
 # Documents
-function updatecontent!(value, name::String, doc::Document, argAmlType::Type{<:AbsNode})
+function updatecontent!(value, name::String, doc::Document, argAmlType::Type{<:AbstractNode})
     updatecontent!(value, name, root(doc), argAmlType)
 end
 ################################################################
