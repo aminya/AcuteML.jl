@@ -1,7 +1,7 @@
 name = "AcuteML"
 uuid = "6b84a0a3-a11a-41fa-a417-e600528de108"
 authors = ["Amin Yahyaabadi"]
-version = "0.9.0"
+version = "0.9.1"
 
 [deps]
 EzXML = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
