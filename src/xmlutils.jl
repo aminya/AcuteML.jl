@@ -13,8 +13,6 @@ import EzXML: Document, Node
 #     end
 #     print(io, "$(prefix)(<$desc>)")
 # end
-Base.unsigned(x::Ptr) = UInt(x)
-Base.signed(x::Ptr) = Int(x)
 
 ################################################################
 import Tables
