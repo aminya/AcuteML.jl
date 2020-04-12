@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Custom Contructors - AcuteML Backend · AcuteML.jl</title><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit">AcuteML.jl</span></div><form class="docs-search" action="../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../valueChecking/">Value Checking</a></li><li><a class="tocitem" href="../supportedValueTypes/">Supported Value Types</a></li><li><a class="tocitem" href="../extraConstructors/">Extra Contructors</a></li><li><a class="tocitem" href="../customValueTypes/">Custom Value Types</a></li><li class="is-active"><a class="tocitem" href>Custom Contructors - AcuteML Backend</a><ul class="internal"><li><a class="tocitem" href="#Adding-Custom-code-to-the-structures-1"><span>Adding Custom code to the structures</span></a></li><li><a class="tocitem" href="#Making-a-Type-and-constructor-from-scratch-using-AcuteML-Backend-1"><span>Making a Type and constructor from scratch using AcuteML Backend</span></a></li><li class="toplevel"><a class="tocitem" href="#Example:-1"><span>Example:</span></a></li></ul></li><li><a class="tocitem" href="../templating/">Templating</a></li><li><a class="tocitem" href="../SyntaxReference/">Syntax Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Custom Contructors - AcuteML Backend</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Custom Contructors - AcuteML Backend</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/aminya/AcuteML.jl/blob/master/docs/src/customConstructors.md#L" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Custom-Constructors-1"><a class="docs-heading-anchor" href="#Custom-Constructors-1">Custom Constructors</a><a class="docs-heading-anchor-permalink" href="#Custom-Constructors-1" title="Permalink"></a></h1><h2 id="Adding-Custom-code-to-the-structures-1"><a class="docs-heading-anchor" href="#Adding-Custom-code-to-the-structures-1">Adding Custom code to the structures</a><a class="docs-heading-anchor-permalink" href="#Adding-Custom-code-to-the-structures-1" title="Permalink"></a></h2><p>AcuteML introduces three <code>@creator</code>, <code>@extractor</code>, and <code>@updater</code> macros to be used inside <code>@aml</code> definition. The location of the macros specifies their location in the function. For example, putting <code>@creator</code> at the begining, adds the code to begining of creator function.</p><ul><li><p>Put <code>@creator</code> inside <code>@aml</code> to add a custom code to the creator function (DOM creation when the struct is instanciated).</p><p>This macro only affects creation (not extraction/updating), but can be used in combination with other macros.</p></li><li><p>Put <code>@extractor</code> inside <code>@aml</code> to add a custom code to the extractor function (DOM parsing when a html/xml text is used for instanciation of a struct).</p><p>This macro only affects creation (not creation/updating), but can be used in combination with other macros.</p><p>Be careful that setting struct fields using <code>@extractor</code> only changes the struct field and not the xml code.</p></li><li><p>Put <code>@updater</code> inside <code>@aml</code> to add a custom code to the updater function (DOM updating after instanciation of a struct).</p><p>This macro only affects updating (not creation/extraction), but can be used in combination with other macros.</p></li></ul><p>In the following example <code>IQ</code> and <code>average</code> are calculated automatically. Also, in the following example <code>log</code> is filled automatically (which doesn&#39;t have an associated xml element).</p><pre><code class="language-julia">using AcuteML
+# Definition
+@aml mutable struct Student &quot;student&quot;
+
+    # add custom code to the begining of creator function
+    # the following automatically fills IQ based on the name
+    @creator begin
+        if occursin(&quot;smart&quot;, name)
+            name = replace(name, &quot;-smart&quot; =&gt; &quot;&quot;) # remove smart from name
+            IQ = &quot;smart&quot;
+        elseif occursin(&quot;genius&quot;, name)
+            name = replace(name, &quot;-genius&quot; =&gt; &quot;&quot;) # remove smart from name
+            IQ = &quot;genius&quot;
+        else
+            error(&quot;Give a smart student.&quot;)
+        end
+    end
+
+    name::String, &quot;~&quot;
+    GPA::Float64, &quot;~&quot;
+    IQ::UN{String} = nothing, att&quot;~&quot; # default to nothing, but filled automatically by first @cretor macro
+    # add custom code to the end of extractor function
+
+    log::UN{String} = nothing, &quot;~&quot;
+
+    @extractor begin
+        if GPA &gt; 4.0
+            log = &quot;A genius with a GPA of $GPA is found&quot; # setting fields using @extractor only changes the field and not the xml code
+        end
+    end
+end
+
+@aml mutable struct MathClass &quot;math-class&quot;
+    @creator begin
+        GPAsum = 0.0
+        for student in students
+            GPAsum = GPAsum + student.GPA
+        end
+        average = GPAsum / length(students) # fill average field
+    end
+
+    students::Vector{Student}, &quot;student&quot;
+    average::UN{Float64} = nothing, &quot;average&quot; # calculated automatically
+end
+
+################################################################
+# Creation
+smarts = [Student(name = &quot;Jack-smart&quot;, GPA = 2.0), Student(name = &quot;Sara-genius&quot;, GPA = 5.0)]
+mathclass = MathClass(students = smarts)
+
+mathclass.students[1].name # &quot;Jack&quot;
+mathclass.students[2].name # &quot;Sara&quot;
+mathclass.average # 3.5
+
+pprint(mathclass)
+# &lt;math-class&gt;
+#     &lt;student IQ=&quot;smart&quot;&gt;
+#       &lt;name&gt;Jack&lt;/name&gt;
+#       &lt;GPA&gt;2.0&lt;/GPA&gt;
+#     &lt;/student&gt;
+#     &lt;student IQ=&quot;genius&quot;&gt;
+#       &lt;name&gt;Sara&lt;/name&gt;
+#       &lt;GPA&gt;5.0&lt;/GPA&gt;
+#     &lt;/student&gt;
+#     &lt;average&gt;3.5&lt;/average&gt;
+#   &lt;/math-class&gt;
+
+################################################################
+# Extraction
+
+xml = parsexml(&quot;&quot;&quot;
+&lt;math-class&gt;
+    &lt;student&gt;
+      &lt;name&gt;Jack&lt;/name&gt;
+      &lt;GPA&gt;2.0&lt;/GPA&gt;
+    &lt;/student&gt;
+    &lt;student&gt;
+      &lt;name&gt;Sara&lt;/name&gt;
+      &lt;GPA&gt;5.0&lt;/GPA&gt;
+    &lt;/student&gt;
+    &lt;average&gt;3.5&lt;/average&gt;
+  &lt;/math-class&gt;
+&quot;&quot;&quot;)
+
+mathclass = MathClass(xml)
+
+mathclass.students[2].log # &quot;A genius with a GPA of 5.0 is found&quot;</code></pre><h2 id="Making-a-Type-and-constructor-from-scratch-using-AcuteML-Backend-1"><a class="docs-heading-anchor" href="#Making-a-Type-and-constructor-from-scratch-using-AcuteML-Backend-1">Making a Type and constructor from scratch using AcuteML Backend</a><a class="docs-heading-anchor-permalink" href="#Making-a-Type-and-constructor-from-scratch-using-AcuteML-Backend-1" title="Permalink"></a></h2><p>You can use AcuteML utilities to define custom type constructors from scratch or to override <code>@aml</code> defined constructors.</p><p>Notice that if you don&#39;t use <code>@aml</code>, you should include <code>aml::Node</code> as one of your fields.</p><p>Functions to use for custom html/xml constructor:</p><ul><li><a href="@ref">initialize_node</a>: function to initialize the aml</li><li><a href="@ref">addelm!</a> : to add elements (single or a vector of elements)</li></ul><p>Use these functions, to make a method that calculates the <code>aml</code> inside the function and returns all of the fields.</p><p>Functions to use for custom html/xml extractor:</p><ul><li><a href="@ref">findcontent</a> : to extract elements</li></ul><p>Use these functions, to make a method that gets the <code>aml::Node</code> and calculates and returns all of the fields.</p><p>Functions to support mutability:</p><ul><li><a href="@ref">updatecontent!</a>: Finds all the elements with the address of string in the node, and updates the content.</li></ul><h1 id="Example:-1"><a class="docs-heading-anchor" href="#Example:-1">Example:</a><a class="docs-heading-anchor-permalink" href="#Example:-1" title="Permalink"></a></h1><p>In this example we define <code>Identity</code> with custom constructors:</p><pre><code class="language-julia">using AcuteML
+
+mutable struct Identity
+    pitch::UN{Pitch}
+    rest::UN{Rest}
+    unpitched::UN{Unpitched}
+    aml::Node
+end
+
+function Identity(;pitch = nothing, rest = nothing, unpitched = nothing)
+
+    # This constructor only allows one the fields to exist - similar to choice element in XS
+
+    aml = initialize_node(AbsNormal, &quot;identity&quot;)
+
+    if pitch != nothing
+        addelm!(aml, &quot;pitch&quot;, pitch, AbsNormal)
+    elseif rest != nothing
+        addelm!(aml, &quot;rest&quot;, rest, AbsNormal)
+    elseif unpitched != nothing
+        addelm!(aml, &quot;unpitched&quot;, unpitched, AbsNormal)
+    else
+        error(&quot;one of the pitch, rest or unpitched should be given&quot;)
+    end
+
+    return Identity(pitch, rest, unpitched, aml)
+end
+
+function Identity(;aml)
+
+        pitch = findcontent(Pitch, &quot;pitch&quot;, aml, AbsNormal)
+        rest = findcontent(Rest, &quot;rest&quot;, aml, AbsNormal)
+        unpitched = findcontent(Unpitched, &quot;unpitched&quot;, aml, AbsNormal)
+
+        return Identity(pitch, rest, unpitched, aml)
+end</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../customValueTypes/">« Custom Value Types</a><a class="docs-footer-nextpage" href="../templating/">Templating »</a></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> on <span class="colophon-date" title="Sunday 12 April 2020 08:40">Sunday 12 April 2020</span>. Using Julia version 1.3.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
