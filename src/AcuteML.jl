@@ -24,7 +24,14 @@ export Node, Document
   @aml
 
 # Type Definition
-Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type.
+Use `@aml` macro to define a Julia type, and then the package automatically creates a xml or html associated with the defined type. The general syntax would look like this:
+```julia
+@aml mutable struct mybody "body"
+    myh1, "h1"
+    p::Vector{String}, "~"
+end
+```
+Now, we go into the details:
 
 ### Document Definition
 * Use doc literal before the root name to define a HTML or XML document. For HTML documents root should always be "html".
@@ -40,7 +47,7 @@ end
 ```
 
 ### Nodes (Elements) Definition
-* Specify the html/xml struct name as a string after the struct name after a space
+* Specify the html/xml name of struct as a string after the struct name (after a space)
 ```julia
 @aml mutable struct Person "person"
 # add fields (elements) here
@@ -62,6 +69,29 @@ field, "study-field"
 ```julia
 age::UInt, "~"
 ```
+
+!!! warning
+    The field names of a struct should not be the same as other defined types. This error happens when you use the same name of a type for a field name. For example, the follwing is an **error**:
+    ```julia
+    @aml struct person "~"
+        name, "~"
+    end
+    @aml struct myxml doc"~"
+        person::person, "~"
+    end
+    ```
+    Another example of this error:
+    ```julia
+    @aml struct myxml doc"~"
+        Int, "myint"
+    end
+    ```
+    However, you can choose any xml/html name. The xml/html name of the fields isn't related to the types defined in Julia. So the following is a **valid** syntax:
+    ```julia
+    @aml struct myxml doc"~"
+        myint, "Int"
+    end
+    ```
 
 ### Attributes
 * If the value is going to be an attribute put `att` before its name
@@ -377,6 +407,14 @@ macro aml(expr)
         # expr.args[3] # arguments
         # args_param.args # empty
         expr.args[3], args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, args_custom_creator, args_custom_extractor, args_custom_updater, T = aml_parse(expr)
+
+        # check if the field name is a defined type
+        for arg_var in args_var
+            if isdefined(__module__, arg_var) && isa(getfield(__module__, arg_var), Type)
+                f, l = __source__.file, __source__.line
+                @error "Change the field name `$arg_var` in struct `$T` to something else. The name conflicts with an already defined type name. \n Happens at $f:$l"
+            end
+        end
 
         out = aml_create(expr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, args_custom_creator, args_custom_extractor, args_custom_updater, T)
 

@@ -4,8 +4,7 @@
 """
 Get a argument creator expression
 """
-function get_arg_xmlcreator(argcustomcreator, has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
-    esc_argvar = esc(argvar)
+function get_arg_xmlcreator(argcustomcreator, has_arg_xmlchecker::Bool, argtype, esc_argvar, argname, argliteraltype, esc_argfunction, argsym, argvarcall)
 
     if !has_arg_xmlchecker
         arg_creator = quote
@@ -15,7 +14,7 @@ function get_arg_xmlcreator(argcustomcreator, has_arg_xmlchecker::Bool, argtype,
     else
         arg_creator=quote
             $(esc(argcustomcreator))
-            if isnothing($esc_argvar) || ($(esc(argfunction)))($esc_argvar)
+            if isnothing($esc_argvar) || ($esc_argfunction)($esc_argvar)
                 addelm!(aml, $argname, $esc_argvar, $argliteraltype)
             else
                 error("$($argname) doesn't meet criteria function")
@@ -28,21 +27,20 @@ end
 """
 Get a argument extractor expression
 """
-function get_arg_xmlextractor(argcustomextractor, has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
-    esc_argvar = esc(argvar)
+function get_arg_xmlextractor(argcustomextractor, has_arg_xmlchecker::Bool, esc_argtype, esc_argvar, argname, argliteraltype, esc_argfunction, argsym, argvarcall)
 
     if !has_arg_xmlchecker
         arg_extractor=quote
             $(esc(argcustomextractor))
-            $esc_argvar = findcontent($(esc(argtype)), $argname, aml, $argliteraltype)
+            $esc_argvar = findcontent($esc_argtype, $argname, aml, $argliteraltype)
         end
     else
         arg_extractor=quote
             $(esc(argcustomextractor))
 
-            $esc_argvar = findcontent($(esc(argtype)), $argname, aml, $argliteraltype)
+            $esc_argvar = findcontent($esc_argtype, $argname, aml, $argliteraltype)
 
-            if !isnothing($esc_argvar) && !(($(esc(argfunction)))($esc_argvar))
+            if !isnothing($esc_argvar) && !(($esc_argfunction)($esc_argvar))
                 error("$($argname) doesn't meet criteria function")
             end
         end
@@ -53,7 +51,7 @@ end
 """
 Get a argument updater expression
 """
-function get_arg_xmludpater(argcustomupdater, has_arg_xmlchecker::Bool, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
+function get_arg_xmludpater(argcustomupdater, has_arg_xmlchecker::Bool, esc_argtype, esc_argvar, argname, argliteraltype, esc_argfunction, argsym, argvarcall)
 
     if !has_arg_xmlchecker
         arg_updater = quote
@@ -68,7 +66,7 @@ function get_arg_xmludpater(argcustomupdater, has_arg_xmlchecker::Bool, argtype,
             $(esc(argcustomupdater))
 
             if name == $argsym
-                if isnothing($(argvarcall)) || ($(esc(argfunction)))($(argvarcall))
+                if isnothing($(argvarcall)) || ($esc_argfunction)($(argvarcall))
                     updatecontent!(value, $argname, str.aml, $argliteraltype)
                 else
                     error("$($argname) doesn't meet criteria function")
@@ -105,7 +103,7 @@ function parse_argtype(argtype)
     # elseif isa(argtype, Symbol) ||
     #        (isa(argtype, Expr) && argtype.args[1] == :Union) ||
     #        (isa(argtype, Expr) && argtype.args[1] == :UN) ||
-    #        !(argtype <: AbstractVector)
+    #        !(esc_argtype <: AbstractVector)
     else
         arg_parsedtype = Any
     end
