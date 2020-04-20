@@ -40,7 +40,7 @@ end
 ```
 
 ### Nodes (Elements) Definition
-* Specify the html/xml struct name as a string after the struct name after a space
+* Specify the html/xml name of struct as a string after the struct name (after a space)
 ```julia
 @aml mutable struct Person "person"
 # add fields (elements) here
@@ -62,6 +62,20 @@ field, "study-field"
 ```julia
 age::UInt, "~"
 ```
+
+!!! warning
+    The field names of a struct should not be the same as other defined types. This error happens when you use the same name of a type for a field name. For example, the follwing is an **error**:
+    ```
+    struct myxml doc"~"
+        Int, "myint"
+    end
+    ```
+    However, you can choose any xml/html name. The xml/html name of the fields isn't related to the types defined in Julia. So the following is a **valid** syntax:
+    ```
+    struct myxml doc"~"
+        myint, "Int"
+    end
+    ```
 
 ### Attributes
 * If the value is going to be an attribute put `att` before its name
@@ -381,7 +395,8 @@ macro aml(expr)
         # check if the field name is a defined type
         for arg_var in args_var
             if isdefined(__module__, arg_var) && isa(getfield(__module__, arg_var), Type)
-                @error "Change the field name $arg_var in struct $T to something else. The name conflicts with an already defined type name."
+                f, l = __source__.file, __source__.line
+                @error "Change the field name `$arg_var` in struct `$T` to something else. The name conflicts with an already defined type name. \n Happens at $f:$l"
             end
         end
 
