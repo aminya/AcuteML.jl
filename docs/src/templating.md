@@ -45,7 +45,7 @@ out = person(
 print(out)
 
 # you can also write the output to a file:
-file = open(filePath, "r"); print(file, out); close(file)
+Base.write(filePath, out)
 ```
 
 -------------------------------------------------------
@@ -54,11 +54,6 @@ file = open(filePath, "r"); print(file, out); close(file)
 You can render variables into html/xml files. However, you can't have multiline control flow Julia code in this method.
 
 ```julia
-# only to set path to current file
-cd(@__DIR__)
-
-
-
 # you can create a file and edit the file directly by using
 newTemplate("person")
 
