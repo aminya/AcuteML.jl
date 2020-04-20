@@ -83,6 +83,13 @@ P1, P2, U = creation();
 
 #=
 Benchmark Result
+
+V 0.9.2 - julia 1.4
+
+10.000 μs (99 allocations: 3.39 KiB)
+3.986 μs (66 allocations: 3.17 KiB)
+281.099 μs (356 allocations: 14.53 KiB)
+
 V 0.8.2
 
 9.800 μs (100 allocations: 3.41 KiB)
