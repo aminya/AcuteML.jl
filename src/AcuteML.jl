@@ -378,6 +378,13 @@ macro aml(expr)
         # args_param.args # empty
         expr.args[3], args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, args_custom_creator, args_custom_extractor, args_custom_updater, T = aml_parse(expr)
 
+        # check if the field name is a defined type
+        for arg_var in args_var
+            if isdefined(__module__, arg_var) && isa(getfield(__module__, arg_var), Type)
+                @error "Change the field name $arg_var in struct $T to something else. The name conflicts with an already defined type name."
+            end
+        end
+
         out = aml_create(expr, args_param, args_defaultvalue, args_type, args_var, args_name, args_function, args_literaltype, struct_name, struct_nodetype, struct_function, is_struct_mutable, args_custom_creator, args_custom_extractor, args_custom_updater, T)
 
     # elseif expr isa Expr && expr.head == :tuple
