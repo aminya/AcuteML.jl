@@ -61,7 +61,7 @@ function aml_create(expr::Expr, args_param, args_defaultvalue, args_type, args_v
             ##########################
             has_arg_xmlchecker = !ismissing(argfunction)
 
-            inps = (has_arg_xmlchecker, argtype, argvar, argname, argliteraltype, argfunction, argsym, argvarcall)
+            inps = (has_arg_xmlchecker, esc(argtype), esc(argvar), argname, argliteraltype, esc(argfunction), argsym, argvarcall)
 
             args_xmlcreator[iArg]=get_arg_xmlcreator(argcustomcreator, inps...)
 
