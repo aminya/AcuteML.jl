@@ -98,18 +98,21 @@ function aml_create(expr::Expr, args_param, args_defaultvalue, args_type, args_v
 
         struct_definition =:($expr)
 
-        struct_xmlchecker = get_struct_xmlchecker(struct_function, args_var)
+        # args_var is used here to support all the inputs (even non-aml)
+        esc_args_var = esc.(args_var)
+
+        struct_xmlchecker = get_struct_xmlchecker(struct_function, esc_args_var)
 
         # Creator
-        struct_xmlcreator = get_struct_xmlcreator(S, amlargs_param, struct_xmlchecker, node_initializer, args_xmlcreator, args_var, custom_creator_end)
+        struct_xmlcreator = get_struct_xmlcreator(S, amlargs_param, struct_xmlchecker, node_initializer, args_xmlcreator, esc_args_var, custom_creator_end)
         # Extractor
-        struct_xmlextractor = get_struct_xmlextractor(S, args_xmlextractor, struct_xmlchecker, args_var, custom_extractor_end)
+        struct_xmlextractor = get_struct_xmlextractor(S, args_xmlextractor, struct_xmlchecker, esc_args_var, custom_extractor_end)
 
         if iscurly
             # Creator
-            struct_xmlcreator_curly = get_struct_xmlcreator(SQ, P, amlargs_param, struct_xmlchecker, node_initializer, args_xmlcreator, args_var, custom_creator_end)
+            struct_xmlcreator_curly = get_struct_xmlcreator(SQ, P, amlargs_param, struct_xmlchecker, node_initializer, args_xmlcreator, esc_args_var, custom_creator_end)
             # Extractor
-            struct_xmlextractor_curly = get_struct_xmlextractor(SQ, P, args_xmlextractor, struct_xmlchecker, args_var, custom_extractor_end)
+            struct_xmlextractor_curly = get_struct_xmlextractor(SQ, P, args_xmlextractor, struct_xmlchecker, esc_args_var, custom_extractor_end)
         else
             struct_xmlcreator_curly = nothing
             struct_xmlextractor_curly = nothing
