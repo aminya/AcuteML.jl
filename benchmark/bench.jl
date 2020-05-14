@@ -84,6 +84,13 @@ P1, P2, U = creation();
 #=
 Benchmark Result
 
+v 0.10
+# small bump in extraction is because of two additional hasmethod check in nodeparse. Using traits this will be fixed
+
+8.899 μs (100 allocations: 3.61 KiB)
+3.938 μs (66 allocations: 3.17 KiB)
+308.500 μs (403 allocations: 16.33 KiB)
+
 V 0.9.2 - julia 1.4
 
 10.000 μs (99 allocations: 3.39 KiB)
