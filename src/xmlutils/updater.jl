@@ -80,8 +80,8 @@ function updatecontent!(value, name::String, node::Node, argAmlType::Type{<:Unio
     if !isnothing(elm)
         updatecontent!(value, elm, node, argAmlType)
     else
-        # addelm! if nothing is found
-        addelm!(node, name, value, argAmlType)
+        # addnode! if nothing is found
+        addnode!(node, name, value, argAmlType)
     end
 end
 
@@ -90,8 +90,8 @@ function updatecontent!(value, name::String, node::Node, argAmlType::Type{<:AbsA
     if haskey(node, name)
         node[name] = value
     else
-        # addelm! if nothing is found
-        addelm!(node, name, value, argAmlType)
+        # addnode! if nothing is found
+        addnode!(node, name, value, argAmlType)
     end
 end
 
@@ -104,8 +104,8 @@ function updatecontent!(values::Vector, name::String, node::Node, argAmlType::Ty
     if !isnothing(elms)
         updatecontent!(values, elms, node, argAmlType)
     else
-        # addelm! if nothing is found
-        addelm!(node, name, values, argAmlType)
+        # addnode! if nothing is found
+        addnode!(node, name, values, argAmlType)
     end
 end
 
@@ -114,8 +114,8 @@ function updatecontent!(values::Vector, name::String, node::Node, argAmlType::Ty
     if haskey(node, name)
         node[name] .= values
     else
-        # addelm! if nothing is found
-        addelm!(node, name, values, argAmlType)
+        # addnode! if nothing is found
+        addnode!(node, name, values, argAmlType)
     end
 end
 
