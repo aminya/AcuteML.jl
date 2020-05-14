@@ -18,7 +18,7 @@ function aml_parse(expr::Expr)
     argsexpr = expr.args[3] # arguments of the type
 
     # TODO: optimize and fuse these
-    areargs_inds = findall(x->!(isa(x, LineNumberNode)), argsexpr.args)
+    areargs_inds = Base.findall(x->!(isa(x, LineNumberNode)), argsexpr.args)
     macronum = count(x-> isa(x, Tuple{Symbol, Expr}), argsexpr.args)
 
     data = argsexpr.args[areargs_inds]

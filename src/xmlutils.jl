@@ -17,11 +17,15 @@ import EzXML: Document, Node
 ################################################################
 import Tables
 # DataTypesSupport
-include("xmlutils/aml_type_support.jl")
+include("xmlutils/TypesSupport/amlTables.jl")
 ################################################################
 include("xmlutils/initializer.jl")
-include("xmlutils/creators.jl")
-include("xmlutils/extractor_utils.jl")
-include("xmlutils/extractors.jl")
-include("xmlutils/updaters.jl")
+include("xmlutils/addnode.jl")
+include("xmlutils/nodeparse.jl")
+include("xmlutils/findnode.jl")
+include("xmlutils/findcontent.jl")
+include("xmlutils/updater.jl")
 ################################################################
+
+@deprecate addelm!(args...) addnode!(args...)
+@deprecate initialize_node(args...) createnode(args...)

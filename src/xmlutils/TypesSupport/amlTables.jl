@@ -6,7 +6,7 @@ function amlTable(x)
   pretty_table(io, x, backend = :html, standalone = false)
   str = String(resize!(io.data, io.size))
 
-  html = findfirst("html/body/table",parsehtml(str))
+  html = Base.findfirst("html/body/table",parsehtml(str))
   unlink!(html)
   return html
 end

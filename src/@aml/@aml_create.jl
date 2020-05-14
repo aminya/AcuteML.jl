@@ -94,7 +94,7 @@ function aml_create(expr::Expr, args_param, args_defaultvalue, args_type, args_v
             error("Invalid usage of @aml")
         end
         ################################################################
-        node_initializer = :( aml = initialize_node($struct_nodetype, $struct_name) )
+        node_initializer = :( aml = createnode($struct_nodetype, $struct_name) )
 
         struct_definition =:($expr)
 
