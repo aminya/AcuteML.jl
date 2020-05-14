@@ -1,6 +1,6 @@
 export addelm!
 ################################################################
-# Creators
+# Add node
 ################################################################
 # Document
 ################################################################
@@ -14,9 +14,11 @@ function addelm!(aml::Document, name::String, value::T, argAmlType::Type{<:AbsDo
 
     if hasroot(aml)
         amlNode = root(aml)
-        addelm!(amlNode, name, value, argAmlType)
+        elm = addelm!(amlNode, name, value, argAmlType)
+        return elm
     elseif hasfield(T, :aml)
-        setroot!(aml, value.aml)
+        elm = setroot!(aml, value.aml)
+        return elm
     else
         error("You cannot insert $(T) in the document directly. Define a @aml defined field for xml or html document struct")
     end
@@ -39,8 +41,8 @@ function addelm!(aml::Document, name::String, value::Vector, argAmlType::Type{<:
 
     if hasroot(aml)
         amlNode = root(aml)
-        addelm!(amlNode, name, value, argAmlType)
-
+        elm = addelm!(amlNode, name, value, argAmlType)
+        return elm
     else
         error("You cannot insert a vector in the document directly. Define a @aml defined field for xml or html document struct")
     end
@@ -53,13 +55,15 @@ end
 # String
 @transform function addelm!(aml::Node, name::String,value::AbstractString, argAmlType::Type{allsubtypes(AbsNormal)})
     if !isnothing(value) # do nothing if value is nothing
-        addelement!(aml, name, value)
+        elm = addelement!(aml, name, value)
+        return elm
     end
 end
 
 function addelm!(aml::Node, name::String,value::AbstractString, argAmlType::Type{AbsAttribute})
     if !isnothing(value) # do nothing if value is nothing
-        link!(aml, AttributeNode(name, value))
+        elm = link!(aml, AttributeNode(name, value))
+        return elm
     end
 end
 
@@ -68,12 +72,14 @@ function addelm!(aml::Node, indexstr::String,value::AbstractString, argAmlType::
     if index < length(elements(aml))
         desired_node = elements(aml)[index]
         if !isnothing(value) # do nothing if value is nothing
-            linkprev!(desired_node, TextNode(value))
+            elm = linkprev!(desired_node, TextNode(value))
+            return elm
         end
     else
         desired_node = elements(aml)[end]
         if !isnothing(value) # do nothing if value is nothing
-            linknext!(desired_node, TextNode(value))
+            elm = linknext!(desired_node, TextNode(value))
+            return elm
         end
     end
 end
@@ -81,13 +87,15 @@ end
 # Number  (and also Bool <:Number)
 @transform function addelm!(aml::Node, name::String, value::Number, argAmlType::Type{allsubtypes(AbsNormal)})
     if !isnothing(value) # do nothing if value is nothing
-        addelement!(aml, name, string(value))
+        elm = addelement!(aml, name, string(value))
+        return elm
     end
 end
 
 function addelm!(aml::Node, name::String, value::Number, argAmlType::Type{AbsAttribute})
     if !isnothing(value) # do nothing if value is nothing
-        link!(aml, AttributeNode(name, string(value)))
+        elm = link!(aml, AttributeNode(name, string(value)))
+        return elm
     end
 end
 
@@ -96,12 +104,14 @@ function addelm!(aml::Node, indexstr::String, value::Number, argAmlType::Type{Ab
     if index < length(elements(aml))
         desired_node = elements(aml)[index]
         if !isnothing(value) # do nothing if value is nothing
-            linkprev!(desired_node, TextNode(string(value)))
+            elm = linkprev!(desired_node, TextNode(string(value)))
+            return elm
         end
     else
         desired_node = elements(aml)[end]
         if !isnothing(value) # do nothing if value is nothing
-            linknext!(desired_node, TextNode(string(value)))
+            elm = linknext!(desired_node, TextNode(string(value)))
+            return elm
         end
     end
 end
@@ -109,31 +119,41 @@ end
 # Other
 function addelm!(aml::Node, name::String, value::T, argAmlType::Type{<:AbsNormal}) where {T}
     if hasfield(T, :aml)
-        link!(aml,value.aml)
+        elm = link!(aml,value.aml)
+        return elm
 
     elseif Tables.istable(value)
-        link!(aml,amlTable(value))
+        elm = link!(aml, amlTable(value))
+        return elm
 
     elseif hasmethod(aml, Tuple{T})
-        link!(aml,aml(value))
+        elm = link!(aml,aml(value))
+        return elm
 
     else
-        addelement!(aml, name, string(value))
+        elm = addelement!(aml, name, string(value))
+        return elm
+
     end
 end
 
 function addelm!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribute}) where {T}
     if hasfield(T, :aml)
-        link!(aml, AttributeNode(name, value.aml))
+        elm = link!(aml, AttributeNode(name, value.aml))
+        return elm
 
     elseif Tables.istable(value)
-        link!(aml, AttributeNode(name, amlTable(value)))
+        elm = link!(aml, AttributeNode(name, amlTable(value)))
+        return elm
 
     elseif hasmethod(aml, Tuple{T})
-        link!(aml, AttributeNode(name, aml(value)))
+        elm = link!(aml, AttributeNode(name, aml(value)))
+        return elm
 
     else
-        link!(aml, AttributeNode(name, string(value)))
+        elm = link!(aml, AttributeNode(name, string(value)))
+        return elm
+
     end
 end
 
@@ -143,31 +163,41 @@ function addelm!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbsText
 
         desired_node = elements(aml)[index]
         if hasfield(T, :aml)
-            linkprev!(desired_node, TextNode(value.aml))
+            elm = linkprev!(desired_node, TextNode(value.aml))
+            return elm
 
         elseif Tables.istable(value)
-            linkprev!(desired_node, TextNode(amlTable(value)))
+            elm = linkprev!(desired_node, TextNode(amlTable(value)))
+            return elm
 
         elseif hasmethod(aml, Tuple{T})
-            linkprev!(desired_node, TextNode(aml(value)))
+            elm = linkprev!(desired_node, TextNode(aml(value)))
+            return elm
 
         else
-            linkprev!(desired_node, TextNode(string(value)))
+            elm = linkprev!(desired_node, TextNode(string(value)))
+            return elm
+
         end
 
     else
         desired_node = elements(aml)[end]
         if hasfield(T, :aml)
-            linknext!(desired_node, TextNode(value.aml))
+            elm = linknext!(desired_node, TextNode(value.aml))
+            return elm
 
         elseif Tables.istable(value)
-            linknext!(desired_node, TextNode(amlTable(value)))
+            elm = linknext!(desired_node, TextNode(amlTable(value)))
+            return elm
 
         elseif hasmethod(aml, Tuple{T})
-            linknext!(desired_node, TextNode(aml(value)))
+            elm = linknext!(desired_node, TextNode(aml(value)))
+            return elm
 
         else
-            linknext!(desired_node, TextNode(string(value)))
+            elm = linknext!(desired_node, TextNode(string(value)))
+            return elm
+
         end
     end
 end
@@ -182,7 +212,11 @@ end
 allsubtypes_butAbsText(t) = setdiff(allsubtypes(AbsDocOrNode), [AbsText])
 
 @transform function addelm!(aml::Node, name::String, values::Vector, argAmlType::Type{allsubtypes_butAbsText(AbsDocOrNode)})
-    foreach(x-> addelm!(aml, name, x, argAmlType), values)
+    elms = Vector{Union{Node, Nothing}}(undef, length(values))
+    for (ielm, value) in enumerate(values)
+        elms[ielm] = addelm!(aml, name, value, argAmlType)
+    end
+    return elms
 end
 
 function addelm!(aml::Node, indicesstr::String, values::Vector, argAmlType::Type{AbsText})
@@ -190,7 +224,13 @@ function addelm!(aml::Node, indicesstr::String, values::Vector, argAmlType::Type
     if indices isa Colon
         indices = 1:length(elements(aml))
     end
-    foreach((x, i)-> addelm!(aml, string(i), x, argAmlType), zip(values, indices))
+    elms = Vector{Union{Node, Nothing}}(undef, length(indices))
+    ielm = 1
+    for (value, index) in zip(values, indices)
+        elms[ielm] = addelm!(aml, string(index), value, argAmlType)
+        ielm += 1
+    end
+    return elms
 end
 
 ################################################################
@@ -200,7 +240,10 @@ end
     # name is discarded now: actual names are stored in the Dict itself
     # elements are added directly
     # for AbsText, v_name is considered as the text index
+    elms = Vector{Union{Node, Nothing}}(undef, length(values))
+    ielm = 1
     for (v_name, v_value) in values
-        addelm!(aml, v_name, v_value, argAmlType)
+        elms[ielm] = addelm!(aml, v_name, v_value, argAmlType)
+        ielm += 1
     end
 end
