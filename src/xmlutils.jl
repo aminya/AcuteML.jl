@@ -26,3 +26,6 @@ include("xmlutils/findnode.jl")
 include("xmlutils/findcontent.jl")
 include("xmlutils/updater.jl")
 ################################################################
+
+@deprecate addelm!(args...) addnode!(args...)
+@deprecate initialize_node(args...) createnode(args...)
