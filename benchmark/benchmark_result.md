@@ -1,4 +1,14 @@
 # Benchmark Result
+v 0.10.2
+Outside Atom
+8.700 μs (100 allocations: 3.61 KiB)
+3.938 μs (66 allocations: 3.17 KiB)
+220.101 μs (403 allocations: 16.33 KiB)
+
+Inside Atom
+9.000 μs (100 allocations: 3.61 KiB)
+4.114 μs (66 allocations: 3.17 KiB)
+300.800 μs (403 allocations: 16.33 KiB)
 
 v 0.10
 small bump in extraction is because of two additional `hasmethod` check in `nodeparse`. Using traits this will be fixed

@@ -2,8 +2,7 @@ using AcuteML, BenchmarkTools
 
 # Type Definition
 
-@aml mutable struct Person
-    "person", check_course
+@aml mutable struct Person "person", check_course
     age::UInt64, "~"
     field, "study-field"
     GPA::Float64 = 4.5, "~", GPAcheck
