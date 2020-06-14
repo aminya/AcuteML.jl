@@ -23,13 +23,11 @@ function newTemplate(name, type::Symbol = :file, template::Union{String,Nothing}
 
     if type == :file
 
-        try
-            mkpath(joinpath("app", "destination"))
-        catch e
+        dir = joinpath("app", "destination")
+        if !isdir(dir)
+            mkpath(dir)
         end
         filePath = joinpath("app", "destination", "$(name).html")
-        touch(filePath)
-
         if !isnothing(template)
             Base.write(filePath, template)
         else # open file in Atom for editingn
@@ -114,13 +112,15 @@ function render2file(destination::String, overwrite::Bool = false; var...)
 
     # reading string from html file
     if isfile(destination)
-        filePath = destination
-        file = open(filePath, "r")
-        destinationString = read(file, String)
+        destinationString = Base.read(destination, String)
     else
-        filePath = joinpath("app", "destination", "$(destination).html")
-        file = open(filePath, "r")
-        destinationString = read(file, String)
+        destination = joinpath("app", "destination", "$(destination).html")
+        if isfile(destination)
+            destinationString = Base.read(destination, String)
+        else
+            # TODO do recursive search
+            error("$(destination).html was not found")
+        end
     end
 
     try
@@ -133,9 +133,8 @@ function render2file(destination::String, overwrite::Bool = false; var...)
     out = eval(Meta.parse(s))
 
     if overwrite
-        print(file, out)
+        Base.write(destination, out)
     end
-    close(file)
 
     return out
 end
