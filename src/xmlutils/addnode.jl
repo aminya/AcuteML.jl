@@ -67,16 +67,24 @@ function addnode!(aml::Node, name::String,value::AbstractString, argAmlType::Typ
     end
 end
 
-function addnode!(aml::Node, indexstr::String,value::AbstractString, argAmlType::Type{AbsText})
+function addnode!(aml::Node, indexstr::String, value::AbstractString, argAmlType::Type{AbsText})
     index = parse_textindex(indexstr)
-    if index < length(elements(aml))
-        desired_node = elements(aml)[index]
+    aml_elms = elements(aml)
+    aml_elms_len = length(aml_elms)
+    if length(aml_elms) == 0
+        desired_node = aml
+        if !isnothing(value) # do nothing if value is nothing
+            elm = link!(desired_node, TextNode(value))
+            return elm
+        end
+    elseif index < aml_elms_len
+        desired_node = aml_elms[index]
         if !isnothing(value) # do nothing if value is nothing
             elm = linkprev!(desired_node, TextNode(value))
             return elm
         end
     else
-        desired_node = elements(aml)[end]
+        desired_node = aml_elms[end]
         if !isnothing(value) # do nothing if value is nothing
             elm = linknext!(desired_node, TextNode(value))
             return elm
