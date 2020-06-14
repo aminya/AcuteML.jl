@@ -245,7 +245,7 @@ function parse_textindices(indicesstr::String)
         indicesExpr.head == :vect || error("give indices as a vetor e.g. [2:3], [2, 3] ,[:]")
         indices = eval(indicesExpr)
         # TODO find a better way
-        if typeof(indices) <: Vector{UnitRange{Int64}}
+        if typeof(indices) <: Vector{<:Union{UnitRange{Int64},Colon}}
             indices = indices[1]
         end
     end

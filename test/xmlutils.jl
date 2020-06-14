@@ -113,6 +113,17 @@ using AcuteML, Test
         @test_broken ["txt1-uu", "txt2-uu"] == findcontent(Vector{String}, "[1:2]", n, AbsText)
         @test_broken ["txt1-uu", "txt2-uu", "txt3-u"] == findcontent(Vector{String}, "[1:2]", n, AbsText)
 
+        n = createnode(AbsNormal, "p")
+        addnode!(n, "n1", "1", AbsNormal)
+        addnode!(n, "n2", "2", AbsNormal)
+        addnode!(n, "n3", "3", AbsNormal)
+        addnode!(n, "n4", "4", AbsNormal)
+        # puts form 1 to end
+        addnode!(n, "[:]", ["txt1", "txt2"], AbsText) # Adds text inside n1 and n2
+        @test ["txt1", "txt2"] == findcontent(Vector{String}, "[:]", n, AbsText)
+        updatecontent!(["txt1-u", "txt2"], "[:]", n, AbsText)
+        @test ["txt1-u", "txt2"] == findcontent(Vector{String}, "[:]", n, AbsText)
+
         n = createnode(AbsNormal, "a")
         addnode!(n, "1", 1, AbsText)
         @test 1 == findcontent(Int64, "1", n, AbsText)
