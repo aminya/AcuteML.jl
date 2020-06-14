@@ -3,12 +3,12 @@ export findfirst, findall
 # Find Node
 ################################################################
 # findfirst
-function findfirst(name::String, doc::Document, argAmlType::Type{<:AbsNode})
+function Base.findfirst(name::String, doc::Document, argAmlType::Type{<:AbsNode})
     elm = findfirst(name, root(doc), argAmlType)
     return elm
 end
 
-function findfirst(name::String, node::Node, argAmlType::Type{<:AbsNormal})
+function Base.findfirst(name::String, node::Node, argAmlType::Type{<:AbsNormal})
     # if hasdocument(node)
     #     elm = findfirst(name, node)
     # else
@@ -17,24 +17,24 @@ function findfirst(name::String, node::Node, argAmlType::Type{<:AbsNormal})
     return elm
 end
 
-function findfirst(name::String, node::Node, argAmlType::Type{AbsAttribute})
+function Base.findfirst(name::String, node::Node, argAmlType::Type{AbsAttribute})
     elms = findfirstatt(name, node)
     return elms
 end
 
-function findfirst(indexstr::String, node::Node, argAmlType::Type{AbsText})
+function Base.findfirst(indexstr::String, node::Node, argAmlType::Type{AbsText})
     index = parse_textindex(indexstr)
     elm = findfirsttext(index, node)
     return elm
 end
 ################################################################
 # findall
-function findall(name::String, doc::Document, argAmlType::Type{<:AbsNode})
+function Base.findall(name::String, doc::Document, argAmlType::Type{<:AbsNode})
     elms = findall(name, root(doc), argAmlType)
     return elms
 end
 
-function findall(name::String, node::Node, argAmlType::Type{<:AbsNormal})
+function Base.findall(name::String, node::Node, argAmlType::Type{<:AbsNormal})
     # if hasdocument(node)
     #     elms = findall(name, node) # a vector of Node elements
     # else
@@ -43,12 +43,12 @@ function findall(name::String, node::Node, argAmlType::Type{<:AbsNormal})
     return elms
 end
 
-function findall(name::String, node::Node, argAmlType::Type{AbsAttribute})
+function Base.findall(name::String, node::Node, argAmlType::Type{AbsAttribute})
     elms = findallatt(name, node)
     return elms
 end
 
-function findall(indicesstr::String, node::Node, argAmlType::Type{AbsText})
+function Base.findall(indicesstr::String, node::Node, argAmlType::Type{AbsText})
     indices = parse_textindices(indicesstr)
     elms = findalltext(indices, node)
     return elms
