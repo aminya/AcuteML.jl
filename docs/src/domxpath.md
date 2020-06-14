@@ -20,6 +20,8 @@ Use these functions, to make a method that gets the `aml::Node` and calculates a
 Functions to support mutability:
 - [updatecontent!](@ref): Finds all the elements with the address of string in the node, and updates the content.
 
+ Additionally, all the EzXML API are reexported.
+ 
 ## Making a Type and constructor from scratch using AcuteML Backend
 
 # Example:

@@ -1,5 +1,9 @@
 module AcuteML
 
+using Reexport
+
+@reexport using EzXML
+
 import EzXML.Node
 
 # aml macro
