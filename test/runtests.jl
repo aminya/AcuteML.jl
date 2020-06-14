@@ -15,3 +15,7 @@ include("customcode.jl")
 @testset "templating" begin
     include("../examples/templating/templating.jl")
 end
+
+@testset "simple" begin
+    include("../examples/simple.jl")
+end

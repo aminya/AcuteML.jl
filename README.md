@@ -38,29 +38,29 @@ See [Type Definition](https://aminya.github.io/AcuteML.jl/dev/#Main-macro-and-I/
 # Example - Simple
 ```julia
 using AcuteML
-
-@aml mutable struct body "~"
+@aml mutable struct Body "~"
     h1, "~"
     p::Vector{String}, "~"
 end
 
-@aml mutable struct html doc"html"
-    body::body, "~"
+@aml mutable struct Page doc"html"
+    body::Body, "~"
 end
 
-b = body(h1 = "My heading", p = ["Paragraph1", "Paragraph2"])
-d = html(body = b)
+b = Body(h1 = "My heading", p = ["Paragraph1", "Paragraph2"])
+d = Page(body = b)
+pprint(d)
 ```
 ```html
 julia> pprint(d)
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
-  <body>
+  <Body>
     <h1>My heading</h1>
     <p>Paragraph1</p>
     <p>Paragraph2</p>
-  </body>
+  </Body>
 </html>
 ```
 
