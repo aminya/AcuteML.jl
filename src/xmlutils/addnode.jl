@@ -92,77 +92,36 @@ function addnode!(aml::Node, indexstr::String, value::AbstractString, argAmlType
     end
 end
 
-# Number  (and also Bool <:Number)
-@transform function addnode!(aml::Node, name::String, value::Number, argAmlType::Type{allsubtypes(AbsNormal)})
-    if !isnothing(value) # do nothing if value is nothing
-        elm = addelement!(aml, name, string(value))
-        return elm
-    end
-end
-
-function addnode!(aml::Node, name::String, value::Number, argAmlType::Type{AbsAttribute})
-    if !isnothing(value) # do nothing if value is nothing
-        elm = link!(aml, AttributeNode(name, string(value)))
-        return elm
-    end
-end
-
-function addnode!(aml::Node, indexstr::String, value::Number, argAmlType::Type{AbsText})
-    index = parse_textindex(indexstr)
-    if index < length(elements(aml))
-        desired_node = elements(aml)[index]
-        if !isnothing(value) # do nothing if value is nothing
-            elm = linkprev!(desired_node, TextNode(string(value)))
-            return elm
-        end
-    else
-        desired_node = elements(aml)[end]
-        if !isnothing(value) # do nothing if value is nothing
-            elm = linknext!(desired_node, TextNode(string(value)))
-            return elm
-        end
-    end
+# Number (and also Bool <:Number)
+@transform function addnode!(aml::Node, name::String, value::Number, argAmlType::Type{allsubtypes(AbsNode)})
+    addnode!(aml, name, string(value), argAmlType)
 end
 
 # Other
 function addnode!(aml::Node, name::String, value::T, argAmlType::Type{<:AbsNormal}) where {T}
     if hasfield(T, :aml)
         elm = link!(aml,value.aml)
-        return elm
-
     elseif Tables.istable(value)
         elm = link!(aml, amlTable(value))
-        return elm
-
     elseif hasmethod(aml, Tuple{T})
         elm = link!(aml,aml(value))
-        return elm
-
     else
         elm = addelement!(aml, name, string(value))
-        return elm
-
     end
+    return elm
 end
 
 function addnode!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribute}) where {T}
     if hasfield(T, :aml)
         elm = link!(aml, AttributeNode(name, value.aml))
-        return elm
-
     elseif Tables.istable(value)
         elm = link!(aml, AttributeNode(name, amlTable(value)))
-        return elm
-
     elseif hasmethod(aml, Tuple{T})
         elm = link!(aml, AttributeNode(name, aml(value)))
-        return elm
-
     else
         elm = link!(aml, AttributeNode(name, string(value)))
-        return elm
-
     end
+    return elm
 end
 
 function addnode!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbsText}) where {T}
