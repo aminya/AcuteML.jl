@@ -445,9 +445,6 @@ macro aml(expr)
 
     return out
 end
-################################################################
 
-include("../deps/SnoopCompile/precompile/precompile_AcuteML.jl")
-_precompile_()
 
 end
