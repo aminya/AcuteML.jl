@@ -17,6 +17,8 @@ using AcuteML, Test
         @test "val" == findcontent(String, "attString", n, AbsAttribute)
         updatecontent!("val2", "attString", n, AbsAttribute)
         @test "val2" == findcontent(String, "attString", n, AbsAttribute)
+        @test "val2" == get(n, "attString", nothing)
+        @test nothing == get(n, "attString1", nothing)
 
         using Dates
         addnode!(n, "Date", Date(2013,7,1), AbsNormal)
@@ -141,6 +143,7 @@ using AcuteML, Test
 
         addnode!(dhtml, "normalString", "val", AbsNormal)
         @test "val" == findcontent(String, "normalString", dhtml, AbsNormal)
+        @test "val" == findfirst("normalString", dhtml, AbsNormal).content
         @test ["val"] == findcontent("normalString", dhtml, AbsNormal)
 
         updatecontent!("val2", "normalString", dhtml, AbsNormal)
@@ -186,6 +189,7 @@ using AcuteML, Test
         @test ["aa", "bb"] == findcontent(Vector{String}, "stringVect", dhtml, AbsNormal)
         updatecontent!(["aa2", "bb"], "stringVect", dhtml, AbsNormal)
         @test ["aa2", "bb"] == findcontent(Vector{String}, "stringVect", dhtml, AbsNormal)
+        @test ["aa2", "bb"] == getproperty.(findall("stringVect", dhtml, AbsNormal), :content)
 
         addnode!(dhtml, "floatVect", [5.6, 7.8], AbsNormal)
         @test [5.6, 7.8] == findcontent(Vector{Float64}, "floatVect", dhtml, AbsNormal)
