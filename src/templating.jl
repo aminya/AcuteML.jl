@@ -158,33 +158,6 @@ end
 
 multiString(var::String) = var
 multiString(var::Union{Number,Bool}) = string(var)
-
-function multiString(var::Array{T}) where {T<:Union{String, Number, Bool}}
-
-    varNum=length(var)
-
-    # out = NTuple{varNum,String}
-
-    out = Array{String}(undef,varNum)
-
-    for i = 1:varNum
-        out[i] = string(var[i])
-        # Base.setindex!(out,var[i],i)
-    end
-
-    return out
-end
-
-function multiString(var::NTuple{N,T}) where {T<:Union{String, Number, Bool}} where{N}
-
-    # out = NTuple{N,String}
-    out = Array{String}(undef,N)
-
-    for i = 1:N
-        out[i] = string(var[i])
-        # Base.setindex!(out,var[i],i)
-    end
-
-    return Tuple(out)
-end
-################################################################
+multiString(var::Array{T}) where {T<:Union{String, Number, Bool}} = string.(var)
+multiString(var::NTuple{N,T}) where {T<:Union{String, Number, Bool}} where{N} = string.(var)
+multistring(var) = string(var)
