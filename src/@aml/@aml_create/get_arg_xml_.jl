@@ -78,35 +78,35 @@ function get_arg_xmludpater(argcustomupdater, has_arg_xmlchecker::Bool, esc_argt
 end
 
 ################################################################
-"""
-Parses argument type for sentence creation. Only three output are considered:
-- Vector
-- Dict
-- Other (Any)
-
-Not used anymore, but can be used to determine the correct xml utils sets of functions
-"""
-function parse_argtype(argtype)
-    # Vector
-    if (isa(argtype, Expr) && argtype.args[1] == :Vector) ||
-       (!isa(argtype, Union{Symbol,Expr}) && argtype <: AbstractVector)
-
-       arg_parsedtype = AbstractVector
-
-    # Dict
-    elseif (isa(argtype, Expr) && argtype.args[1] == :Dict) ||
-           (!isa(argtype, Union{Symbol,Expr}) && argtype <: AbstractDict)
-
-        arg_parsedtype = AbstractDict
-
-    # # Non Vector
-    # elseif isa(argtype, Symbol) ||
-    #        (isa(argtype, Expr) && argtype.args[1] == :Union) ||
-    #        (isa(argtype, Expr) && argtype.args[1] == :UN) ||
-    #        !(esc_argtype <: AbstractVector)
-    else
-        arg_parsedtype = Any
-    end
-
-    return arg_parsedtype
-end
+# """
+# Parses argument type for sentence creation. Only three output are considered:
+# - Vector
+# - Dict
+# - Other (Any)
+#
+# Not used anymore, but can be used to determine the correct xml utils sets of functions
+# """
+# function parse_argtype(argtype)
+#     # Vector
+#     if (isa(argtype, Expr) && argtype.args[1] == :Vector) ||
+#        (!isa(argtype, Union{Symbol,Expr}) && argtype <: AbstractVector)
+#
+#        arg_parsedtype = AbstractVector
+#
+#     # Dict
+#     elseif (isa(argtype, Expr) && argtype.args[1] == :Dict) ||
+#            (!isa(argtype, Union{Symbol,Expr}) && argtype <: AbstractDict)
+#
+#         arg_parsedtype = AbstractDict
+#
+#     # # Non Vector
+#     # elseif isa(argtype, Symbol) ||
+#     #        (isa(argtype, Expr) && argtype.args[1] == :Union) ||
+#     #        (isa(argtype, Expr) && argtype.args[1] == :UN) ||
+#     #        !(esc_argtype <: AbstractVector)
+#     else
+#         arg_parsedtype = Any
+#     end
+#
+#     return arg_parsedtype
+# end
