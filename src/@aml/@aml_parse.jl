@@ -112,7 +112,7 @@ function aml_parse(expr::Expr)
             end
 
 
-        elseif ei.head == :tuple
+        elseif ei isa Expr && ei.head == :tuple
             ########################
             # Struct Function - "aml name", F
             if isa(ei.args[1], String) && isa(ei.args[2], Union{Symbol,Function}) # "aml name", F
@@ -230,10 +230,10 @@ function aml_parse(expr::Expr)
             end  # end Tuple sub possibilities
         ################################################################
         # Def Value
-        elseif ei.head == :(=) # def value provided
+        elseif ei isa Expr && ei.head == :(=) # def value provided
 
             # aml name Checker
-            if ei.args[2].head == :tuple # var/var::T = defVal, "name"
+            if ei.args[2] isa Expr && ei.args[2].head == :tuple # var/var::T = defVal, "name"
 
                 # Def Value
                 defVal = ei.args[2].args[1]
