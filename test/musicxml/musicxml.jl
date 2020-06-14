@@ -1,4 +1,5 @@
 using MusicXML
+using Test
 
 cd(@__DIR__)
 
@@ -12,4 +13,8 @@ end
 @testset "creating example" begin
     include("creating.jl")
     @test isfile("myscore.musicxml")
+end
+
+@testset "grace note" begin
+    include("grace.jl")
 end

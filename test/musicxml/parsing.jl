@@ -1,5 +1,6 @@
 using MusicXML
 cd(@__DIR__)
+@MX begin
 # Reads musicxml file and then extracts the data, builds all the types and stores them in proper format.
 scorepartwise = readmusicxml( "musescore.musicxml")
 
@@ -15,7 +16,7 @@ parts = scorepartwise.parts
 # Extracting each part
 for part in parts
 
-    ind = findfirst(x -> part.id == x.id, scoreparts) # returns the index of scorepart that matches the id of part
+    ind = Base.findfirst(x -> part.id == x.id, scoreparts) # returns the index of scorepart that matches the id of part
 
     # printing the instrument name
     println(scoreparts[ind].name)
@@ -40,4 +41,6 @@ for part in parts
 
         iMsr+=1
     end
+end
+
 end

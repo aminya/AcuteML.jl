@@ -1,7 +1,6 @@
 using MusicXML
 
 @MX begin
-
 ## Part List
 ### Piano
 midiinstrument_piano = MidiInstrument(channel= 1, program =1, volume = 100, pan =0, id = "P1-I1")
@@ -44,9 +43,8 @@ Note(pitch = Pitch(step = "B", alter = 0, octave = 5), duration =  4),
 
 measures_piano = [
 Measure(attributes = attributes1_piano, notes = measure1_notes_piano) # measure 1 has attributes
-Measure(notes = measure2_notes_piano)
+# Measure(notes = measure2_notes_piano)
 ]
-
 
 part_piano = Part(measures = measures_piano, id = "P1")
 
@@ -63,7 +61,7 @@ attributes1_guitar = Attributes(
 
 measure1_notes_guitar = [
 # G Major chord for a bar
-Note(pitch = Pitch(step = "G", alter = 0, octave = 2), duration =  16, chord = Chord()),
+Note(pitch = Pitch(step = "G", alter = 0, octave = 2), duration =  16),
 Note(pitch = Pitch(step = "B", alter = 0, octave = 2), duration =  16, chord = Chord()),
 Note(pitch = Pitch(step = "D", alter = 0, octave = 3), duration =  16, chord = Chord()),
 Note(pitch = Pitch(step = "G", alter = 0, octave = 3), duration =  16, chord = Chord()),
@@ -73,7 +71,7 @@ Note(pitch = Pitch(step = "G", alter = 0, octave = 4), duration =  16, chord = C
 
 measure2_notes_guitar = [
 # G Major chord for half a bar
-Note(pitch = Pitch(step = "G", alter = 0, octave = 2), duration =  8, chord = Chord()),
+Note(pitch = Pitch(step = "G", alter = 0, octave = 2), duration =  8),
 Note(pitch = Pitch(step = "B", alter = 0, octave = 2), duration =  8, chord = Chord()),
 Note(pitch = Pitch(step = "D", alter = 0, octave = 3), duration =  8, chord = Chord()),
 Note(pitch = Pitch(step = "G", alter = 0, octave = 3), duration =  8, chord = Chord()),
@@ -81,7 +79,7 @@ Note(pitch = Pitch(step = "D", alter = 0, octave = 4), duration =  8, chord = Ch
 Note(pitch = Pitch(step = "G", alter = 0, octave = 4), duration =  8, chord = Chord()),
 
 # G Major chord for half a bar
-Note(pitch = Pitch(step = "G", alter = 0, octave = 2), duration =  8, chord = Chord()),
+Note(pitch = Pitch(step = "G", alter = 0, octave = 2), duration =  8),
 Note(pitch = Pitch(step = "B", alter = 0, octave = 2), duration =  8, chord = Chord()),
 Note(pitch = Pitch(step = "D", alter = 0, octave = 3), duration =  8, chord = Chord()),
 Note(pitch = Pitch(step = "G", alter = 0, octave = 3), duration =  8, chord = Chord()),
@@ -103,6 +101,7 @@ partlist = partlist,
 parts =  [part_piano, part_guitar],
 )
 
-end # @MX
-
 writemusicxml("myscore.musicxml", score)
+
+
+end
