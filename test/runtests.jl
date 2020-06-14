@@ -5,6 +5,7 @@ stripall(x::String) = replace(x, r"\s|\n"=>"")
 
 ##
 include("struct_definition.jl")
+include("struct_parametric.jl")
 include("creator.jl")
 include("extractor.jl")
 include("tables.jl")
