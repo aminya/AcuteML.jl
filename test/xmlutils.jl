@@ -79,8 +79,17 @@ using AcuteML, Test
         updatecontent!( ["aa", Time(12,53,40), 3, nothing], "AnyVect", n, AbsNormal)
         @test string.(["aa", Time(12,53,40), 3]) == findcontent(typeof(["aa", Time(12,53,40), 2, nothing]), "AnyVect", n, AbsNormal)
 
-        addnode!(n, "1", "some text", AbsText)
-        @test "some text" == findcontent(String, "1", n, AbsText)
+        n = createnode(AbsNormal, "a")
+        addnode!(n, "1", "val1", AbsText)
+        @test "val1" == findcontent(String, "1", n, AbsText)
+        updatecontent!("val2", "", n, AbsText)
+        @test "val2" == findcontent(String, "", n, AbsText)
+
+        n = createnode(AbsNormal, "a")
+        addnode!(n, "1", 1, AbsText)
+        @test 1 == findcontent(Int64, "1", n, AbsText)
+        updatecontent!(2, "", n, AbsText)
+        @test 2 == findcontent(Int64, "", n, AbsText)
 
         @testset "Node link" begin
             # Linking two nodes

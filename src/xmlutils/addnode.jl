@@ -67,28 +67,29 @@ function addnode!(aml::Node, name::String,value::AbstractString, argAmlType::Typ
     end
 end
 
-function addnode!(aml::Node, indexstr::String, value::AbstractString, argAmlType::Type{AbsText})
+# helper
+function textlinkinfo(aml, indexstr)
     index = parse_textindex(indexstr)
     aml_elms = elements(aml)
     aml_elms_len = length(aml_elms)
     if length(aml_elms) == 0
         desired_node = aml
-        if !isnothing(value) # do nothing if value is nothing
-            elm = link!(desired_node, TextNode(value))
-            return elm
-        end
+        linking_function! = link!
     elseif index < aml_elms_len
         desired_node = aml_elms[index]
-        if !isnothing(value) # do nothing if value is nothing
-            elm = linkprev!(desired_node, TextNode(value))
-            return elm
-        end
+        linking_function! = linkprev!
     else
         desired_node = aml_elms[end]
-        if !isnothing(value) # do nothing if value is nothing
-            elm = linknext!(desired_node, TextNode(value))
-            return elm
-        end
+        linking_function! = linknext!
+    end
+    return desired_node, linking_function!
+end
+
+function addnode!(aml::Node, indexstr::String, value::AbstractString, argAmlType::Type{AbsText})
+    desired_node, linking_function! = textlinkinfo(aml, indexstr)
+    if !isnothing(value) # do nothing if value is nothing
+        elm = linking_function!(desired_node, TextNode(value))
+        return elm
     end
 end
 
@@ -125,48 +126,17 @@ function addnode!(aml::Node, name::String, value::T, argAmlType::Type{AbsAttribu
 end
 
 function addnode!(aml::Node, indexstr::String, value::T, argAmlType::Type{AbsText}) where {T}
-    index = parse_textindex(indexstr)
-    if index < length(elements(aml))
-
-        desired_node = elements(aml)[index]
-        if hasfield(T, :aml)
-            elm = linkprev!(desired_node, TextNode(value.aml))
-            return elm
-
-        elseif Tables.istable(value)
-            elm = linkprev!(desired_node, TextNode(amlTable(value)))
-            return elm
-
-        elseif hasmethod(aml, Tuple{T})
-            elm = linkprev!(desired_node, TextNode(aml(value)))
-            return elm
-
-        else
-            elm = linkprev!(desired_node, TextNode(string(value)))
-            return elm
-
-        end
-
+    desired_node, linking_function! = textlinkinfo(aml, indexstr)
+    if hasfield(T, :aml)
+        elm = linking_function!(desired_node, TextNode(value.aml))
+    elseif Tables.istable(value)
+        elm = linking_function!(desired_node, TextNode(amlTable(value)))
+    elseif hasmethod(aml, Tuple{T})
+        elm = linking_function!(desired_node, TextNode(aml(value)))
     else
-        desired_node = elements(aml)[end]
-        if hasfield(T, :aml)
-            elm = linknext!(desired_node, TextNode(value.aml))
-            return elm
-
-        elseif Tables.istable(value)
-            elm = linknext!(desired_node, TextNode(amlTable(value)))
-            return elm
-
-        elseif hasmethod(aml, Tuple{T})
-            elm = linknext!(desired_node, TextNode(aml(value)))
-            return elm
-
-        else
-            elm = linknext!(desired_node, TextNode(string(value)))
-            return elm
-
-        end
+        elm = linking_function!(desired_node, TextNode(string(value)))
     end
+    return elm
 end
 
 # Nothing
