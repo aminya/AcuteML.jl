@@ -417,6 +417,7 @@ macro aml(expr)
             if isdefined(__module__, arg_var) && isa(getfield(__module__, arg_var), Type)
                 f, l = __source__.file, __source__.line
                 @error "Change the field name `$arg_var` in struct `$T` to something else. The name conflicts with an already defined type name. \n Happens at $f:$l"
+                return
             end
         end
 
@@ -425,7 +426,9 @@ macro aml(expr)
     # elseif expr isa Expr && expr.head == :tuple
     #     amlTypesSupport(expr)
     else
-        error("Invalid usage of @aml")
+        f, l = __source__.file, __source__.line
+        @error "Invalid usage of @aml \n Happens at $f:$l"
+        return
     end
 
     return out

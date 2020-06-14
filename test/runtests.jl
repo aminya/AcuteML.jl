@@ -19,3 +19,5 @@ end
 @testset "simple" begin
     include("../examples/simple.jl")
 end
+
+include("errors.jl")
