@@ -79,7 +79,42 @@ using AcuteML, Test
         updatecontent!( ["aa", Time(12,53,40), 3, nothing], "AnyVect", n, AbsNormal)
         @test string.(["aa", Time(12,53,40), 3]) == findcontent(typeof(["aa", Time(12,53,40), 2, nothing]), "AnyVect", n, AbsNormal)
     end
-
+    
+    @testset "Node link" begin
+        # Linking two nodes
+        n1 = createnode(AbsNormal, "n1")
+        n2 = createnode(AbsNormal, "n2")
+        pprint(n1)
+        pprint(n2)
+        addnode!(n1, "n2", n2, AbsNormal)
+        pprint(n1)
+        pprint(n2)
+        
+        # Linking a node and a type
+        n3 = createnode(AbsNormal, "n3")
+        @aml mutable struct n4 "~"
+            a::UN{String} = nothing, "~"
+        end
+        n4i = n4(a="1")
+        pprint(n3)
+        pprint(n4i)
+        addnode!(n3, "n2", n4i, AbsNormal)
+        pprint(n3)
+        pprint(n4i)
+        
+        # Linking a node and an empty type
+        n5 = createnode(AbsNormal, "n5")
+        @aml mutable struct n6 "~"
+            a::UN{String} = nothing, "~"
+        end
+        n6i = n6()
+        pprint(n5)
+        pprint(n6i)
+        addnode!(n5, "n2", n6i, AbsNormal)
+        pprint(n5)
+        pprint(n6i)
+    end
+    
     @testset "Html Document" begin
         dhtml = createnode(AbsHtml, "html")
 
