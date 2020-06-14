@@ -1,4 +1,5 @@
 export newTemplate, render2file
+# TODO Make this code good! :)
 ################################################################
 """
     newTemplate(name)
@@ -25,17 +26,12 @@ function newTemplate(name, type::Symbol = :file, template::Union{String,Nothing}
         try
             mkpath(joinpath("app", "destination"))
         catch e
-
         end
         filePath = joinpath("app", "destination", "$(name).html")
         touch(filePath)
 
         if !isnothing(template)
-
-            file = open(filePath, "w")
-            print(file, template)
-            close(file)
-
+            Base.write(filePath, template)
         else # open file in Atom for editingn
             if isdefined(Main, :Atom)
                 Atom = getfield(Main, :Atom)
@@ -54,7 +50,7 @@ function newTemplate(name, type::Symbol = :file, template::Union{String,Nothing}
             """
         end
 
-    # todo: append this to controller file
+        # todo: append this to controller file
         println("""
 
         function $(name)(; put_variables_here)
@@ -107,7 +103,7 @@ out =render2file("person", false,
 
 ```
 """
-function render2file(destination::String, overwrite::Bool=false; var...)
+function render2file(destination::String, overwrite::Bool = false; var...)
 
     local file, destinationString, s
 
@@ -117,24 +113,15 @@ function render2file(destination::String, overwrite::Bool=false; var...)
     end
 
     # reading string from html file
-    if ispath(destination)
-
-        try
-            filePath = destination
-            file = open(filePath, "r")
-            destinationString = read(file, String)
-
-        catch e
-            error("destination file address is not correct")
-        end
-
+    if isfile(destination)
+        filePath = destination
+        file = open(filePath, "r")
+        destinationString = read(file, String)
     else
         filePath = joinpath("app", "destination", "$(destination).html")
         file = open(filePath, "r")
         destinationString = read(file, String)
     end
-
-
 
     try
         s = '"' * '"' * '"' * destinationString * '"' * '"' * '"'
@@ -158,6 +145,6 @@ end
 
 multiString(var::String) = var
 multiString(var::Union{Number,Bool}) = string(var)
-multiString(var::Array{T}) where {T<:Union{String, Number, Bool}} = string.(var)
-multiString(var::NTuple{N,T}) where {T<:Union{String, Number, Bool}} where{N} = string.(var)
+multiString(var::Array{T}) where {T<:Union{String,Number,Bool}} = string.(var)
+multiString(var::NTuple{N,T}) where {T<:Union{String,Number,Bool}} where {N} = string.(var)
 multistring(var) = string(var)
