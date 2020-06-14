@@ -98,3 +98,5 @@ end
 function findcontent(::Type{AbstractDict}, name, node, argAmlType)
     throw(MethodError("Dicts are not supported for extraction/updating"))
 end
+
+# TODO: For Dict findcontent try to have some assumptions and fix it

@@ -79,6 +79,12 @@ using AcuteML, Test
         updatecontent!( ["aa", Time(12,53,40), 3, nothing], "AnyVect", n, AbsNormal)
         @test string.(["aa", Time(12,53,40), 3]) == findcontent(typeof(["aa", Time(12,53,40), 2, nothing]), "AnyVect", n, AbsNormal)
 
+
+        addnode!(n, "Dict", Dict("class"=>"h1", "id"=>"h2"), AbsNormal)
+        pprint(n)
+        @test_throws MethodError findcontent(Dict("class"=>"h1", "id"=>"h2"), "Dict", n, AbsNormal)
+        @test_broken updatecontent!(Dict("class"=>"h1", "id"=>"h2"), "Dict", n, AbsNormal)
+
         n = createnode(AbsNormal, "a")
         addnode!(n, "1", "val1", AbsText)
         @test "val1" == findcontent(String, "1", n, AbsText)
@@ -90,6 +96,7 @@ using AcuteML, Test
         @test 1 == findcontent(Int64, "1", n, AbsText)
         updatecontent!(2, "", n, AbsText)
         @test 2 == findcontent(Int64, "", n, AbsText)
+
 
         @testset "Node link" begin
             # Linking two nodes

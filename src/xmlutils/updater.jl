@@ -121,6 +121,6 @@ end
 
 ################################################################
 # Dict Updating
-function updatecontent!(value::Type{AbstractDict}, name::Union{Node, String, Nothing}, node::Union{Node, Document}, argAmlType::Type{<:AbsNode})
+function updatecontent!(value::Type{AbstractDict}, name, node, argAmlType)
     throw(MethodError("Dicts are not supported for extraction/updating"))
 end
