@@ -78,43 +78,45 @@ using AcuteML, Test
         @test string.(["aa", Time(12,53,40), 2]) == findcontent(typeof(["aa", Time(12,53,40), 2, nothing]), "AnyVect", n, AbsNormal)
         updatecontent!( ["aa", Time(12,53,40), 3, nothing], "AnyVect", n, AbsNormal)
         @test string.(["aa", Time(12,53,40), 3]) == findcontent(typeof(["aa", Time(12,53,40), 2, nothing]), "AnyVect", n, AbsNormal)
-    end
-    
-    @testset "Node link" begin
-        # Linking two nodes
-        n1 = createnode(AbsNormal, "n1")
-        n2 = createnode(AbsNormal, "n2")
-        pprint(n1)
-        pprint(n2)
-        addnode!(n1, "n2", n2, AbsNormal)
-        pprint(n1)
-        pprint(n2)
-        
-        # Linking a node and a type
-        n3 = createnode(AbsNormal, "n3")
-        @aml mutable struct n4 "~"
-            a::UN{String} = nothing, "~"
+
+        @testset "Node link" begin
+            # Linking two nodes
+            n1 = createnode(AbsNormal, "n1")
+            n2 = createnode(AbsNormal, "n2")
+            pprint(n1)
+            pprint(n2)
+            addnode!(n1, "n2", n2, AbsNormal)
+            pprint(n1)
+            pprint(n2)
+
+            # Linking a node and a type
+            n3 = createnode(AbsNormal, "n3")
+            @aml mutable struct n4 "~"
+                a::UN{String} = nothing, "~"
+            end
+            n4i = n4(a="1")
+            pprint(n3)
+            pprint(n4i)
+            addnode!(n3, "n2", n4i, AbsNormal)
+            pprint(n3)
+            pprint(n4i)
+
+            # Linking a node and an empty type
+            n5 = createnode(AbsNormal, "n5")
+            @aml mutable struct n6 "~"
+                a::UN{String} = nothing, "~"
+            end
+            n6i = n6()
+            pprint(n5)
+            pprint(n6i)
+            addnode!(n5, "n2", n6i, AbsNormal)
+            pprint(n5)
+            pprint(n6i)
         end
-        n4i = n4(a="1")
-        pprint(n3)
-        pprint(n4i)
-        addnode!(n3, "n2", n4i, AbsNormal)
-        pprint(n3)
-        pprint(n4i)
-        
-        # Linking a node and an empty type
-        n5 = createnode(AbsNormal, "n5")
-        @aml mutable struct n6 "~"
-            a::UN{String} = nothing, "~"
-        end
-        n6i = n6()
-        pprint(n5)
-        pprint(n6i)
-        addnode!(n5, "n2", n6i, AbsNormal)
-        pprint(n5)
-        pprint(n6i)
     end
-    
+
+
+
     @testset "Html Document" begin
         dhtml = createnode(AbsHtml, "html")
 
@@ -190,41 +192,43 @@ using AcuteML, Test
         @test string.(["aa", Time(12,53,40), 2]) == findcontent(typeof(["aa", Time(12,53,40), 2, nothing]), "AnyVect", dhtml, AbsNormal)
         updatecontent!( ["aa", Time(12,53,40), 3, nothing], "AnyVect", dhtml, AbsNormal)
         @test string.(["aa", Time(12,53,40), 3]) == findcontent(typeof(["aa", Time(12,53,40), 2, nothing]), "AnyVect", dhtml, AbsNormal)
-    end
-    
-    @testset "HTML Document link" begin
-        # Linking two nodes
-        x1 = createnode(AbsHtml)
-        nx1 = createnode(AbsNormal, "nx1")
-        pprint(x1)
-        pprint(nx1)
-        addnode!(x1, "nx1", nx1, AbsNormal)
-        pprint(x1)
-        pprint(nx1)
-        
-        # Linking a node and a type
-        x2 = createnode(AbsHtml)
-        @aml mutable struct nx2 "~"
-            a::UN{String} = nothing, "~"
+
+
+        @testset "HTML Document link" begin
+            # Linking two nodes
+            x1 = createnode(AbsHtml)
+            nx1 = createnode(AbsNormal, "nx1")
+            pprint(x1)
+            pprint(nx1)
+            addnode!(x1, "nx1", nx1, AbsNormal)
+            pprint(x1)
+            pprint(nx1)
+
+            # Linking a node and a type
+            x2 = createnode(AbsHtml)
+            @aml mutable struct nx2 "~"
+                a::UN{String} = nothing, "~"
+            end
+            nx2i = nx2(a="1")
+            pprint(x2)
+            pprint(nx2i)
+            addnode!(x2, "nx2", nx2i, AbsNormal)
+            pprint(x2)
+            pprint(nx2i)
+
+            # Linking a node and an empty type
+            x3 = createnode(AbsHtml)
+            @aml mutable struct nx3 "~"
+                a::UN{String} = nothing, "~"
+            end
+            nx3i = nx3()
+            pprint(x3)
+            pprint(nx3i)
+            addnode!(x3, "nx3", nx3i, AbsNormal)
+            pprint(x3)
+            pprint(nx3i)
         end
-        nx2i = nx2(a="1")
-        pprint(x2)
-        pprint(nx2i)
-        addnode!(x2, "nx2", nx2i, AbsNormal)
-        pprint(x2)
-        pprint(nx2i)
-        
-        # Linking a node and an empty type
-        x3 = createnode(AbsHtml)
-        @aml mutable struct nx3 "~"
-            a::UN{String} = nothing, "~"
-        end
-        nx3i = nx3()
-        pprint(x3)
-        pprint(nx3i)
-        addnode!(x3, "nx3", nx3i, AbsNormal)
-        pprint(x3)
-        pprint(nx3i)
+
     end
 
     @testset "XML Document" begin
@@ -305,41 +309,41 @@ using AcuteML, Test
         @test string.(["aa", Time(12,53,40), 2]) == findcontent(typeof(["aa", Time(12,53,40), 2, nothing]), "AnyVect", dxml, AbsNormal)
         updatecontent!( ["aa", Time(12,53,40), 3, nothing], "AnyVect", dxml, AbsNormal)
         @test string.(["aa", Time(12,53,40), 3]) == findcontent(typeof(["aa", Time(12,53,40), 2, nothing]), "AnyVect", dxml, AbsNormal)
-    end
 
-    @testset "XML Document link" begin
-        # Linking two nodes
-        x1 = createnode(AbsXml)
-        nx1 = createnode(AbsNormal, "nx1")
-        pprint(x1)
-        pprint(nx1)
-        addnode!(x1, "nx1", nx1, AbsNormal)
-        pprint(x1)
-        pprint(nx1)
-        
-        # Linking a node and a type
-        x2 = createnode(AbsXml)
-        @aml mutable struct nx2 "~"
-            a::UN{String} = nothing, "~"
+        @testset "XML Document link" begin
+            # Linking two nodes
+            x1 = createnode(AbsXml)
+            nx1 = createnode(AbsNormal, "nx1")
+            pprint(x1)
+            pprint(nx1)
+            addnode!(x1, "nx1", nx1, AbsNormal)
+            pprint(x1)
+            pprint(nx1)
+
+            # Linking a node and a type
+            x2 = createnode(AbsXml)
+            @aml mutable struct nx2 "~"
+                a::UN{String} = nothing, "~"
+            end
+            nx2i = nx2(a="1")
+            pprint(x2)
+            pprint(nx2i)
+            addnode!(x2, "nx2", nx2i, AbsNormal)
+            pprint(x2)
+            pprint(nx2i)
+
+            # Linking a node and an empty type
+            x3 = createnode(AbsXml)
+            @aml mutable struct nx3 "~"
+                a::UN{String} = nothing, "~"
+            end
+            nx3i = nx3()
+            pprint(x3)
+            pprint(nx3i)
+            addnode!(x3, "nx3", nx3i, AbsNormal)
+            pprint(x3)
+            pprint(nx3i)
         end
-        nx2i = nx2(a="1")
-        pprint(x2)
-        pprint(nx2i)
-        addnode!(x2, "nx2", nx2i, AbsNormal)
-        pprint(x2)
-        pprint(nx2i)
-        
-        # Linking a node and an empty type
-        x3 = createnode(AbsXml)
-        @aml mutable struct nx3 "~"
-            a::UN{String} = nothing, "~"
-        end
-        nx3i = nx3()
-        pprint(x3)
-        pprint(nx3i)
-        addnode!(x3, "nx3", nx3i, AbsNormal)
-        pprint(x3)
-        pprint(nx3i)
     end
 
 end
