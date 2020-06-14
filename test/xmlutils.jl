@@ -99,6 +99,26 @@ using AcuteML, Test
         updatecontent!(2, "", n, AbsText)
         @test 2 == findcontent(Int64, "", n, AbsText)
 
+        n = createnode(AbsNormal, "p")
+        addnode!(n, "n1", "1", AbsNormal)
+        addnode!(n, "n2", "2", AbsNormal)
+        addnode!(n, "n3", "3", AbsNormal)
+        addnode!(n, "n4", "4", AbsNormal)
+        addnode!(n, "[2:3]", ["txt2", "txt3"], AbsText) # Adds text inside n1 and n2
+        @test ["txt2", "txt3"] == findcontent(Vector{String}, "[2:3]", n, AbsText)
+        updatecontent!(["txt2-u", "txt3-u"] , "[2:3]", n, AbsText)
+        @test ["txt2-u", "txt3-u"] == findcontent(Vector{String}, "[2:3]", n, AbsText)
+        # TODO will throw error if text nodes don't exist
+        @test_broken updatecontent!(["txt1-uu", "txt2-uu"] , "[1:2]", n, AbsText)
+        @test_broken ["txt1-uu", "txt2-uu"] == findcontent(Vector{String}, "[1:2]", n, AbsText)
+        @test_broken ["txt1-uu", "txt2-uu", "txt3-u"] == findcontent(Vector{String}, "[1:2]", n, AbsText)
+
+        n = createnode(AbsNormal, "a")
+        addnode!(n, "1", 1, AbsText)
+        @test 1 == findcontent(Int64, "1", n, AbsText)
+        updatecontent!(2, "", n, AbsText)
+        @test 2 == findcontent(Int64, "", n, AbsText)
+
 
         @testset "Node link" begin
             # Linking two nodes

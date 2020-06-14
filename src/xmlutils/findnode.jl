@@ -243,7 +243,11 @@ function parse_textindices(indicesstr::String)
     else
         indicesExpr = Meta.parse(indicesstr)
         indicesExpr.head == :vect || error("give indices as a vetor e.g. [2:3], [2, 3] ,[:]")
-        indices = eval(indexExpr)
+        indices = eval(indicesExpr)
+        # TODO find a better way
+        if typeof(indices) <: Vector{UnitRange{Int64}}
+            indices = indices[1]
+        end
     end
     return indices
 end
@@ -270,14 +274,17 @@ function findalltext(indices::Colon, node::Node)
 end
 
 function findalltext(indices::AbstractVector, node::Node)
-    out = Node[]
-    iText = 0
+    out = Vector{Node}(undef, length(indices))
+    iTextLocation = 1
+    outIndex = 1
     for child in eachnode(node)
         if istext(child)
-            iText +=1
-            if iText in indices
-                push!(out, child)
+            if iTextLocation in indices
+                out[outIndex] = child
             end
+            outIndex += 1
+        else
+            iTextLocation +=1
         end
     end
     if !isempty(out)
