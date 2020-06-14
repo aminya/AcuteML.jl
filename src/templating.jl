@@ -38,6 +38,7 @@ function newTemplate(name, type::Symbol = :file, template::Union{String,Nothing}
 
         else # open file in Atom for editingn
             if isdefined(Main, :Atom)
+                Atom = getfield(Main, :Atom)
                 Atom.edit(filePath)
             end
         end

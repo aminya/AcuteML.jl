@@ -11,3 +11,7 @@ include("tables.jl")
 include("xmlutils.jl")
 include("customcode.jl")
 # include("musicxml/musicxml.jl")
+
+@testset "templating" begin
+    include("../examples/templating/templating.jl")
+end
