@@ -88,3 +88,12 @@ end
 
     @test mathclass.students[2].log == "A genius with a GPA of 5.0 is found"
 end
+
+################################################################
+# io
+@testset "io" begin
+    pprint(mathclass)
+    pprint("mathclass.xml", mathclass)
+    pprint(stdout, mathclass)
+    pprint(mathclass.aml)
+end

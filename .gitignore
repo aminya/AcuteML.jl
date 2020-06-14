@@ -3,4 +3,5 @@
 *.jl.mem
 /docs/build/
 Manifest.toml
-/test/musicxml/myscore.musicxml 
+/test/musicxml/myscore.musicxml
+mathclass.xml
