@@ -1,5 +1,5 @@
-using Tricks: static_hasmethod
-# TODO use traits for static_hasmethod checks
+using Tricks: compat_hasmethod
+# TODO use traits for compat_hasmethod checks
 
 # Scalar parsers
 
@@ -18,9 +18,9 @@ function nodeparse(type::Type, content::String)
     # https://julialang.slack.com/archives/C6A044SQH/p1578442480438100
     if hasmethod(type, Tuple{String}) &&  Core.Compiler.return_type(type, Tuple{Node})=== Union{}
         return type(content)
-    elseif static_hasmethod(convert, Tuple{String, type})
+    elseif compat_hasmethod(convert, Tuple{String, type})
         return convert(type, content)
-    elseif static_hasmethod(parse, Tuple{type, String})
+    elseif compat_hasmethod(parse, Tuple{type, String})
         return parse(type, content)
     else
         error("Could not parse a String as type $type")
@@ -33,9 +33,9 @@ function nodeparse(type::Type, elm::Node)
     content = elm.content
     if hasmethod(type, Tuple{String}) &&  Core.Compiler.return_type(type, Tuple{Node})=== Union{}
         return type(content)
-    elseif static_hasmethod(convert, Tuple{String, type})
+    elseif compat_hasmethod(convert, Tuple{String, type})
         return convert(type, content)
-    elseif static_hasmethod(parse, Tuple{type, String})
+    elseif compat_hasmethod(parse, Tuple{type, String})
         return parse(type, content)
     else
         # should be the last to avoid invoking generic methods
@@ -65,12 +65,12 @@ function nodeparse(::Type{T}, contents::Vector{String}) where {T}
             elms_typed[i] = type(content)
             i+=1
         end
-    elseif static_hasmethod(convert, Tuple{String, type})
+    elseif compat_hasmethod(convert, Tuple{String, type})
         for content in contents
             elms_typed[i] = convert(type, content)
             i+=1
         end
-    elseif static_hasmethod(parse, Tuple{type, String})
+    elseif compat_hasmethod(parse, Tuple{type, String})
         for content in contents
             elms_typed[i] = parse(type, content)
             i+=1
@@ -90,12 +90,12 @@ function nodeparse(type::Type{T}, elms::Vector{Node}) where {T}
             elms_typed[i] = type(elm.content)
             i+=1
         end
-    elseif static_hasmethod(convert, Tuple{String, type})
+    elseif compat_hasmethod(convert, Tuple{String, type})
         for elm in elms
             elms_typed[i] = convert(type, elm.content)
             i+=1
         end
-    elseif static_hasmethod(parse, Tuple{type, String})
+    elseif compat_hasmethod(parse, Tuple{type, String})
         for elm in elms
             elms_typed[i] = parse(type, elm.content)
             i+=1
