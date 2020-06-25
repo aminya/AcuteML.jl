@@ -1,11 +1,8 @@
-using SnoopCompile
+using SnoopCompileBot
 
 botconfig = BotConfig(
-  "AcuteML";
-  os = ["linux", "windows", "macos"],
-  version = [v"1.4.2", v"1.3.1"],
-  blacklist = [],
-  exhaustive = false,
+  "AcuteML",
+  yml_path="SnoopCompile.jl"
 )
 
 println("Benchmarking the inference time of `using AcuteML`")
