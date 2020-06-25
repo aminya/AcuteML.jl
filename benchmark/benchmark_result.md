@@ -1,4 +1,11 @@
 # Benchmark Result
+
+v 0.10.3
+Outside Atom
+8.700 μs (100 allocations: 3.61 KiB)
+3.957 μs (66 allocations: 3.17 KiB)
+201.799 μs (401 allocations: 16.27 KiB)
+
 v 0.10.2
 Outside Atom
 8.700 μs (100 allocations: 3.61 KiB)
