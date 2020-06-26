@@ -2,7 +2,7 @@ using SnoopCompile
 
 botconfig = BotConfig(
   "AcuteML",
-  yml_path="SnoopCompile.jl"
+  yml_path="SnoopCompile.yml"
 )
 
 println("Benchmarking the inference time of `using AcuteML`")
