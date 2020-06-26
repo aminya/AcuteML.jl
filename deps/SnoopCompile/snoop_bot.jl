@@ -1,4 +1,4 @@
-using SnoopCompileBot
+using SnoopCompile
 
 botconfig = BotConfig(
   "AcuteML",
