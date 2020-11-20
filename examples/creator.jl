@@ -1,4 +1,4 @@
-# see exmaples.jl first
+# see examples.jl first
 
 # Creator
 

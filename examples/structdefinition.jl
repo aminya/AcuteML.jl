@@ -1,4 +1,4 @@
-# see exmaples.jl first
+# see examples.jl first
 
 # Type Definition
 @aml mutable struct Person "person", check_course
