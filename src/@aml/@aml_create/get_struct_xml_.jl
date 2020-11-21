@@ -68,7 +68,7 @@ function get_struct_xmlextractor(SQ, P, args_xmlextractor, struct_xmlchecker, es
     return struct_xmlextractor_curly
 end
 ################################################################
-function get_struct_xmlupdater(is_struct_mutable, T, args_xmludpater, struct_function, args_varcall, custom_updater_end)
+function get_struct_xmlupdater(is_struct_mutable, T, args_xmlupdater, struct_function, args_varcall, custom_updater_end)
     if is_struct_mutable
         # struct_xmlchecker
         if !ismissing(struct_function[1])
@@ -86,7 +86,7 @@ function get_struct_xmlupdater(is_struct_mutable, T, args_xmludpater, struct_fun
              function Base.setproperty!(str::($(esc(T))),name::Symbol, value)
                  setfield!(str,name,value)
                  $struct_xmlchecker
-                 $(args_xmludpater...)
+                 $(args_xmlupdater...)
                  $(esc(custom_updater_end))
              end
          end
