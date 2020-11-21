@@ -55,10 +55,15 @@ abstract type AbstractTestType end
     myfield::String, "~"
 end
 
+@test MyParentedType <: AbstractTestType
+
 # parametric with supertype
 @aml mutable struct MyParentedType2{T} <: AbstractTestType "MyParentedType2"
     myfield::T, "~"
 end
+
+@test MyParentedType2 <: AbstractTestType
+@test MyParentedType2{String} <: AbstractTestType
 
 ################################################################
 
