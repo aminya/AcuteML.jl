@@ -73,6 +73,11 @@ function aml_create(expr::Expr, args_param, args_defaultvalue, args_type, args_v
 
         end # endfor
         ################################################################
+        # Remove supertype if it is present
+        if T isa Expr && T.head == :<:
+            T = T.args[1]
+        end
+        ################################################################
         # Type name is a single name (symbol)
         if T isa Symbol
             S = T
