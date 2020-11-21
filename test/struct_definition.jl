@@ -45,6 +45,26 @@ pprint(pxml_vector)
 @aml mutable struct MyGeneralXML2{T} "MyGeneralXML2"
     myfield::T, "~"
 end
+
+################################################################
+
+abstract type AbstractTestType end
+
+# non-parametric with supertype
+@aml mutable struct MyParentedType <: AbstractTestType "MyParentedType"
+    myfield::String, "~"
+end
+
+@test MyParentedType <: AbstractTestType
+
+# parametric with supertype
+@aml mutable struct MyParentedType2{T} <: AbstractTestType "MyParentedType2"
+    myfield::T, "~"
+end
+
+@test MyParentedType2 <: AbstractTestType
+@test MyParentedType2{String} <: AbstractTestType
+
 ################################################################
 
 # empty or no aml
