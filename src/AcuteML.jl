@@ -180,7 +180,7 @@ textnode_vector::Vector{String}, txt"[2:3]"
 Note that the vector Text nodes should only be used as the last field of a struct (because possible positons for text node should be known). Alternatively, you can make non-vector separate fields with correct position in the struct definition.
 
 ### Empty Elements (Self-Closing) Definition
-* Use `sc"name"` to define a self-closing (empty) element (e.g. `<rest />`)
+* Use `empty"name"` to define an empty (self-closing) element (e.g. `<rest />`)
 ```julia
 @aml struct rest empty"~"
 end
