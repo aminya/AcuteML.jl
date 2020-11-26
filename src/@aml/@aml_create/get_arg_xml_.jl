@@ -51,7 +51,7 @@ end
 """
 Get a argument updater expression
 """
-function get_arg_xmludpater(argcustomupdater, has_arg_xmlchecker::Bool, esc_argtype, esc_argvar, argname, argliteraltype, esc_argfunction, argsym, argvarcall)
+function get_arg_xmlupdater(argcustomupdater, has_arg_xmlchecker::Bool, esc_argtype, esc_argvar, argname, argliteraltype, esc_argfunction, argsym, argvarcall)
 
     if !has_arg_xmlchecker
         arg_updater = quote

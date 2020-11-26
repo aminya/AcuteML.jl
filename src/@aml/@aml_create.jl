@@ -68,7 +68,7 @@ function aml_create(expr::Expr, args_param, args_defaultvalue, args_type, args_v
             args_xmlextractor[iArg]=get_arg_xmlextractor(argcustomextractor, inps...)
 
             if is_struct_mutable
-                args_xmludpater[iArg] = get_arg_xmludpater(argcustomupdater, inps...)
+                args_xmludpater[iArg] = get_arg_xmlupdater(argcustomupdater, inps...)
             end
 
         end # endfor
