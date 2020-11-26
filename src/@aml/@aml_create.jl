@@ -38,7 +38,7 @@ function aml_create(expr::Expr, args_param, args_defaultvalue, args_type, args_v
 
         args_xmlcreator=Vector{Expr}(undef,amlargs_num)
         args_xmlextractor=Vector{Expr}(undef,amlargs_num)
-        args_xmludpater=Vector{Expr}(undef,amlargs_num)
+        args_xmlupdater=Vector{Expr}(undef,amlargs_num)
 
         args_varcall = Vector{Expr}(undef,amlargs_num)
 
@@ -68,7 +68,7 @@ function aml_create(expr::Expr, args_param, args_defaultvalue, args_type, args_v
             args_xmlextractor[iArg]=get_arg_xmlextractor(argcustomextractor, inps...)
 
             if is_struct_mutable
-                args_xmludpater[iArg] = get_arg_xmlupdater(argcustomupdater, inps...)
+                args_xmlupdater[iArg] = get_arg_xmlupdater(argcustomupdater, inps...)
             end
 
         end # endfor
@@ -128,7 +128,7 @@ function aml_create(expr::Expr, args_param, args_defaultvalue, args_type, args_v
         self_method = :( ($(esc(S)))(in::$(esc(S))) = $(esc(S))(in.aml) )
         pprint_method = :( AcuteML.pprint(in::$(esc(S))) = pprint(in.aml) )
 
-        struct_xmlupdater = get_struct_xmlupdater(is_struct_mutable, S, args_xmludpater, struct_function, args_varcall, custom_updater_end)
+        struct_xmlupdater = get_struct_xmlupdater(is_struct_mutable, S, args_xmlupdater, struct_function, args_varcall, custom_updater_end)
 
         out = quote
             Base.@__doc__($(esc(struct_definition)))
