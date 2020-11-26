@@ -1,11 +1,8 @@
-using SnoopCompile
+using CompileBot
 
 botconfig = BotConfig(
   "AcuteML";
-  os = ["linux", "windows", "macos"],
-  version = [v"1.4.2", v"1.3.1"],
-  blacklist = [],
-  exhaustive = false,
+  yml_path = "SnoopCompile.yml"        # parse `os` and `version` from `SnoopCompile.yml`
 )
 
 snoop_bot(
