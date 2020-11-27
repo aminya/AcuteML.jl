@@ -4,6 +4,7 @@
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://aminya.github.io/AcuteML.jl/dev)
 ![CI](https://github.com/aminya/AcuteML.jl/workflows/CI/badge.svg)
 [![Test Coverage](https://codecov.io/gh/aminya/AcuteML.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/aminya/AcuteML.jl)
+![SnoopCompile](https://github.com/aminya/AcuteML.jl/workflows/SnoopCompile/badge.svg)
 
 AcuteML is an Acute Markup Language (AML) for Web/XML development in Julia.
 
