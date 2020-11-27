@@ -40,7 +40,11 @@ See [Type Definition](https://aminya.github.io/AcuteML.jl/dev/#Main-macro-and-I/
 # Example - Simple
 ```julia
 using AcuteML
-@aml mutable struct Body "~"
+
+# the xml/html name of each property is written in front of it (e.g. "body")
+# `~` means that the struct property name is the same as xml/html name
+
+@aml mutable struct Body "body"
     h1, "~"
     p::Vector{String}, "~"
 end
@@ -58,11 +62,11 @@ julia> pprint(d)
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
-  <Body>
+  <body>
     <h1>My heading</h1>
     <p>Paragraph1</p>
     <p>Paragraph2</p>
-  </Body>
+  </body>
 </html>
 ```
 

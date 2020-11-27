@@ -1,5 +1,8 @@
 using AcuteML
-@aml mutable struct Body "~"
+
+# `~` means that the struct property name is the same as xml/html name
+
+@aml mutable struct Body "body"
     h1, "~"
     p::Vector{String}, "~"
 end

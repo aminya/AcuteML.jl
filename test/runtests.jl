@@ -17,6 +17,8 @@ include("errors.jl")
 end
 @testset "simple" begin
     include("../examples/simple.jl")
+
+    include("./issue_142.jl")
 end
 
 ## MusicXML tests
