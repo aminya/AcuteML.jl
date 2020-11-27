@@ -26,6 +26,13 @@ jobs:
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
+      - uses: actions/cache@v2
+        env:
+          cache-name: cache-julia-modules
+        with:
+          path: ~/.julia
+          key: ${{ runner.os }}-${{ matrix.version }}-${{ env.cache-name }}
+
       - uses: julia-actions/julia-buildpkg@latest
       - uses: julia-actions/julia-runtest@latest
       - uses: julia-actions/julia-uploadcodecov@latest
