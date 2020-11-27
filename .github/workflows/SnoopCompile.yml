@@ -65,7 +65,7 @@ jobs:
         uses: actions/download-artifact@v2
 
       - name: CompileBot postprocess
-        run: julia -e 'using Pkg; Pkg.add( PackageSpec(name="CompileBot", version = "1") );
+        run: julia -e 'using Pkg; Pkg.add( PackageSpec(name="CompileBot", rev = "includer-in-entry") );
                        using CompileBot; CompileBot.postprocess();'
 
       - name: Create Pull Request
