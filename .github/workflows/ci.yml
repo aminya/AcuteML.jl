@@ -28,9 +28,9 @@ jobs:
           arch: ${{ matrix.arch }}
       - uses: actions/cache@v2
         env:
-          cache-name: cache-julia-modules
+          cache-name: cache-julia-artifacts
         with:
-          path: ~/.julia
+          path: ~/.julia/artifacts
           key: ${{ runner.os }}-${{ matrix.version }}-${{ env.cache-name }}
 
       - uses: julia-actions/julia-buildpkg@latest

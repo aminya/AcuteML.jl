@@ -38,9 +38,11 @@ jobs:
           arch: ${{ matrix.arch }}
       - uses: actions/cache@v2
         env:
-          cache-name: cache-julia-modules
+          cache-name: cache-julia-SnoopCompile
         with:
-          path: ~/.julia
+          path: |
+            ~/.julia
+            !~/.julia/compiled
           key: ${{ runner.os }}-${{ matrix.version }}-${{ env.cache-name }}
 
       - name: Install dependencies
