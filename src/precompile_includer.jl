@@ -56,6 +56,26 @@ else
                 include("../deps/SnoopCompile/precompile/linux/1.5/precompile_AcuteML.jl")
                 _precompile_()
             end
+        elseif v"1.6.0-DEV" <= VERSION <= v"1.6.9"
+            @static if isfile(
+                joinpath(
+                    @__DIR__,
+                    "../deps/SnoopCompile/precompile/linux/1.6/precompile_AcuteML.jl",
+                ),
+            )
+                include("../deps/SnoopCompile/precompile/linux/1.6/precompile_AcuteML.jl")
+                _precompile_()
+            end
+        elseif v"1.7.0-DEV" <= VERSION <= v"1.7.9"
+            @static if isfile(
+                joinpath(
+                    @__DIR__,
+                    "../deps/SnoopCompile/precompile/linux/1.7/precompile_AcuteML.jl",
+                ),
+            )
+                include("../deps/SnoopCompile/precompile/linux/1.7/precompile_AcuteML.jl")
+                _precompile_()
+            end
         elseif v"1.8.0-DEV" <= VERSION <= v"1.8.9"
             @static if isfile(
                 joinpath(
@@ -110,6 +130,26 @@ else
                 include("../deps/SnoopCompile/precompile/windows/1.5/precompile_AcuteML.jl")
                 _precompile_()
             end
+        elseif v"1.6.0-DEV" <= VERSION <= v"1.6.9"
+            @static if isfile(
+                joinpath(
+                    @__DIR__,
+                    "../deps/SnoopCompile/precompile/windows/1.6/precompile_AcuteML.jl",
+                ),
+            )
+                include("../deps/SnoopCompile/precompile/windows/1.6/precompile_AcuteML.jl")
+                _precompile_()
+            end
+        elseif v"1.7.0-DEV" <= VERSION <= v"1.7.9"
+            @static if isfile(
+                joinpath(
+                    @__DIR__,
+                    "../deps/SnoopCompile/precompile/windows/1.7/precompile_AcuteML.jl",
+                ),
+            )
+                include("../deps/SnoopCompile/precompile/windows/1.7/precompile_AcuteML.jl")
+                _precompile_()
+            end
         elseif v"1.8.0-DEV" <= VERSION <= v"1.8.9"
             @static if isfile(
                 joinpath(
@@ -162,6 +202,26 @@ else
                 ),
             )
                 include("../deps/SnoopCompile/precompile/apple/1.5/precompile_AcuteML.jl")
+                _precompile_()
+            end
+        elseif v"1.6.0-DEV" <= VERSION <= v"1.6.9"
+            @static if isfile(
+                joinpath(
+                    @__DIR__,
+                    "../deps/SnoopCompile/precompile/apple/1.6/precompile_AcuteML.jl",
+                ),
+            )
+                include("../deps/SnoopCompile/precompile/apple/1.6/precompile_AcuteML.jl")
+                _precompile_()
+            end
+        elseif v"1.7.0-DEV" <= VERSION <= v"1.7.9"
+            @static if isfile(
+                joinpath(
+                    @__DIR__,
+                    "../deps/SnoopCompile/precompile/apple/1.7/precompile_AcuteML.jl",
+                ),
+            )
+                include("../deps/SnoopCompile/precompile/apple/1.7/precompile_AcuteML.jl")
                 _precompile_()
             end
         elseif v"1.8.0-DEV" <= VERSION <= v"1.8.9"
