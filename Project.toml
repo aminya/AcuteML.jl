@@ -13,7 +13,7 @@ TypeTransform = "0fb2cfb0-ef68-4639-af2f-cb92dac991ae"
 
 [compat]
 EzXML = "1.0, 1.1"
-PrettyTables = "0.8, 0.9"
+PrettyTables = "0.8, 0.9, 1"
 Reexport = "^0.2.0, 1"
 Tables = "0.2, 1.0"
 Tricks = "0.1.3"
