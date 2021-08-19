@@ -16,6 +16,7 @@ end
 function _precompile_()
     ccall(:jl_generating_output, Cint, ()) == 1 || return nothing
     Base.precompile(Tuple{Core.kwftype(typeof(render2file)),NamedTuple{(:id, :age, :field, :GPA, :courses),Tuple{Int64,Int64,String,Float64,Array{String,1}}},typeof(render2file),String,Bool})
+    Base.precompile(Tuple{typeof(addnode!),Node,String,Array{String,1},Type{AbsText}})
     Base.precompile(Tuple{typeof(addnode!),Node,String,Node,Type{AbsNormal}})
     Base.precompile(Tuple{typeof(aml_create),Expr,Array{Union{Expr, Symbol},1},Array{Any,1},Array{Union{Expr, Symbol, Type},1},Array{Union{Expr, Symbol},1},Array{Union{Missing, String},1},Array{Union{Missing, Function, Symbol},1},Array{Union{Missing, Type},1},String,Type{T} where T,Array{Union{Missing, Function, Symbol},0},Bool,Array{Union{Nothing, Expr},1},Array{Union{Nothing, Expr},1},Array{Union{Nothing, Expr},1},Expr})
     Base.precompile(Tuple{typeof(aml_create),Expr,Array{Union{Expr, Symbol},1},Array{Any,1},Array{Union{Expr, Symbol, Type},1},Array{Union{Expr, Symbol},1},Array{Union{Missing, String},1},Array{Union{Missing, Function, Symbol},1},Array{Union{Missing, Type},1},String,Type{T} where T,Array{Union{Missing, Function, Symbol},0},Bool,Array{Union{Nothing, Expr},1},Array{Union{Nothing, Expr},1},Array{Union{Nothing, Expr},1},Symbol})
